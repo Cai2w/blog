@@ -45,9 +45,9 @@
       
         <tags>
             
-            <tag> 分库分表 </tag>
-            
             <tag> 主从复制 </tag>
+            
+            <tag> 分库分表 </tag>
             
             <tag> 读写分离 </tag>
             
