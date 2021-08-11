@@ -1,28 +1,46 @@
-- class_name: 友情链接
+- class_name: 博主和朋友们
   class_desc: 那些人，那些事
   link_list:
+    - name: Caicai
+      link: https://blog.cai2.wang/
+      avatar: https://blog.cai2.wang/img/avatar.jpg
+      descr: 你现在的你努力，是为了以后有更多的选择
+
     - name: Ned
       link: https://blog.wangez.site
       avatar: https://blog.wangez.site/uploads/avatar.jpg
       descr: 
       
+    - name: 良良的小窝
+      link: http://blog.ghl.asia
+      avatar: https://blog.ghl.asia/uploads/avatar.jpg
+      descr: 良良不是猪猪
+
     - name: 五年工作三年摸鱼
       link: http://mrzzzzh.work:8090
-      avatar: 
-      descr: 
+      avatar: https://wangez.site/img/shangke/zh.jpg
+      descr: 啥也不会的菜鸟程序员......
 
-- class_name: 网站
-  class_desc: 值得推荐的网站
+    - name: 凯老板的室友
+      link: http://blog.sshao.tech
+      avatar: https://portrait.gitee.com/uploads/avatars/user/1014/3042723_Shaoshaolj_1618845889.png
+      descr:
+
+    - name: 活脱的鳄龟
+      link: http://1.117.35.77:8090/
+      avatar: http://1.117.35.77:8090/upload/2021/08/%E5%A4%B4%E5%83%8F-bee44172dccd48d6a3bf93e80b458fe9.jpg
+      descr:
+
+    - name: 长寿
+      link: http://49.232.157.194/
+      avatar: http://49.232.157.194/wordpress/wp-content/uploads/2021/05/logo.png
+      descr: 摸鱼ing
+
+- class_name: 友情链接
+  class_desc: 一起加油呀
   link_list:
-    - name: Youtube
-      link: https://www.youtube.com/
-      avatar: https://i.loli.net/2020/05/14/9ZkGg8v3azHJfM1.png
-      descr: 视频网站
-    - name: Weibo
-      link: https://www.weibo.com/
-      avatar: https://i.loli.net/2020/05/14/TLJBum386vcnI1P.png
-      descr: 中国最大社交分享平台
-    - name: Twitter
-      link: https://twitter.com/
-      avatar: https://i.loli.net/2020/05/14/5VyHPQqR6LWF39a.png
-      descr: 社交分享平台
+    - name:
+      link:
+      avatar:
+      descr:
+
