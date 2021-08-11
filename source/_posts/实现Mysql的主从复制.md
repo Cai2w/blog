@@ -393,6 +393,8 @@ server-uuid=0661e980-f858-11eb-9073-000c2965b895
 #保存退出
 #重启mysql
 systemctl restart mysql
+#上述命令不可以就使用这个（不同linux版本，命令不一样）
+service mysqld restart
 
 #登录mysql
 mysql -uroot -p
@@ -517,16 +519,32 @@ Master_SSL_Verify_Server_Cert: No
 
 至此，我们完成了mysql的主从复制。
 
-再多嘴一句，配置好主从复制，我们如果使用windows上的连接工具（博主使用的是navicat）连接我们虚拟机的数据库时，可能会出现下面这种情况
+再多嘴一句，配置好主从复制，我们如果使用windows上的连接工具（博主使用的是navicat）连接我们虚拟机的数据库时，可能会出现下面这些情况（要会举一反三）
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235600.png)
 
-注意观察：**这里提示的时192.168.200.1连接出问题，而我连接的mysql地址是192.168.200.11（master）**，大概率和vm的网卡有关。给虚拟机也赋个权限吧, **grant select, update, delete, create on PICARRO.* to root@192.168.200.1 identified by '123456';**
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-12_00-17-49.jpg)
+
+注意观察：**这里提示的时192.168.200.1连接出问题，而我连接的mysql地址是192.168.200.11（master）**，应该是权限不足，root权限只能在本地访问，我们可以修改root权限，也可以新建一个用户用来远程访问：
+
+```
+#创建一个新用户
+grant all privileges on *.* to 用户名@localhost identified by “123456” ;
+#设置用户可以在远程访问mysql
+grant all privileges on *.* to 用户名@”%” identified by “123456” ;
+#设置用户访问数据库权限
+#设置用户可以访问mysql上的所有数据库
+grant all privileges on *.* to 用户名@localhost identified by “123456” ;
+```
+
+
 
 再次连接：
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235823.png)
 
 成功。
+
+> **思考：这类问题，给我们的提示都是192.168.200.1出现问题，所以是这里出了问题，我们也没有给192.168.200.1分配账号，所以连接失败**
 
 如果想配置读写分离，请移步我的另一篇博客，导航栏搜索**shardingjdbc**，下拉文章到读写分离即可
