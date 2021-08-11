@@ -517,4 +517,16 @@ Master_SSL_Verify_Server_Cert: No
 
 至此，我们完成了mysql的主从复制。
 
+再多嘴一句，配置好主从复制，我们如果使用windows上的连接工具（博主使用的是navicat）连接我们虚拟机的数据库时，可能会出现下面这种情况
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235600.png)
+
+注意观察：**这里提示的时192.168.200.1连接出问题，而我连接的mysql地址是192.168.200.11（master）**，大概率和vm的网卡有关。给虚拟机也赋个权限吧, **grant select, update, delete, create on PICARRO.* to root@192.168.200.1 identified by '123456';**
+
+再次连接：
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235823.png)
+
+成功。
+
 如果想配置读写分离，请移步我的另一篇博客，导航栏搜索**shardingjdbc**，下拉文章到读写分离即可
