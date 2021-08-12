@@ -466,93 +466,224 @@ CREATE TABLE `tb_commodity_info` (
 > 读写分离就可以使用ShardingSphere-JDBC实现。
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246430164-0a4ab21b-1990-4798-87e4-d6f66651b8c8.png)
-下面演示一下SpringBoot+Mybatis+Mybatis-plus+druid+ShardingSphere-JDBC代码实现。
+下面演示一下SpringBoot+Mybatis+druid+ShardingSphere-JDBC代码实现。
 **项目配置**
 版本说明：
 
-```sql
-SpringBoot：2.0.1.RELEASE
-druid：1.1.22
+```yml
+SpringBoot：2.5.3
+druid：1.1.20
 mybatis-spring-boot-starter:1.3.2
-mybatis-plus-boot-starter：3.0.7
-sharding-jdbc-spring-boot-starter:4.1.1
+sharding-jdbc-spring-boot-starter:4.0.0-RC1
 ```
 添加sharding-jdbc的maven配置：
 ```sql
 <dependency>
     <groupId>org.apache.shardingsphere</groupId>
     <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-    <version>4.1.1</version>
+    <version>4.0.0-RC1</version>
 </dependency>
 ```
 然后在application.yml添加配置：
 ```sql
 # 这是使用druid连接池的配置，其他的连接池配置可能有所不同
 spring:
+  main:
+    allow-bean-definition-overriding: true
   shardingsphere:
     datasource:
       names: master,slave0,slave1
       master:
         type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://192.168.0.108:3306/test_db?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
-        username: yehongzhi
-        password: YHZ@1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.200.11:3306/mall?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+        username: root
+        password: root
       slave0:
         type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://192.168.0.109:3306/test_db?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
-        username: yehongzhi
-        password: YHZ@1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.200.12:3306/mall?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+        username: root
+        password: root
       slave1:
         type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://192.168.0.110:3306/test_db?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
-        username: yehongzhi
-        password: YHZ@1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.200.13:3306/mall?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&useSSL=false&serverTimezone=GMT
+        username: root
+        password: root
+
     props:
       sql.show: true
     masterslave:
-      load-balance-algorithm-type: round_robin
+      load-balance-algorithm-type: round_robin  #round_robin    random
     sharding:
       master-slave-rules:
         master:
           master-data-source-name: master
-          slave-data-source-names: slave0,slave1
+          slave-data-source-names: slave1,slave0
 ```
 sharding.master-slave-rules是标明主库和从库，一定不要写错，否则写入数据到从库，就会导致无法同步。
-load-balance-algorithm-type是路由策略，round_robin表示轮询策略。
-启动项目，可以看到以下信息，代表配置成功：
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246531245-1dd6f0b5-46ef-4d7d-b4bd-7849badc329c.png)
-编写Controller接口：
+load-balance-algorithm-type是路由策略，round_robin表示轮询策略，random表示随机策略。
+启动项目，可以看到以下信息，配置的三个数据源初始化，代表配置成功：
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210812145324.png)
+编写实体类接口：
 
 ```java
-    /**
-     * 添加商品
-     *
-     * @param commodityName  商品名称
-     * @param commodityPrice 商品价格
-     * @param description    商品价格
-     * @param number         商品数量
-     * @return boolean 是否添加成功
-     */
-    @PostMapping("/insert")
-    public boolean insertCommodityInfo(@RequestParam(name = "commodityName") String commodityName,
-                                       @RequestParam(name = "commodityPrice") String commodityPrice,
-                                       @RequestParam(name = "description") String description,
-                                       @RequestParam(name = "number") Integer number) throws Exception {
-        return commodityInfoService.insertCommodityInfo(commodityName, commodityPrice, description, number);
-    }
+import lombok.Data;
+
+/**
+ * @author wangpeixu
+ * @date 2021/8/12 13:41
+ */
+@Data
+public class Commodity {
+    private String id;
+    private String commodityName;
+    private String commodityPrice;
+    private Integer number;
+    private String description;
+}
 ```
 准备就绪，开始测试！
 **测试**
-打开POSTMAN，添加商品：
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246580143-35fffc67-4868-42a1-a25d-ee0a24cb384c.png)
-控制台可以看到如下信息：
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246593211-e4cd46fa-f921-4e6e-a611-9d48bc8b602c.png)
-查询数据的话则通过slave进行：
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246607092-a7351893-3195-4ff8-9b35-47d5ef82f823.png)
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628246615328-929136a7-4056-48b2-b905-3d43a0d05d13.png)
+编写测试类
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import wang.cai2.shardingSphere.dao.CommodityMapper;
+import wang.cai2.shardingSphere.entity.Commodity;
+
+import java.util.List;
+import java.util.Random;
+
+/**
+ * @author wangpeixu
+ * @date 2021/8/12 13:56
+ */
+@SpringBootTest
+public class masterTest {
+    @Autowired
+    private CommodityMapper commodityMapper;
+
+    @Test
+    void masterT() {
+        Commodity commodity = new Commodity();
+        commodity.setCommodityName("冬瓜");
+        commodity.setCommodityPrice("6");
+        commodity.setNumber(10000);
+        commodity.setDescription("卖冬瓜");
+        commodity.setId(String.valueOf(new Random().nextInt(1000)));
+        commodityMapper.addCommodity(commodity);
+    }
+
+    @Test
+    void queryTest() {
+        for (int i = 0; i < 10; i++) {
+            List<Commodity> query = commodityMapper.query();
+            System.out.println("-------");
+        }
+    }
+}
+```
+
+插入数据**masterT()**：
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210812220118.png)
+查询数据**queryTest()**：
+![image-20210812220324746](C:/Users/486/AppData/Roaming/Typora/typora-user-images/image-20210812220324746.png)
 成功
 
 ### Sharding-Jdbc实现分库分表
+
+shardingJdbc的配置文件如下：
+
+```
+# datasource
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  # 配置真实数据源
+  shardingsphere:
+    # 打开sql输出日志
+    props:
+      sql:
+        show: true
+    datasource:
+      names: db1,db2
+      # 第一个配置源
+      db1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/db_1?serverTimezone=UTC
+        username: root
+        password: root
+      # 第二个配置源
+      db2:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/db_2?serverTimezone=UTC
+        username: root
+        password: root
+    sharding:
+      #库的分片策略
+      default-database-strategy:
+        inline:
+          sharding-column: user_id
+          algorithm-expression: db$->{user_id %2 +1}
+      tables:
+        course:
+          actual-data-nodes: db$->{1..2}.course_$->{1..2}
+          # 表的分片策略
+          table-strategy:
+            inline:
+              sharding-column: cid
+              algorithm-expression: course_$->{cid % 2 + 1}
+          # cid 的生成策略
+          key-generator:
+            column: cid
+            type: SNOWFLAKE  #雪花算法
+```
+
+测试代码：
+
+```
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import wang.cai2.shardingSphere.dao.CourseMapper;
+import wang.cai2.shardingSphere.entity.Course;
+
+import java.util.List;
+
+@SpringBootTest
+class ShardingSphereApplicationTests {
+
+    @Autowired
+    private CourseMapper courseMapper;
+
+    @Test
+    void saveCourse() {
+        for (int i = 1; i <= 10; i++) {
+            Course course = new Course();
+            course.setCname("java" + i);
+            course.setUserId(Long.valueOf(i));
+            course.setCstatus("Normal" + i);
+            courseMapper.saveCourse(course);
+        }
+    }
+
+    @Test
+    void findAll() {
+        List<Course> all = courseMapper.findAll();
+        for (Course course : all) {
+            System.out.println(course);
+        }
+    }
+
+}
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210812233553.png)
+
+我们可以看到，数据是按照我们的配置插入了
