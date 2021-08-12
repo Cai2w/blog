@@ -532,9 +532,6 @@ Master_SSL_Verify_Server_Cert: No
 grant all privileges on *.* to 用户名@localhost identified by “123456” ;
 #设置用户可以在远程访问mysql
 grant all privileges on *.* to 用户名@”%” identified by “123456” ;
-#设置用户访问数据库权限
-#设置用户可以访问mysql上的所有数据库
-grant all privileges on *.* to 用户名@localhost identified by “123456” ;
 ```
 
 

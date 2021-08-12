@@ -1,7 +1,9 @@
 ---
 title: {{ title }}
 date: {{ date }}
-tags:
-categories:
+tags: 
+categories: 
+description: 
 sticky: 
+cover: 
 ---
