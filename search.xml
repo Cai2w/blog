@@ -13,7 +13,7 @@
       
       <categories>
           
-          <category> Java </category>
+          <category> Javaj </category>
           
       </categories>
       
@@ -98,7 +98,7 @@
       
       <categories>
           
-          <category> Java </category>
+          <category> Javaj </category>
           
       </categories>
       
@@ -123,16 +123,16 @@
       
       <categories>
           
-          <category> Java </category>
+          <category> Javaj </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> 分库分表 </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 读写分离 </tag>
             
