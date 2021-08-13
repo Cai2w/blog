@@ -229,7 +229,7 @@ post_meta:
     date_type: both # created or updated or both 嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭?嚙踝蕭嚙踝蕭梬嚙踝蕭葚嚙踝蕭嚙踝蕭梬嚙踝蕭@尨
     date_format: date # date/relative 嚙瑾尨嚙踝蕭嚙踝蕭?嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭
     categories: true # true or false 嚙踝蕭嚙踝蕭嚙踝蕭@尨嚙踝蕭嚙?
-    tags: true  # true or false 嚙踝蕭嚙踝蕭嚙踝蕭@尨嚙誼蒐
+    tags: false  # true or false 嚙踝蕭嚙踝蕭嚙踝蕭@尨嚙誼蒐
     label: true # true or false 嚙瑾尨嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭
   post:
     date_type: both # created or updated or both 嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭?嚙踝蕭嚙踝蕭梬嚙踝蕭葚嚙踝蕭嚙踝蕭梬嚙踝蕭@尨

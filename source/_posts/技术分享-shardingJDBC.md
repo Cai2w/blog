@@ -7,7 +7,8 @@ tags:
 - 读写分离
 - shardingJDBC
 categories:
-- java
+- Java
+cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_social_grl_562b.png
 ---
 
 ## 为什么要分库分表？

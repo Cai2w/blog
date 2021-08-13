@@ -4,7 +4,8 @@ date: 2021-08-08 21:23:23
 tags:
 - 主从复制
 categories:
-- java
+- Java
+cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Selected_options_re_vtjd.png
 ---
 
 ## 准备工作

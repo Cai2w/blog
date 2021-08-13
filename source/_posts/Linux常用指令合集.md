@@ -1,11 +1,13 @@
 ---
 title: Linux常用指令合集
 date: 2021-08-12 23:49:59
-tags:
-categories:
+tags: 
+- Linux常用指令
+categories: 
+- Linux
 description: 
 sticky: 2
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/linux-1962898_960_720.jpg
+cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 ---
 
 ## Vi / Vim快捷键
