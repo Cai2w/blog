@@ -11,11 +11,11 @@ categories:
 
 ### 配置网络
 
-1. 通过VMware,复制三台虚拟机：master、slave1、slave2
+- 通过VMware,复制三台虚拟机：master、slave1、slave2
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-08_22-12-53.jpg)
 
-2. 修改IP地址
+- 修改IP地址
 
 ```bash
 # master: 192.168.200.11
@@ -34,7 +34,7 @@ GATEWAY=192.168.200.2
 DNS1=192.168.200.2
 ```
 
-3. 重启网络服务或重启系统生效
+- 重启网络服务或重启系统生效
 
 ```bash
 #重启网络 
@@ -49,7 +49,7 @@ ifconfig
 
 ### 安装mysql
 
-1. 创建目录
+- 创建目录
 
 ```shell
 #创建目录
@@ -58,8 +58,9 @@ mkdir /opt/software
 cd /opt/software
 ```
 
-2. 使用xftp将mysql5.7上传到该目录
-3. 解压安装
+- 使用xftp将mysql5.7上传到该目录
+
+- 解压安装
 
 ```shell
 #解压
