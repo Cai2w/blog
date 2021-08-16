@@ -624,7 +624,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
   - `crontab –l`：列出当前有那些任务调度
   - `service crond restart`   [重启任务调度]
 
-## at 定时任务
+### at 定时任务
 
 - **基本介绍：**
 
@@ -634,9 +634,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 3. at 命令是一次性定时计划任务，执行完一个任务后不再执行此任务了
 
-4. 在使用 at 命令的时候，一定要保证 atd 进程的启动 , 可以使用相关指令来查看
-
-`ps -ef | grep atd` //可以检测 atd 是否在运行
+4. 在使用 at 命令的时候，一定要保证 atd 进程的启动 , 可以使用相关指令来查看`ps -ef | grep atd` //可以检测 atd 是否在运行
 
 5. 画一个示意图
 
@@ -662,9 +660,7 @@ at 指定时间的方法：
 
 4. 指定命令执行的具体日期，指定格式为 month day（月 日）或 mm/dd/yy（月/日/年）或 dd.mm.yy（日.月.年），指定的日期必须跟在指定时间的后面。 例如：04:00 2021-03-1
 
-5. 使用相对计时法。指定格式为：now + count time-units ，now 就是当前时间，time-units 是时间单位，这里能够是 minutes
-
-（分钟）、hours（小时）、days（天）、weeks（星期）。count 是时间的数量，几天，几小时。 例如：now + 5 minutes
+5. 使用相对计时法。指定格式为：now + count time-units ，now 就是当前时间，time-units 是时间单位，这里能够是 minutes（分钟）、hours（小时）、days（天）、weeks（星期）。count 是时间的数量，几天，几小时。 例如：now + 5 minutes
 
 6. 直接使用 today（今天）、tomorrow（明天）来指定完成命令的时间。
 

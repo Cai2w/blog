@@ -5,7 +5,7 @@ keywords: 博客 Java 大数据
 author: Caicai
 language: zh-CN
 timezone: ''
-url: http://blog.cai2.wang/
+url:  https://blog.cai2.wang/
 permalink: ':year/:month/:day/:title/'
 permalink_defaults: null
 pretty_urls:
@@ -62,7 +62,7 @@ ignore: null
 theme: butterfly
 deploy:
   type: git
-  repo: https://github.com/Cai2w/Cai2w.github.io.git
+  repo: git@github.com:Cai2w/Cai2w.github.io.git
   branch: master
 
 search:
