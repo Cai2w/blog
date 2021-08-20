@@ -835,9 +835,172 @@ at 指定时间的方法：
 
 ## 网络配置
 
+### 原理图
 
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115925.png)
+
+### 查看网络IP和网关
+
+#### 查看虚拟网络编辑器和修改IP 地址
+
+VMware：编辑—>虚拟网络编辑器
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115355.png)
+
+#### 查看网关
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115453.png)
+
+### 查看 windows 环境的中 VMnet8 网络配置 (ipconfig 指令)
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115631.png)
+
+### 查看 linux 的网络配置 ifconfig
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115853.png)
+
+### ping 测试主机之间网络连通性
+
+#### 基本语法
+
+ping 目的主机 （功能描述：测试当前服务器是否可以连接目的主机）
+
+#### 应用实例
+
+测试当前服务器是否可以连接百度
+
+ping [www.baidu.com](http://www.baidu.com/)
+
+### linux 网络环境配置
+
+#### 第一种方法（自动获取）
+
+说明：登陆后，通过界面的来设置自动获取ip，特点：linux 启动后会自动获取 IP,缺点是每次自动获取的 ip 地址可能不一样
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820141935.png)
+
+#### 第二种方法（指定ip）
+
+* 说明：直接修改配置文件来指定 IP,并可以连接到外网(程序员推荐)
+
+```bash
+# 编辑网络配置文件
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+要求：将 ip 地址配置的静态的，比如: ip 地址为 192.168.200.130
+
+# ifcfg-ens33 文件说明
+DEVICE=eth0	#接口名（设备,网卡） 
+HWADDR=00:0C:2x:6x:0x:xx	#MAC 地址
+TYPE=Ethernet	#网络类型（通常是 Ethemet） 
+UUID=926a57ba-92c6-4231-bacb-f27e5e6a9f44	#随机 id
+#系统启动的时候网络接口是否有效（yes/no） 
+ONBOOT=yes
+```
+
+- 修改ip地址为静态
+
+```bash
+# IP 的配置方法[none|static|bootp|dhcp]（引导时不使用协议|静态分配 IP|BOOTP 协议|DHCP 协议）
+BOOTPROTO=static 
+#IP 地址
+IPADDR=192.168.200.130
+#网关
+GATEWAY=192.168.200.2
+#域名解析器
+DNS1=192.168.200.2
+
+# 重启网络服务或者重启系统生效
+service	network restart	# 重启网络
+reboot # 重启主机
+```
+
+### 设置主机名和hosts 映射
+
+#### 设置主机名
+
+> 为了方便记忆，可以给 **linux** **系统设置主机名**, 也可以根据需要修改主机名
+
+- 指令：`hostname`：查看主机名
+
+> 修改文件在 **/etc/hostname** 指定
+>
+> 修改后，**重启**生效
+
+#### 设置hosts 映射
+
+> - **windows**：在 **C:\Windows\System32\drivers\etc\hosts** 文件指定即可
+>
+> 案例: 192.168.200.130 caicai
+>
+> linux：在 **/etc/hosts** 文件 指定
+>
+> 案例: 192.168.200.1 myWindows
+
+### 主机名解析过程分析(Hosts、DNS)
+
+#### Hosts是什么
+
+一个文本文件，用来**记录** **IP** 和 **Hostname(主机名)**的映射关系
+
+#### DNS
+
+**DNS**，就是 **Domain Name System** 的缩写，翻译过来就是域名系统是互联网上作为域名和 IP 地址相互映射的一个**分布式数据**库
+
+#### 应用实例：用户在浏览器输入了www.baidu.com
+
+- 浏览器先检查浏览器缓存中有没有该域名解析 IP 地址，有就先调用这个 IP 完成解析；如果没有，就检查 DNS 解析器缓存，如果有直接返回 IP 完成解析。这两个缓存，可以理解为**本地解析器缓存**
+- 一般来说，当电脑第一次成功访问某一网站后，在一定时间内，浏览器或操作系统会缓存他的 IP 地址（DNS 解析记录）.如 在 cmd 窗口中输入
+
+```bash
+ipconfig /displaydns	#DNS 域名解析缓存
+ipconfig /flushdns	#手动清理 dns 缓存
+```
+
+- 如果本地解析器缓存没有找到对应映射，检查系统中`hosts`文件中有没有配置对应的域名 IP 映射，如果有，则完成解析并返回
+
+- 如果本地`DNS`解析器缓存和`hosts` 文件中均没有找到对应的 IP，则到域名服务DNS进行解析域
+
+- 示意图
+
+
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820151852.png)
 
 ## 进程管理
+
+### 基本介绍
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
