@@ -983,7 +983,12 @@ ipconfig /flushdns	#手动清理 dns 缓存
 
 `ps` 命令是用来查看目前系统中，有哪些正在执行，以及它们执行的状况。可以不加任何参数
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820154751.png)
+- 常用参数：
+  - `-a`：显示当前终端的所有进程信息
+  - `-u`：以用户的格式显示进程信息
+  - `-x`：显示后台进程运行的参数
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820155939.png)
 
 #### ps详解
 
@@ -1002,29 +1007,341 @@ ipconfig /flushdns	#手动清理 dns 缓存
   * TIME：CPU 时间，即进程使用 CPU 的总时间
   * COMMAND：启动进程所用的命令和参数，如果过长会被截断显示
 
+#### 应用实例
 
+要求：以全格式显示当前所有的进程，查看进程的父进程。 查看 sshd 的父进程信息
 
+`ps -ef` 是以全格式显示当前所有的进程
 
+`-e` 显示所有进程。`-f` 全格式
 
+```bash
+ps -ef|grep sshd
+```
 
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820161044.png)
 
+- UID：用户ID
+- PID：进程ID
+- PPID：父进程ID
+- C：CPU 用于计算执行优先级的因子。数值越大，表明进程是 CPU 密集型运算，执行优先级会降低；数值越小，表明进程是 I/O 密集型运算，执行优先级会提高
+- STIME：进程启动的时间
+- TTY：完整的终端名称
+- TIME：CPU 时间
+- CMD：启动进程所用的命令和参数
 
+### 终止进程kill和killall
 
+#### 介绍
 
+若是某个进程执行一半需要停止时，或是已消了很大的系统资源时，此时可以考虑停止该进程。使用 kill 命令来完成此项任务
 
+#### 基本语法
 
+- `kill [选项] 进程号`：通过进程号杀死/终止进程
+- `killall 进程名称`：通过进程名称杀死进程，也支持通配符，这在系统因负载过大而变得很慢时很有用
 
+#### 常用选项
 
+`-9`：表示强迫进程立即停止
 
+#### 最佳实践
 
+> 案例 1：踢掉某个非法登录用户
 
+```bash
+# kill 进程号 
+kill 11421
+```
 
+> 案例 2: 终止远程登录服务 sshd, 在适当时候再次重启 sshd 服务
 
+```bash
+# 终止远程登录服务
+kill sshd对应的进程号
 
+# 再次重启 sshd 服务
+/bin/systemctl start sshd.service
+```
 
+> 案例 3: 终止多个 gedit 
 
+```bash
+killall	gedit
+```
 
+> 案例 4：强制杀掉一个终端
 
+```bash
+kill -9 bash对应的进程号
+```
+
+### 查看进程树 pstree
+
+#### 基本语法
+
+`pstree [选项]`：可以更加直观的来看进程信息
+
+#### 常用选项
+
+- `-p`：显示进程的PID
+- `-u`：显示进程的所属用户
+
+#### 应用实例
+
+> 案例 1：请你树状的形式显示进程的 pid 
+
+```bash
+pstree -p
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165429.png)
+
+> 案例 2：请你树状的形式进程的用户
+
+```bash
+pstree -u
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165403.png)
+
+### 服务（service）管理
+
+#### 介绍
+
+服务(service) 本质就是进程，但是是运行在后台的，通常都会监听某个端口，等待其它程序的请求，比如(mysqld , sshd，防火墙等)，因此我们又称为守护进程，是 Linux 中非常重要的知识点
+
+#### service 管理指令
+
+* `service 服务名 [start | stop | restart | reload | status]`
+* 在 CentOS7.0 后 (我的是7.6)，很多服务不再使用 service ,而是 systemctl (后面专门讲)
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165803.png)
+
+* service 指令管理的服务在 `/etc/init.d` 查看
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165938.png)
+
+#### service管理指令案例
+
+> 使用 service 指令，查看，关闭，启动 network [注意：在虚拟系统演示，因为网络连接会关闭]
+
+```bash
+# 查看
+service network status 
+# 关闭
+service network stop 
+# 启动
+service network start
+```
+
+#### 查看服务名
+
+* 方式一：使用 setup -> 系统服务 就可以看到全部
+
+```bash
+setup
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820170311.png)
+
+**\*表示开机自启动**
+
+* 方式二：`/etc/init.d` 看到 service 指令管理的服务
+
+```bash
+ls -l /etc/init.d
+```
+
+#### 服务的运行级别(runlevel)
+
+* Linux 系统有 7 种运行级别(runlevel)：常用的是**级别** **3** **和** **5**
+  * 运行级别 0：系统停机状态，系统默认运行级别不能设为 0，否则不能正常启动运行级别 1：单用户工作状态，root 权限，用于系统维护，禁止远程登陆
+  * 运行级别 2：多用户状态(没有 NFS)，不支持网络
+  * 运行级别 3：完全的多用户状态(有 NFS)，无界面，登陆后进入控制台命令行模式
+  * 运行级别 4：系统未使用，保留
+  * 运行级别 5：X11 控制台，登陆后进入图形 GUI 模式
+  * 运行级别 6：系统正常关闭并重启，默认运行级别不能设为 6，否则不能正常启动
+
+* 开机流程说明：
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820170658.png)
+
+#### CentOS7 后运行级别说明
+
+在 `/etc/inittab`中
+
+```bash
+cat /etc/inittab
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820171023.png)
+
+#### chkconfig 指令
+
+通过 chkconfig 命令可以给服务的各个运行级别设置自 启动/关闭
+
+chkconfig 指令管理的服务在 /etc/init.d 查看   
+
+> 注意: Centos7.0 后，很多服务使用 systemctl 管理
+
+* 基本语法：
+  * `chkconfig [服务名] --list [| grep xxx]`：查看服务
+  * `chkconfig --level 5 服务名  on/off`：设置服务在5运行级别的自启动
+
+* 案例演示：对 network  服务    进行各种操作, 把 network 在 3 运行级别,关闭自启动
+
+```bash
+chkconfig --level 3 network off 
+chkconfig --level 3 network on
+```
+
+> `chkconfig` 重新设置服务后自启动或关闭，需要重启机器 `reboot` 生效
+
+#### systemctl 管理指令
+
+- 基本语法：`systemctl [start | stop | restart | status] 服务名`
+
+> systemctl 指令管理的服务在 /usr/lib/systemd/system 查看
+
+#### systemctl 设置服务的自启动状态
+
+```bash
+# 查看服务开机启动状态, grep 可以进行过滤
+systemctl list-unit-files [ | grep 服务名]
+# 设置服务开机启动
+systemctl enable 服务名
+# 关闭服务开机启动
+systemctl disable 服务名
+# 查询某个服务是否是自启动的
+systemctl is-enabled 服务名
+```
+
+#### 应用实例
+
+> 查看当前防火墙的状况，关闭防火墙和重启防火墙。=> firewalld.service
+
+```bash
+# 查看
+systemctl status firewalld
+
+# 关闭
+systemctl stop firewalld 
+
+# 重启
+systemctl start firewalld
+```
+
+#### 细节讨论
+
+关闭或者启用防火墙后，立即生效。[telnet 测试 某个端口即可]
+
+```bash
+# 在windows上，测试111端口
+telnet 192.168.200.130 111
+```
+
+这种方式只是临时生效，当重启系统后，还是回归以前对服务的设置。
+
+如果希望设置某个服务自启动或关闭永久生效，要使用 systemctl [enable|disable] 服务名
+
+#### 打开或者关闭指定端口
+
+在真正的生产环境，往往需要将防火墙打开，但问题来了，如果我们把防火墙打开，那么外部请求数据包就不能跟服务器监听端口通讯。这时，需要打开指定的端口。比如 80、22、8080 等
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820174627.png)
+
+#### firewall 指令
+
+* 打开端口：`firewall-cmd --permanent --add-port=端口号/协议`
+
+* 关闭端口：`firewall-cmd --permanent --remove-port=端口号/协议`
+
+* 重新载入才能生效：`firewall-cmd --reload`
+* 查询端口是否开放：`firewall-cmd --query-port=端口/协议`
+
+#### 应用案例
+
+* 启动防火墙，测试111端口是否能telnet：不可以
+* 开放111端口
+
+```bash
+firewall-cmd --permanent --add-port=111/tcp 
+firewall-cmd --reload
+```
+
+* 再次关闭111端口
+
+```bash
+firewall-cmd --permanent --remove-port=111/tcp 
+firewall-cmd --reload
+```
+
+### 动态监控进程
+
+#### 介绍
+
+top 与 ps 命令很相似。它们都用来显示正在执行的进程。Top 与 ps 最大的不同之处，在于 top 在执行一段时间可以更新正在运行的的进程
+
+#### 基本语法
+
+```bash
+top [选项]
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175417.png)
+
+#### 选项说明
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175100.png)
+
+#### 交互操作说明
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175643.png)
+
+#### 应用实例
+
+* 案例 1.监视特定用户, 比如我们监控 tom 用户
+
+> top：输入top命令，按回车键，查看执行的进程
+>
+> u：然后输入“u”回车，再输入用户名，即可
+
+* 案例 2：终止指定的进程, 比如我们要结束 tom 登录
+
+> top：输入此命令，按回车键，查看执行的进程
+>
+> k：然后输入“k”回车，再输入要结束的进程 ID 号
+
+* 案例 3:指定系统状态更新的时间(每隔 10 秒自动更新), 默认是 3 秒
+
+> top -d 10
+
+### 监控网络状态
+
+#### 查看系统网络情况netstat
+
+* 基本语法：`netstat [选项]`
+
+* 选项说明：
+  * `-an`：按一定顺序排列输出
+  * `-p`：显示哪个进程在调用
+
+* 应用案例
+
+请查看服务名为 sshd 的服务的信息
+
+```bash
+netstat -anp | grep sshd
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820180252.png)
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820180328.png)
+
+#### 检测主机连接命令 ping
+
+是一种网络检测工具，它主要是用检测远程主机是否正常，或是两部主机间的网线或网卡故障。如: ping 对方 ip 地址
 
 ## RPM 与 YUM
 
