@@ -731,7 +731,7 @@ aside:
       text: Fork Me
       link: https://github.com/Cai2w/Cai2w.github.io
   card_announcement:
-    enable: true
+    enable: false
     content: 王菜菜的个人博客
   card_recent_post:
     enable: true
@@ -789,7 +789,7 @@ newest_comments:
 # --------------------------------------
 
 # Change font size
-change_font_size: false
+change_font_size: true
 
 # Conversion between Traditional and Simplified Chinese (嚙踝蕭嚙踝蕭嚙瘩嚙瞋)
 translate:
@@ -862,7 +862,7 @@ note:
 # It may contain bugs and unstable, give feedback when you find the bugs.
 # https://github.com/MoOx/pjax
 pjax:
-  enable: false
+  enable: true
   exclude:
     # - xxxx
     # - xxxx
@@ -884,7 +884,7 @@ snackbar:
 
 # https://instant.page/
 # prefetch (嚙璀嚙踝蕭嚙範)
-instantpage: false
+instantpage: true
 
 # https://github.com/vinta/pangu.js
 # Insert a space between Chinese character and English character (嚙踝蕭荎嚙踝蕭眳嚙篇嚙踝蕭蚇楖嚙?
