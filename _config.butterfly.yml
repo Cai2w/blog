@@ -629,9 +629,9 @@ canvas_nest:
 # Typewriter Effect (嚙踝蕭嚙踝蕭虴嚙踝蕭)
 # https://github.com/disjukr/activate-power-mode
 activate_power_mode:
-  enable: false
+  enable: true
   colorful: true # open particle animation (簸嚙踝蕭嚙踝蕭虴)
-  shake: true #  open shake (嚙踝蕭嚙踝蕭嚙踝蕭虴)
+  shake: false #  open shake (嚙踝蕭嚙踝蕭嚙踝蕭虴)
   mobile: false
 
 # Mouse click effects: fireworks (嚙踝蕭嚙踝蕭c嚙踝蕭虴嚙踝蕭: 嚙踝蕭嚙踝蕭嚙踝蕭虴)
@@ -642,7 +642,7 @@ fireworks:
 
 # Mouse click effects: Heart symbol (嚙踝蕭嚙踝蕭c嚙踝蕭虴嚙踝蕭: 嚙踝蕭嚙踝蕭)
 click_heart:
-  enable: false
+  enable: true
   mobile: false
 
 # Mouse click effects: words (嚙踝蕭嚙踝蕭c嚙踝蕭虴嚙踝蕭: 嚙踝蕭嚙踝蕭)
@@ -877,7 +877,7 @@ aplayerInject:
 # position 嚙踝蕭嚙踝蕭弇嚙踝蕭
 # 嚙踝蕭嚙綞 top-left / top-center / top-right / bottom-left / bottom-center / bottom-right
 snackbar:
-  enable: false
+  enable: true
   position: bottom-left
   bg_light: '#49b1f5' # The background color of Toast Notification in light mode
   bg_dark: '#121212' # The background color of Toast Notification in dark mode
