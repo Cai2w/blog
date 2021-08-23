@@ -1345,6 +1345,86 @@ netstat -anp | grep sshd
 
 ## RPM 与 YUM
 
+### rpm包的管理
+
+#### 介绍
+
+> rpm 用于互联网下载包的打包及安装工具，它包含在某些 Linux 分发版中。它生成具有.RPM 扩展名的文件。RPM 是 RedHat Package Manager（RedHat 软件包管理工具）的缩写，类似 windows 的setup.exe，这一文件格式名称虽然打上了 RedHat 的标志，但理念是通用的。
+>
+> Linux 的分发版本都有采用（suse,redhat, centos 等等），可以算是公认的行业标准了。
+
+#### rpm 包的简单查询指令
+
+- 查询已安装的rpm列表：`rpm -qa | grep xx`
+
+> 举例：查看当前系统是否安装了firefox
+>
+> `rpm -qa | grep firefox`
+
+#### rpm包名基本格式
+
+一个 rpm 包名：`firefox-60.2.2-1.el7.centos.x86_64`
+
+版本号：60.2.2-1
+
+适用操作系统: el7.centos.x86_64
+
+x86_64表示 centos7.x 的 64 位系统，如果是 i686、i386 表示 32 位系统，noarch 表示通用
+
+#### rpm包的其他查询指令
+
+- 查询所安装的所有 rpm 软件包：`rpm -qa`
+
+> `rpm -qa | more`
+>
+> `rpm -qa | grep X [rpm -qa | grep firefox ]`
+
+- 查询软件包是否安装：`rpm -q 软件包名`
+
+- 查询软件包信息：`rpm -qi 软件包名`
+
+> 案例: `rpm -qi firefox`
+
+- 查询软件包中的文件：`rpm -ql`
+
+> `rpm -ql firefox`
+
+- 查询文件所属的软件包：`rpm -qf 文件全路径名`
+
+> `rpm -qf /etc/passwd`
+>
+> `rpm -qf /root/install.log`
+
+#### 卸载rpm包
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Shell编程
