@@ -16,7 +16,7 @@ menu:
     视频: /video/ || fas fa-video
     心动: /love/ || fa fa-heartbeat
   友链: /link/ || fas fa-link
-  关于: /about/ || fas fa-heart
+  关于: /about/ || fas fa-seedling
 
 # Hide the child menu items in mobile sidebar
 hide_sidebar_menu_child: false
