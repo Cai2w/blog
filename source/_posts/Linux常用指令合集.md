@@ -1397,33 +1397,68 @@ x86_64表示 centos7.x 的 64 位系统，如果是 i686、i386 表示 32 位系
 
 #### 卸载rpm包
 
+- 基本语法：`rpm -e RPM包的名称`
 
+- 应用案例：
 
+> 删除 firefox   软件包
+>
+> `rpm -e firefox`
 
+- 细节讨论
 
+> - 如果其它软件包依赖于您要卸载的软件包，卸载时则会产生错误信息。
+>
+> 如：`$ rpm -e foo`
+>
+> `removing these packages would break dependencies:foo is needed by bar-1.0-1`
+>
+> - 如果我们就是要删除 foo 这个 rpm 包，可以增加参数 --nodeps ,就可以强制删除，但是一般不推荐这样做，因为依赖于该软件包的程序可能无法运行
+>
+>   如：`$ rpm -e --nodeps foo`
 
+#### 安装rpm包
 
+- 基本语法：`rpm -ivh RPM 包全路径名称`
 
+- 参数说明：
+  - `i=install`： 安装
+  - `v=verbose`： 提示
+  - `h=hash`： 进度条
 
+- 应用实例
 
+> 演示卸载和安装 firefox 浏览器
+>
+> `rpm -e firefox` 
+>
+> `rpm -ivh firefox`
 
+### yum
 
+#### 介绍
 
+Yum 是一个 Shell 前端软件包管理器。基于 RPM 包管理，能够从指定的服务器自动下载 RPM 包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软件包
 
+#### yum的基本指令
 
+查询 yum 服务器是否有需要安装的软件
 
+`yum list|grep xx`
 
+#### 安装指定的yum包
 
+`yum install xxx` 
 
+#### yum应用实例
 
-
-
-
-
-
-
-
-
+> 案例：请使用 yum 的方式来安装 firefox
+>
+> `rpm -e firefox`
+>
+> `yum list | grep firefox` 
+>
+> `yum install firefox`
 
 
 
