@@ -1661,7 +1661,7 @@ echo "执行的结果是=$?"
 
 3. expr m - n
 
-4. expr  \*, /, %    乘，除，取余
+4. expr  \\*, /, %    乘，除，取余
 
 #### 应用实例
 
@@ -1671,21 +1671,257 @@ echo "执行的结果是=$?"
 
 ```shell
 #!/bin/bash
-#案例 1：计算（2+3）X4 的值#使用第一种方式
 RES1=$(((2+3)*4))
 echo "res1=$RES1"
 #使用第二种方式, 推荐使用
 RES2=$[(2+3)*4]
 echo "res2=$RES2"
 #使用第三种方式 expr 
-TEMP=`expr 2 + 3` 
-RES4=`expr $TEMP * 4` 
+TEMP=`expr 2 + 3`
+RES4=`expr $TEMP \* 4`
 echo "temp=$TEMP"
 echo "res4=$RES4"
 #案例 2：请求出命令行的两个参数[整数]的和 20 50 
 SUM=$[$1+$2]
 echo "sum=$SUM"
 ```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829102237.png)
+
+### 条件判断
+
+#### 判断语句
+
+- 基本语法
+
+> `[ condition ]`（注意 condition 前后要有空格）
+>
+> \#非空返回 true，可使用$?验证（0 为 true，>1 为 false）
+
+- 应用实例
+
+> `[ caicai ]`                 返回 true 
+>
+> `[ ]`   返回 false
+>
+> `[ condition ] && echo OK || echo notok`   条件满足，执行后面的语句
+
+- 判断语句
+  - `=` 字符串比较
+  - 两个整数的比较
+    - `-lt` 小于
+    - `-le` 小于等于 little equal
+    - `-eq` 等于
+    - `-gt` 大于
+    - `-ge` 大于等于
+    - `-ne` 不等于  
+  - 按照文件权限进行判断
+    - `-r` 有读的权限
+    - `-w` 有写的权限
+    - `-x` 有执行的权限
+  - 按照文件类型进行判断
+    - `-f` 文件存在并且是一个常规的文件
+    - `-e` 文件存在
+    - `-d` 文件存在并是一个目录
+- 应用实例
+
+> **案例 1："ok"是否等于"ok"**
+>
+> 判断语句：使用 `=`
+>
+> **案例 2：23 是否大于等于 22**
+>
+> 判断语句：使用 `-ge`
+>
+> **案例 3：/root/shcode/aaa.txt 目录中的文件是否存在**
+>
+> 判断语句： 使用 `-f`
+
+代码如下
+
+```shell
+#!/bin/bash
+#案例 1："ok"是否等于"ok"
+if [ "ok" = "ok" ]
+then
+        echo "equal"
+fi
+#案例 2：23 是否大于等于 22
+#判断语句：使用 -ge
+if [ 23 -ge 22 ]
+then
+        echo "大于"
+fi
+#案例 3：/opt/position.sh 目录中的文件是否存在
+
+#判断语句： 使用 -f
+if [ -f /opt/position.sh ]
+then
+        echo "-f 判断，存在"
+fi
+
+if [ -e /opt/position.sh ]
+then
+        echo "-e 判断，存在"
+fi
+#看几个案例
+if [ caicai ]
+then
+        echo "hello,caicai"
+fi
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829094606.png)
+
+### 流程控制
+
+#### if判断
+
+- 基本语法
+
+```shell
+#单分支
+if [ 条件判断式 ] 
+then
+代码
+fi
+
+#多分支
+if [ 条件判断式 ] 
+then
+代码
+elif [条件判断式] then
+代码
+fi
+
+```
+
+> **注意事项：[ 条件判断式 ]，中括号和条件判断式之间必须有空格**
+
+- 应用实例
+
+> 案例：请编写一个 shell 程序，如果输入的参数，大于等于 60，则输出 "及格了"，如果小于 60,则输出 "不及格"
+
+```shell
+#!/bin/bash
+if [ $1 -ge 60 ]
+then    
+        echo "及格了"
+elif [ $1 -lt 60 ]
+then    
+        echo "不及格"
+fi 
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829095709.png)
+
+#### case语句
+
+- 基本语法
+
+```shell
+case $变量名 in 
+"值 1"）
+如果变量的值等于值 1，则执行程序 1
+;;
+"值 2"）
+如果变量的值等于值 2，则执行程序 2
+;;
+…省略其他分支…
+*）
+如果变量的值都不是以上的值，则执行此程序
+;;
+esac
+```
+
+- 应用实例
+
+> 案例 1 ：当命令行参数是 1 时，输出 "周一",  是 2 时，就输出"周二"， 其它情况输出   "other"
+
+```shell 
+#!/bin/bash
+case $1 in
+"1")
+echo "周一"
+;;
+"2")
+echo "周二"
+;;
+*)
+echo "other..."
+esac
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829100404.png)
+
+#### for循环
+
+- 基本语法1
+
+```shell 
+for 变量 in  值 1  值 2  值 3… 
+do
+程序/代码
+done
+```
+
+- 应用实例
+
+> 案例 1 ：打印命令行输入的参数 [这里可以看出$* 和 $@ 的区别]
+
+```shell
+#!/bin/bash
+#打印命令行输入的参数 [这里可以看出$* 和 $@ 的区别]
+#注意：$* 是把输入的参数，当作一个整体，所以只会输出一句
+for i in "$*"
+do
+        echo "num is $i"
+done
+#使用 $@ 来获取输入的参数，注意，这时是分别对待。所以有几个参数就输出几个
+echo "-----------------"
+for j in "$@"
+do
+        echo "num is $j"
+done 
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829123116.png)
+
+- 基本语法2
+
+```shell
+for (( 初始值;循环控制条件;变量变化 ))
+do
+程序/代码
+done
+```
+
+- 应用实例
+
+> 案例 1 ：从 1 加到 100 的值输出显示
+
+```shell
+#!/bin/bash
+#案例 1 ：从 1 加到 100 的值输出显示
+#定义一个变量 SUM
+SUM=0
+for(( i=1; i<=$1; i++))
+do
+#写上你的业务代码
+        SUM=$[$SUM+$i]
+done
+echo "总和SUM=$SUM"
+```
+
+>**注意：SUM=0，赋值符号两边不能有空格**
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829124028.png)
+
+
+
+#### while循环
+
+- 基本语法1
 
 
 
