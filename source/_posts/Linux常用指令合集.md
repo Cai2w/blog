@@ -1775,7 +1775,7 @@ fi
 
 ### 流程控制
 
-#### if判断
+#### if 判断
 
 - 基本语法
 
@@ -1815,7 +1815,7 @@ fi
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829095709.png)
 
-#### case语句
+#### case 语句
 
 - 基本语法
 
@@ -1854,7 +1854,7 @@ esac
 
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829100404.png)
 
-#### for循环
+#### for 循环
 
 - 基本语法1
 
@@ -1919,24 +1919,209 @@ echo "总和SUM=$SUM"
 
 
 
-#### while循环
+#### while 循环
 
 - 基本语法1
 
+```shell
+while [ 条件判断式 ]
+do
+程序 /代码
+done
+```
+
+**注意：while 和 [有空格，条件判断式和 [也有空格**
+
+- 应用实例
+
+> 案例 1 ：从命令行输入一个数 n，统计从 1+..+ n 的值是多少
+
+```shell
+#!/bin/bash
+#案例 1 ：从命令行输入一个数 n，统计从 1+..+ n 的值是多少
+SUM=0
+i=1
+while [ $i -le $1 ]
+do
+        SUM=$[$SUM+$i]
+        #i自增
+        i=$[$i+1]
+done
+echo "执行结果=$SUM"
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829190756.png)
+
+### read 读取控制台输入
+
+- 基本语法：`read(选项)(参数)`
+- 选项：
+  - `-p`：指定读取值时的提示符
+  - `-t`：指定读取值时等待的时间（秒），如果没有在指定的时间内输入，就不再等待了
+- 参数：
+  - 变量：指定读取值的变量名
+
+- 应用实例
+
+> 案例 1：读取控制台输入一个 NUM1 值
+>
+> 案例 2：读取控制台输入一个 NUM2 值，在 10 秒内输入
+
+```shell
+#!/bin/bash
+#案例 1：读取控制台输入一个 NUM1 值
+read -p "请输入一个数 NUM1=" NUM1
+echo "你输入的NUM1=$NUM1"
+#案例 2：读取控制台输入一个 NUM2 值，在 10 秒内输入
+read -t 10 -p "请输入一个数 NUM2=" NUM2
+echo "你输入的NUM2=$NUM2"
+```
+
+### 函数
+
+#### 函数介绍
+
+shell 编程和其它编程语言一样，有系统函数，也可以自定义函数。系统函数中，我们这里就介绍两个
+
+#### 系统函数
+
+**basename 基本语法**
+
+- 功能：返回完整路径最后 `/` 的部分，常用于获取文件名
+- 语法：
+  - `basename [pathname] [suffix]`
+  - `basename [string] [suffix]`：（功能描述：basename 命令会删掉所有的前缀包括最后一个（‘/’）字符，然后将字符串显示出来）
+
+- 选项：suffix 为后缀，如果 suffix 被指定了，basename 会将 pathname 或 string 中的 suffix 去掉
+
+- 应用实例
+
+> 案例 1：请返回 /home/aaa/test.txt 的 "test.txt" 部分
+
+```shell
+basename /home/aaa/test.txt
+```
+
+**dirname 基本语法**
+
+- 功能：返回完整路径最后 / 的前面的部分，常用于返回路径部分
+
+- 语法：`dirname 文件绝对路径` （功能描述：从给定的包含绝对路径的文件名中去除文件名（非目录的部分），然后返回剩下的路径（目录的部分））
+
+- 应用实例
+
+> 案例 1：请返回 /home/aaa/test.txt 的 /home/aaa 
+
+```shell
+dirname /home/aaa/test.txt
+```
+
+#### 自定义函数
+
+- 基本语法
+
+```shell
+[ function ] funname[()]
+{
+	Action; 
+	[return int;]
+}
+
+#调用直接写函数名：funname [值]
+```
+
+- 应用实例
+
+> 案例 1：计算输入两个参数的和(动态的获取)， getSum
+
+```shell
+#!/bin/bash
+#案例 1：计算输入两个参数的和(动态的获取)， getSum
+#定义函数 getSum 
+function getSum() {
+	SUM=$[$n1+$n2] 
+	echo "和是=$SUM"
+}
+
+#输入两个值
+read -p "请输入一个数 n1=" n1 
+read -p "请输入一个数 n2=" n2 
+#调用自定义函数
+getSum $n1 $n2
+```
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210830213706.png)
+
+### Shell 编程综合案例
+
+#### 需求分析
+
+1. 每天凌晨 2:30 备份 数据库 caicai到 /data/backup/db
+
+2. 备份开始和备份结束能够给出相应的提示信息
+
+3. 备份后的文件要求以备份时间为文件名，并打包成 .tar.gz 的形式，比如：2021-03-12_230201.tar.gz
+
+4. 在备份的同时，检查是否有 10 天前备份的数据库文件，如果有就将其删除。
+
+#### 代码 `/usr/sbin/mysql_db.backup.sh`
+
+```shell
+#备份目录
+BACKUP=/data/backup/db 
+#当前时间
+DATETIME=$(date +%Y-%m-%d_%H%M%S)
+echo $DATETIME 
+#数据库的地址
+HOST=localhost
+#数据库用户名
+DB_USER=root 
+#数据库密码
+DB_PW=root 
+#备份的数据库名
+DATABASE=caicai
+#创建备份目录, 如果不存在，就创建
+[ ! -d "${BACKUP}/${DATETIME}" ] && mkdir -p "${BACKUP}/${DATETIME}"
+#备份数据库
+mysqldump	-u${DB_USER}	-p${DB_PW}	--host=${HOST}	-q	-R	--databases	${DATABASE}	|	gzip	>
+${BACKUP}/${DATETIME}/$DATETIME.sql.gz
+#将文件处理成 tar.gz 
+cd ${BACKUP}
+tar -zcvf $DATETIME.tar.gz ${DATETIME} 
+#删除对应的备份目录
+rm -rf ${BACKUP}/${DATETIME}
+#删除 10 天前的备份文件
+find ${BACKUP} -atime +10 -name "*.tar.gz" -exec rm -rf {} \;
+#这里的 -exec 代表继续执行，后面的 {} 指的是 -exec 前面的内容， \; 代表结束
+echo "备份数据库${DATABASE} 成功~"
 
 
-
-
-
-
-
-
-
-
-
+#将脚本加入到任务调度中
+cround -e
+#添加脚本
+30 2 * * * /usr/sbin/mysql_db.backup.sh
+```
 
 ## 日志管理
 
 
 
+
+
+
+
+
+
 ## 备份与恢复
+
+
+
+
+
+
+
+
+
+
+
+## 补充
