@@ -2035,7 +2035,7 @@ dirname /home/aaa/test.txt
 > 案例 1：计算输入两个参数的和(动态的获取)， getSum
 
 ```shell
-#!/bin/bash
+!/bin/bash
 #案例 1：计算输入两个参数的和(动态的获取)， getSum
 #定义函数 getSum 
 function getSum() {
@@ -2067,6 +2067,7 @@ getSum $n1 $n2
 #### 代码 `/usr/sbin/mysql_db.backup.sh`
 
 ```shell
+!/bin/bash
 #备份目录
 BACKUP=/data/backup/db 
 #当前时间
