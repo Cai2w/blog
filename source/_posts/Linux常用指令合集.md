@@ -6,7 +6,7 @@ tags:
 categories: 
 - Linux
 description: 
-sticky: 2
+sticky:
 cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 ---
 
