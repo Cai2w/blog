@@ -2105,21 +2105,225 @@ cround -e
 
 ## 日志管理
 
+### 基本介绍
 
+1. 日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息、系统的启动信息、系统的安全信息、邮件相关信息、各种服务相关信息等。
+2. 日志对于安全来说也很重要，它记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者受到攻击时攻击者留下的痕迹。
+3. 可以这样理解 **日志是用来记录重大事件的工具**
 
+### 系统常用的日志
 
+- `/var/log/` 目录就是系统日志文件的保存位置，看张图
 
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905170020.png)
 
+- 系统常用的日志
 
+| 日志文件                | 说明                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| **`/var/log/boot.log`** | 系统启动日志                                                 |
+| **`/var/log/cron`**     | 记录与系统定时任务相关的日志                                 |
+| `/var/log/cups`         | 记录打印信息的日志                                           |
+| `/var/log/dmesg`        | 记录了系统在开机时内核自检的信总。也可以使用`dmesg`命令直接查看内核自检信息 |
+| `/var/log/btmp`         | 记录错误登录的日志，这个文件是二进制文件，不能直接用Vi查看，而要使用lastb命令查看。命令如下：`[root@caicai log]#lastb` |
+| **`/var/log/lasllog`**  | 记录系统中所有用户最后一次的登录时间的日志，这个文件也是二进制文件，要使用`lastlog`命令查看 |
+| **`/var/log/mailog`**   | 记录邮件信息的日志                                           |
+| **`/var/log/message`**  | 记录系统重要消息的日志，这个日志文件会记录Linux系统的绝大多数重要信息。如果系统出现问题，首先要检查的应该就是这个日志文件 |
+| **`/var/log/secure`**   | 记录验证和授权方面的信息，只要涉及账户和密码的程序都会记录，比如系统的登录、ssh的登录、su切换用户，sudo授权，甚至添加用户和修改用户密码都会记录在这个日志文件中 |
+| `/var/log/wtmp`         | 永久记录所有用户的登录、注销信息，同时记录系统的启动、重启、关机时间。是二进制文件，要使用`last`命令 |
+| **`/var/log/ulmp`**     | 记录当前已经登录的用户的信息，这个文件会随着用户的登录和注销而不断变化，只记录当前登录用户的信息，这个文件不能用Vi查看，而要使用w、who、users等命令查看 |
 
+- 应用案例
+
+> 使用 root 用户通过 xshell6 登陆, 第一次使用错误的密码，第二次使用正确的密码登录成功看看在日志文件/var/log/secure 里有没有记录相关信息
+
+### 日志管理服务 rsyslogd
+
+CentOS7.6 日志服务是 rsyslogd ， CentOS6.x 日志服务是 syslogd 。rsyslogd 功能更强大。rsyslogd 的使用、日志文件的格式，和 syslogd 服务兼容的。原理示意图
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905175412.png)
+
+- 查询Linux中的rsyslogd 服务是否启动
+
+```bash
+ps aux | grep "rsyslog" | grep -v "grep"
+```
+
+- 查询rsyslogd 服务的自启动状态
+
+```bash
+systemctl list-unit-files | grep rsyslog
+```
+
+- 配置文件：`/etc/rsyslog.conf`
+
+> 编辑文件时的格式为：   \*.\*    存放日志文件
+>
+> 其中第一个\*代表日志类型，第二个\*代表日志级别
+
+- 日志类型分为：
+
+| 类型                 | 说明                                        |
+| -------------------- | ------------------------------------------- |
+| auth                 | pam 产生的日志                              |
+| authpriv             | ssh、ftp 等登录信息的验证信息               |
+| corn                 | 时间任务相关                                |
+| kern                 | 内核                                        |
+| lpr                  | 打印                                        |
+| mail                 | 邮件                                        |
+| mark(syslog)-rsyslog | 服务内部的信息，时间标识                    |
+| news                 | 新闻组                                      |
+| user                 | 用户程序产生的相关信息                      |
+| uucp                 | unix    to  nuix    copy 主机之间相关的通信 |
+| local  1-7           | 自定义的日志设备                            |
+
+- 日志级别分类：
+
+| 类型    | 说明                                                 |
+| ------- | ---------------------------------------------------- |
+| debug   | 有调试信息的，日志通信最多                           |
+| info    | 一般信息日志，最常用                                 |
+| notice  | 最具有重要性的普通条件的信息                         |
+| warning | 警告级别                                             |
+| err     | 错误级别，阻止某个功能或者模块不能正常工作的信息     |
+| crit    | 严重级别，阻止整个系统或者整个软件不能正常工作的信息 |
+| alert   | 需要立刻修改的信息                                   |
+| emerg   | 内核崩溃等重要信息                                   |
+| none    | 什么都不记录                                         |
+
+> 注意：从上到下，级别从低到高，记录信息越来越少
+
+- 由日志服务 rsyslogd 记录的日志文件，日志文件的格式包含以下 4 列：
+  1. 事件产生的时间
+  2. 产生事件的服务器的主机名
+  3. 产生事件的服务名或程序名
+  4. 事件的具体信息
+
+### 日志轮替
+
+#### 基本介绍
+
+日志轮替就是把旧的日志文件移动并改名，同时建立新的空日志文件，当旧日志文件超出保存的范围之后，就会进行删除
+
+#### 日志轮替文件命名
+
+1. centos7 使用 logrotate 进行日志轮替管理，要想改变日志轮替文件名字，通过 /etc/logrotate.conf 配置文件中“dateext” 参数
+
+2. 如果配置文件中有“dateext”参数，那么日志会用日期来作为日志文件的后缀，例如 “secure-20201010”。这样日志文件名不会重叠，也就不需要日志文件的改名， 只需要指定保存日志个数，删除多余的日志文件即可
+3. 如果配置文件中没有“dateext”参数，日志文件就需要进行改名了。当第一次进行日志轮替时，当前的“secure”日志会自动改名为“secure.1”，然后新建“secure”日志， 用来保存新的日志。当第二次进行日志轮替时，“secure.1” 会自动改名为“secure.2”， 当前的“secure”日志会自动改名为“secure.1”，然后也会新建“secure”日志，用来保存新的日志，以此类推
+
+#### logrotate 配置文件
+
+- `/etc/logrotate.conf`为 logrotate 的全局配置文件
+
+```bash
+# rotate log files weekly, 每周对日志文件进行一次轮替
+weekly
+# keep 4 weeks worth of backlogs,  共保存 4 份日志文件，当建立新的日志文件时，旧的将会被删除
+rotate 4
+# create new (empty) log files after rotating old ones,  创建新的空的日志文件，在日志轮替后
+create
+# use date as a suffix of the rotated file,  使用日期作为日志轮替文件的后缀
+dateext
+# uncomment this if you want your log files compressed, 日志文件是否压缩。如果取消注释，则日志会在转储的同时进行压缩
+#compress
+#RPM packages drop log rotation information into this directory include /etc/logrotate.d
+# 包含 /etc/logrotate.d/ 目录中所有的子配置文件。也就 是说会把这个目录中所有子配置文件读取进来，
+#下面是单独设置，优先级更高。
+# no packages own wtmp and btmp -- we'll rotate them here
+/var/log/wtmp {
+	monthly # 每月对日志文件进行一次轮替
+	create 0664 root utmp #  建立的新日志文件，权限是 0664  ，所有者是 root ，所属组是 utmp 组
+	minsize 1M	# 日志文件最小轮替大小是 1MB 。也就是日志一定要超过 1MB 才会轮替，否则就算时间达到一个月，也不进行日志转储
+	rotate 1 #  仅保留一个日志备份。也就是只有 wtmp  和 wtmp.1  日志保留而已
+}
+
+/var/log/btmp {
+    missingok #  如果日志不存在，则忽略该日志的警告信息
+    monthly
+    create 0600 root utmp 
+    rotate 1
+}
+```
+
+- 参数说明：
+
+| 参数                    | 参数说明                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| daily                   | 日志的轮替周期是每天                                         |
+| weekly                  | 日志的轮替周期是每周                                         |
+| monthly                 | 日志的轮替周期是每月                                         |
+| rotate 数字             | 保留的日志文件的个数。0 指没有备份                           |
+| compress                | 日志轮替时，旧的日志进行压缩                                 |
+| create mode owner group | 建立新日志，同时指定新日志的权限与所有者和所属组             |
+| mail address            | 当日志轮替时，输出内容通过邮件发送到指定的邮件地址           |
+| missingok               | 如果日志不存在，则忽略该日志的警告信息                       |
+| notifempty              | 如果日志为空文件，则不进行日志轮替                           |
+| minsize 大小            | 日志轮替的最小值。也就是日志一定要达到这个最小值才会轮替，否则就算时间达到也不轮替 |
+| size 大小               | 日志只有大于指定大小才进行日志轮替，而不是按照时间轮替       |
+| dateext                 | 使用日期作为日志轮替文件的后缀                               |
+| sharedscripts           | 在此关键字之后的脚本只执行一次                               |
+| prerotate/endscript     | 在日志轮替之前执行脚本命令                                   |
+| postrotate/endscript    | 在日志轮替之后执行脚本命令                                   |
+
+#### 把自己的日志加入到日志轮替
+
+1. 第一种方法是直接在/etc/logrotate.conf 配置文件中写入该日志的轮替策略
+2. 第二种方法是在/etc/logrotate.d/目录中新建立该日志的轮替文件，在该轮替文件中写入正确的轮替策略，因为该目录中的文件都会被“include”到主配置文件中，所以也可以把日志加入轮替。
+3. **推荐使用第二种方法**，因为系统中需要轮替的日志非常多，如果全都直接写 入/etc/logrotate.conf 配置文件，那么这个文件的可管理性就会非常差，不利于此文件的维护
+4. 在/etc/logrotate.d/ 配置轮替文件一览
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905181745.png)
+
+#### 应用实例
+
+看一个案例,  在/etc/logrotate.conf 进行配置,  或者直接在 /etc/logrotate.d/  下创建文件 cailog  编写如下内容,    具体轮替的效果 可以参考 /var/log 下的 boot.log 情况
+
+```bash
+/var/log/cai.log
+{
+	missingok
+	daily
+	copytruncate
+	rotate 7
+	notifempty
+}
+```
+
+### 日志轮替机制原理
+
+日志轮替之所以可以在指定的时间备份日志，是依赖系统定时任务。在 /etc/cron.daily/目录，就会发现这个目录中是有 logrotate 文件(可执行)，logrotate 通过这个文件依赖定时任务执行的
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905184053.png)
+
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905175412.png)
+
+### 查看内存日志
+
+```bash
+journalctl									#可以查看内存日志, 这里我们看看常用的指令
+journalctl									#查看全部
+journalctl -n 3								#查看最新 3 条
+journalctl --since 19:00 --until 19:10:10	#查看起始时间到结束时间的日志可加日期
+journalctl	-p err							#报错日志
+journalctl -o verbose						#日志详细内容
+journalctl _PID=1245 _COMM=sshd				#查看包含这些参数的日志（在详细日志查看） 
+#或者 
+journalctl | grep sshd
+```
+
+> 注意: journalctl  查看的是内存日志, 重启清空
 
 ## 备份与恢复
 
+### 基本介绍
 
+实体机无法做快照，如果系统出现异常或者数据损坏，后果严重， 要重做系统，还会造成数据丢失。所以我们可以使用备份和恢复技术
 
+linux 的备份和恢复很简单 ， 有两种方式：
 
-
-
+1. 把需要的文件(或者分区)用 TAR 打包就行，下次需要恢复的时候，再解压开覆盖即可
+2. 使用 dump 和 restore 命令
 
 
 
