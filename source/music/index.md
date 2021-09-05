@@ -2,7 +2,7 @@
 title: 听听音乐
 date: 2021-08-08 12:53:18
 type: "music"
-top_img: /img/music.jpg
+top_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/music.jpg
 ---
 
 

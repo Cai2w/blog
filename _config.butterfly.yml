@@ -82,42 +82,42 @@ katex:
 # --------------------------------------
 
 # Favicon嚙踝蕭嚙磕桴嚙瘩嚙誼?蕭
-favicon: /img/avatar.jpg
+favicon: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/avatar.jpg
 
 # Avatar (嚙稷嚙踝蕭)
 avatar:
-  img: /img/avatar.jpg
+  img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/avatar.jpg
   effect: false
 
 # Disable all banner image
 disable_top_img: false
 
 # The banner image of home page
-index_img: /img/top.jpg
+index_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/hexo.jpg
 
 # If the banner of page not setting, it will show the top_img
-default_top_img: /img/4.jpg
+default_top_img: 
 
 # The banner image of archive page
-archive_img: /img/archive.jpg
+archive_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/archive.jpg
 
 # If the banner of tag page not setting, it will show the top_img
 # note: tag page, not tags page (嚙諉蒐嚙踝蕭嚙踝蕭 top_img)
-tag_img:
+tag_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/tag.jpg
 
 # The banner image of tag page
 # format:
 #  - tag name: xxxxx
-tag_per_img: /img/8.jpg
+tag_per_img: 
 
 # If the banner of category page not setting, it will show the top_img
 # note: category page, not categories page (嚙諉瘀蕭嚙踝蕭嚙踝蕭嚙?top_img)
-category_img:
+category_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/categorie.jpg
 
 # The banner image of category page
 # format:
 #  - category name: xxxxx
-category_per_img: /img/4.jpg
+category_per_img: 
 
 cover:
   # display the cover or not (嚙褒瘀蕭嚙瑾尨嚙踝蕭嚙蝓瘀蕭嚙踝蕭)
