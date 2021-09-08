@@ -696,3 +696,4 @@ class ShardingSphereApplicationTests {
 ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210812233553.png)
 
 我们可以看到，数据是按照我们的配置插入了
+

@@ -495,7 +495,7 @@ footer:
   owner:
     enable: true
     since: 2021
-  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img style="position:relative;top:4px" src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210821203244.png" data-lazy-src="https://cdn.jsdelivr.net/gh/caibhh/CDN/img/blog/icp.webp" alt="ICP" data-ll-status="loaded" class="entered loaded">&nbsp;<span>备案号：豫ICP备2021022101号</span></a>
+  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="/img/icp.png"><span>备案号：豫ICP备2021022101号</span></a>
   copyright: true # Copyright of theme and framework
 
 # Analysis
