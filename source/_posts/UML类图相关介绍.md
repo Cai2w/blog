@@ -1,10 +1,10 @@
 ---
-title: UML图介绍
+title: UML类图介绍
 date: 2021-09-07 21:35:04
 tags:
 - UML图
 categories:
-- 设计模式
+- [设计模式,相关内容介绍]
 description: 设计模式的准备工作，该篇文章介绍了UML图的各种表示方式
 sticky:
 cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png

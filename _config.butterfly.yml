@@ -495,7 +495,7 @@ footer:
   owner:
     enable: true
     since: 2021
-  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="/img/icp.png"><span>备案号：豫ICP备2021022101号</span></a>
+  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/icp.png"><span>备案号：豫ICP备2021022101号</span></a>
   copyright: true # Copyright of theme and framework
 
 # Analysis
@@ -742,7 +742,7 @@ aside:
   card_categories:
     enable: true
     limit: 8 # if set 0 will show all
-    expand: none # none/true/false
+    expand: false # none/true/false
     sort_order: # Don't modify the setting unless you know how it works
   card_tags:
     enable: true
