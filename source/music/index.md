@@ -19,3 +19,5 @@ top_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/music.jpg
 
 {% meting "514774419" "netease" "song" "theme:#66CCFF" "mode:circulation" "mutex:true" "listmaxheight:340px" "preload:auto" %}
 
+<span style="font-size: 25px;font-weight: bold;">&#x1F384;音乐如未加载出来，请刷新此页面</span>
+
