@@ -29,7 +29,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_developer_activity_bv83.
 
 JVM、JRE、JDK 的关系如下图所示
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004114.png)
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003172846.png)
 
 ### 学习JVM有什么用？
 
