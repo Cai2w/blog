@@ -1281,7 +1281,7 @@
 <li>多态：JVM内部使用虚方法调用的机制实现了多态</li>
 </ul>
 <h4 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h4><p>JVM、JRE、JDK 的关系如下图所示</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004114.png"></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003172846.png"></p>
 <h3 id="学习JVM有什么用？"><a href="#学习JVM有什么用？" class="headerlink" title="学习JVM有什么用？"></a>学习JVM有什么用？</h3><ul>
 <li>面试必备</li>
 <li>中高级程序员必备</li>
