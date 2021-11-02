@@ -2,7 +2,6 @@
 title: 关于我
 date: 2021-08-08 02:59:11
 type: "about"
-top_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/about.jpg
 ---
 
 # 个人简介

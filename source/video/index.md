@@ -2,7 +2,6 @@
 title: 放松一下吧
 date: 2021-08-08 15:22:48
 type: "video"
-top_img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/video.jpg
 ---
 
 {% raw %}
