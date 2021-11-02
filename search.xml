@@ -406,77 +406,6 @@
       </tags>
   </entry>
   <entry>
-    <title>享元模式</title>
-    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
-<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
-<ol>
-<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
-<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
-</ol>
-<p>享元模式的主要有以下角色：</p>
-<ul>
-<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
-<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
-<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
-<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
-<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
-
-<p><strong>先来看类图：</strong></p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p><strong>代码如下：</strong></p>
-<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
-<ul>
-<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
-<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
-<p><strong>使用场景：</strong></p>
-<ul>
-<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
-<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
-<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
-</ul>
-<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行上面代码，结果如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
-
-<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>结构型模式</category>
-      </categories>
-      <tags>
-        <tag>享元模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>UML类图介绍</title>
     <url>/2021/09/07/UML%E7%B1%BB%E5%9B%BE%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
@@ -550,6 +479,77 @@
       </categories>
       <tags>
         <tag>UML图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>享元模式</title>
+    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
+<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
+<ol>
+<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
+<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
+</ol>
+<p>享元模式的主要有以下角色：</p>
+<ul>
+<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
+<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
+<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
+<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
+<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
+
+<p><strong>先来看类图：</strong></p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p><strong>代码如下：</strong></p>
+<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
+<ul>
+<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
+<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
+<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
+</ul>
+<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行上面代码，结果如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
+
+<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>享元模式</tag>
       </tags>
   </entry>
   <entry>
@@ -772,6 +772,52 @@
       </tags>
   </entry>
   <entry>
+    <title>桥接模式</title>
+    <url>/2021/09/20/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现在有一个需求，需要创建不同的图形，并且每个图形都有可能会有不同的颜色。我们可以利用继承的方式来设计类的关系：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207194617620.png"></p>
+<p>我们可以发现有很多的类，假如我们再增加一个形状或再增加一种颜色，就需要创建更多的类。</p>
+<p>试想，在一个有多种可能会变化的维度的系统中，用继承方式会造成类爆炸，扩展起来不灵活。每次在一个维度上新增一个具体实现都要增加多个子类。为了更加灵活的设计系统，我们此时可以考虑使用桥接模式。</p>
+<p><strong>定义：</strong></p>
+<p>​    将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>桥接（Bridge）模式包含以下主要角色：</p>
+<ul>
+<li>抽象化（Abstraction）角色 ：定义抽象类，并包含一个对实现化对象的引用。</li>
+<li>扩展抽象化（Refined  Abstraction）角色 ：是抽象化角色的子类，实现父类中的业务方法，并通过组合关系调用实现化角色中的业务方法。</li>
+<li>实现化（Implementor）角色 ：定义实现化角色的接口，供扩展抽象化角色调用。</li>
+<li>具体实现化（Concrete Implementor）角色 ：给出实现化角色接口的具体实现。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】视频播放器</p>
+<p>需要开发一个跨平台视频播放器，可以在不同操作系统平台（如Windows、Mac、Linux等）上播放多种格式的视频文件，常见的视频格式包括RMVB、AVI、WMV等。该播放器包含了两个维度，适合使用桥接模式。</p>
+<p>类图如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//视频文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//avi文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVIFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;avi视频文件：&quot;</span>+ fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//rmvb文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">REVBBFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;rmvb文件：&quot;</span> + fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//操作系统版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> VideoFile videoFile;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OperatingSystemVersion</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.videoFile = videoFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Windows版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Windows</span> <span class="keyword">extends</span> <span class="title">OperatingSystem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Windows</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//mac版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mac</span> <span class="keyword">extends</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mac</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">		videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        OperatingSystem os = <span class="keyword">new</span> Windows(<span class="keyword">new</span> AVIFile());</span><br><span class="line">        os.play(<span class="string">&quot;战狼3&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>好处：</strong></p>
+<ul>
+<li><p>桥接模式提高了系统的可扩充性，在两个变化维度中任意扩展一个维度，都不需要修改原有系统。</p>
+<p>如：如果现在还有一种视频文件类型wmv，我们只需要再定义一个类实现VideoFile接口即可，其他类不需要发生变化。</p>
+</li>
+<li><p>实现细节对客户透明</p>
+</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>当一个类存在两个独立变化的维度，且这两个维度都需要进行扩展时。</li>
+<li>当一个系统不希望使用继承或因为多层次继承导致系统类的个数急剧增加时。</li>
+<li>当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时。避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>桥接模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>建造者模式</title>
     <url>/2021/09/12/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>将一个复杂对象的构建与表示分离，使得同样的构建过程可以创建不同的表示。</p>
@@ -845,49 +891,94 @@
       </tags>
   </entry>
   <entry>
-    <title>桥接模式</title>
-    <url>/2021/09/20/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现在有一个需求，需要创建不同的图形，并且每个图形都有可能会有不同的颜色。我们可以利用继承的方式来设计类的关系：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207194617620.png"></p>
-<p>我们可以发现有很多的类，假如我们再增加一个形状或再增加一种颜色，就需要创建更多的类。</p>
-<p>试想，在一个有多种可能会变化的维度的系统中，用继承方式会造成类爆炸，扩展起来不灵活。每次在一个维度上新增一个具体实现都要增加多个子类。为了更加灵活的设计系统，我们此时可以考虑使用桥接模式。</p>
-<p><strong>定义：</strong></p>
-<p>​    将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>桥接（Bridge）模式包含以下主要角色：</p>
+    <title>模板方法模式</title>
+    <url>/2021/09/22/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。</p>
+</blockquote>
+<p>行为型模式分为类行为模式和对象行为模式，前者采用继承机制来在类间分派行为，后者采用组合或聚合在对象间分配行为。由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。</p>
+<p>行为型模式分为：</p>
 <ul>
-<li>抽象化（Abstraction）角色 ：定义抽象类，并包含一个对实现化对象的引用。</li>
-<li>扩展抽象化（Refined  Abstraction）角色 ：是抽象化角色的子类，实现父类中的业务方法，并通过组合关系调用实现化角色中的业务方法。</li>
-<li>实现化（Implementor）角色 ：定义实现化角色的接口，供扩展抽象化角色调用。</li>
-<li>具体实现化（Concrete Implementor）角色 ：给出实现化角色接口的具体实现。</li>
+<li>模板方法模式</li>
+<li>策略模式</li>
+<li>命令模式</li>
+<li>职责链模式</li>
+<li>状态模式</li>
+<li>观察者模式</li>
+<li>中介者模式</li>
+<li>迭代器模式</li>
+<li>访问者模式</li>
+<li>备忘录模式</li>
+<li>解释器模式</li>
 </ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】视频播放器</p>
-<p>需要开发一个跨平台视频播放器，可以在不同操作系统平台（如Windows、Mac、Linux等）上播放多种格式的视频文件，常见的视频格式包括RMVB、AVI、WMV等。该播放器包含了两个维度，适合使用桥接模式。</p>
-<p>类图如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+<p>以上 11 种行为型模式，除了模板方法模式和解释器模式是类行为型模式，其他的全部属于对象行为型模式。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在面向对象程序设计过程中，程序员常常会遇到这种情况：设计一个系统时知道了算法所需的关键步骤，而且确定了这些步骤的执行顺序，但某些步骤的具体实现还未知，或者说某些步骤的实现与具体的环境相关。</p>
+<p>例如，去银行办理业务一般要经过以下4个流程：取号、排队、办理具体业务、对银行工作人员进行评分等，其中取号、排队和对银行工作人员进行评分的业务对每个客户是一样的，可以在父类中实现，但是办理具体业务却因人而异，它可能是存款、取款或者转账等，可以延迟到子类中实现。</p>
+<p><strong>定义：</strong></p>
+<p>定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>模板方法（Template Method）模式包含以下主要角色：</p>
+<ul>
+<li><p>抽象类（Abstract Class）：负责给出一个算法的轮廓和骨架。它由一个模板方法和若干个基本方法构成。</p>
+<ul>
+<li><p>模板方法：定义了算法的骨架，按某种顺序调用其包含的基本方法。</p>
+</li>
+<li><p>基本方法：是实现算法各个步骤的方法，是模板方法的组成部分。基本方法又可以分为三种：</p>
+<ul>
+<li><p>抽象方法(Abstract Method) ：一个抽象方法由抽象类声明、由其具体子类实现。</p>
+</li>
+<li><p>具体方法(Concrete Method) ：一个具体方法由一个抽象类或具体类声明并实现，其子类可以进行覆盖也可以直接继承。</p>
+</li>
+<li><p>钩子方法(Hook Method) ：在抽象类中已经实现，包括用于判断的逻辑方法和需要子类重写的空方法两种。</p>
+<p>一般钩子方法是用于判断的逻辑方法，这类方法名一般为isXxx，返回值类型为boolean类型。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>具体子类（Concrete Class）：实现抽象类中所定义的抽象方法和钩子方法，它们是一个顶级逻辑的组成步骤。</p>
+</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】炒菜</p>
+<p>炒菜的步骤是固定的，分为倒油、热油、倒蔬菜、倒调料品、翻炒等步骤。现通过模板方法模式来用代码模拟。类图如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
 
 <p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//视频文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//avi文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVIFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;avi视频文件：&quot;</span>+ fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//rmvb文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">REVBBFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;rmvb文件：&quot;</span> + fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//操作系统版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> VideoFile videoFile;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OperatingSystemVersion</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.videoFile = videoFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Windows版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Windows</span> <span class="keyword">extends</span> <span class="title">OperatingSystem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Windows</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//mac版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mac</span> <span class="keyword">extends</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mac</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">		videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        OperatingSystem os = <span class="keyword">new</span> Windows(<span class="keyword">new</span> AVIFile());</span><br><span class="line">        os.play(<span class="string">&quot;战狼3&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">cookProcess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//第一步：倒油</span></span><br><span class="line">        <span class="keyword">this</span>.pourOil();</span><br><span class="line">        <span class="comment">//第二步：热油</span></span><br><span class="line">        <span class="keyword">this</span>.heatOil();</span><br><span class="line">        <span class="comment">//第三步：倒蔬菜</span></span><br><span class="line">        <span class="keyword">this</span>.pourVegetable();</span><br><span class="line">        <span class="comment">//第四步：倒调味料</span></span><br><span class="line">        <span class="keyword">this</span>.pourSauce();</span><br><span class="line">        <span class="comment">//第五步：翻炒</span></span><br><span class="line">        <span class="keyword">this</span>.fry();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourOil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;倒油&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第二步：热油是一样的，所以直接实现</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heatOil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;热油&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第三步：倒蔬菜是不一样的（一个下包菜，一个是下菜心）</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第四步：倒调味料是不一样</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//第五步：翻炒是一样的，所以直接实现</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fry</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;炒啊炒啊炒到熟啊&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteClass_BaoCai</span> <span class="keyword">extends</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的蔬菜是包菜&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的酱料是辣椒&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteClass_CaiXin</span> <span class="keyword">extends</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的蔬菜是菜心&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的酱料是蒜蓉&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//炒手撕包菜</span></span><br><span class="line">        ConcreteClass_BaoCai baoCai = <span class="keyword">new</span> ConcreteClass_BaoCai();</span><br><span class="line">        baoCai.cookProcess();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//炒蒜蓉菜心</span></span><br><span class="line">        ConcreteClass_CaiXin caiXin = <span class="keyword">new</span> ConcreteClass_CaiXin();</span><br><span class="line">        caiXin.cookProcess();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>好处：</strong></p>
+<blockquote>
+<p>注意：为防止恶意操作，一般模板方法都加上 final 关键词。</p>
+</blockquote>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点：</strong></p>
 <ul>
-<li><p>桥接模式提高了系统的可扩充性，在两个变化维度中任意扩展一个维度，都不需要修改原有系统。</p>
-<p>如：如果现在还有一种视频文件类型wmv，我们只需要再定义一个类实现VideoFile接口即可，其他类不需要发生变化。</p>
+<li><p>提高代码复用性</p>
+<p>将相同部分的代码放在抽象的父类中，而将不同的代码放入不同的子类中。</p>
 </li>
-<li><p>实现细节对客户透明</p>
+<li><p>实现了反向控制</p>
+<p>通过一个父类调用其子类的操作，通过对子类的具体实现扩展不同的行为，实现了反向控制 ，并符合“开闭原则”。</p>
 </li>
 </ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li>当一个类存在两个独立变化的维度，且这两个维度都需要进行扩展时。</li>
-<li>当一个系统不希望使用继承或因为多层次继承导致系统类的个数急剧增加时。</li>
-<li>当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时。避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>对每个不同的实现都需要定义一个子类，这会导致类的个数增加，系统更加庞大，设计也更加抽象。</li>
+<li>父类中的抽象方法由子类实现，子类执行的结果会影响父类的结果，这导致一种反向的控制结构，它提高了代码阅读的难度。</li>
 </ul>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><ul>
+<li>算法的整体步骤很固定，但其中个别部分易变时，这时候可以使用模板方法模式，将容易变的部分抽象出来，供子类实现。</li>
+<li>需要通过子类来决定父类算法中某个步骤是否执行，实现子类对父类的反向控制。</li>
+</ul>
+<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>InputStream类就使用了模板方法模式。在InputStream类中定义了多个 <code>read()</code> 方法，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">InputStream</span> <span class="keyword">implements</span> <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">    <span class="comment">//抽象方法，要求子类必须重写</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span> b[])</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> read(b, <span class="number">0</span>, b.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span> b[], <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (b == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (off &lt; <span class="number">0</span> || len &lt; <span class="number">0</span> || len &gt; b.length - off) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> c = read(); <span class="comment">//调用了无参的read方法，该方法是每次读取一个字节数据</span></span><br><span class="line">        <span class="keyword">if</span> (c == -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        b[off] = (<span class="keyword">byte</span>)c;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (; i &lt; len ; i++) &#123;</span><br><span class="line">                c = read();</span><br><span class="line">                <span class="keyword">if</span> (c == -<span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                b[off + i] = (<span class="keyword">byte</span>)c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ee) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上面代码可以看到，无参的 <code>read()</code> 方法是抽象方法，要求子类必须实现。而 <code>read(byte b[])</code> 方法调用了 <code>read(byte b[], int off, int len)</code> 方法，所以在此处重点看的方法是带三个参数的方法。 </p>
+<p>在该方法中第18行、27行，可以看到调用了无参的抽象的 <code>read()</code> 方法。</p>
+<p>总结如下： 在InputStream父类中已经定义好了读取一个字节数组数据的方法是每次读取一个字节，并将其存储到数组的第一个索引位置，读取len个字节数据。具体如何读取一个字节数据呢？由子类实现。</p>
 ]]></content>
       <categories>
         <category>设计模式</category>
-        <category>结构型模式</category>
+        <category>行为型模式</category>
       </categories>
       <tags>
-        <tag>桥接模式</tag>
+        <tag>模板方法模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1087,97 +1178,6 @@
       </tags>
   </entry>
   <entry>
-    <title>模板方法模式</title>
-    <url>/2021/09/22/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>行为型模式用于描述程序在运行时复杂的流程控制，即描述多个类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，它涉及算法与对象间职责的分配。</p>
-</blockquote>
-<p>行为型模式分为类行为模式和对象行为模式，前者采用继承机制来在类间分派行为，后者采用组合或聚合在对象间分配行为。由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象行为模式比类行为模式具有更大的灵活性。</p>
-<p>行为型模式分为：</p>
-<ul>
-<li>模板方法模式</li>
-<li>策略模式</li>
-<li>命令模式</li>
-<li>职责链模式</li>
-<li>状态模式</li>
-<li>观察者模式</li>
-<li>中介者模式</li>
-<li>迭代器模式</li>
-<li>访问者模式</li>
-<li>备忘录模式</li>
-<li>解释器模式</li>
-</ul>
-<p>以上 11 种行为型模式，除了模板方法模式和解释器模式是类行为型模式，其他的全部属于对象行为型模式。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在面向对象程序设计过程中，程序员常常会遇到这种情况：设计一个系统时知道了算法所需的关键步骤，而且确定了这些步骤的执行顺序，但某些步骤的具体实现还未知，或者说某些步骤的实现与具体的环境相关。</p>
-<p>例如，去银行办理业务一般要经过以下4个流程：取号、排队、办理具体业务、对银行工作人员进行评分等，其中取号、排队和对银行工作人员进行评分的业务对每个客户是一样的，可以在父类中实现，但是办理具体业务却因人而异，它可能是存款、取款或者转账等，可以延迟到子类中实现。</p>
-<p><strong>定义：</strong></p>
-<p>定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>模板方法（Template Method）模式包含以下主要角色：</p>
-<ul>
-<li><p>抽象类（Abstract Class）：负责给出一个算法的轮廓和骨架。它由一个模板方法和若干个基本方法构成。</p>
-<ul>
-<li><p>模板方法：定义了算法的骨架，按某种顺序调用其包含的基本方法。</p>
-</li>
-<li><p>基本方法：是实现算法各个步骤的方法，是模板方法的组成部分。基本方法又可以分为三种：</p>
-<ul>
-<li><p>抽象方法(Abstract Method) ：一个抽象方法由抽象类声明、由其具体子类实现。</p>
-</li>
-<li><p>具体方法(Concrete Method) ：一个具体方法由一个抽象类或具体类声明并实现，其子类可以进行覆盖也可以直接继承。</p>
-</li>
-<li><p>钩子方法(Hook Method) ：在抽象类中已经实现，包括用于判断的逻辑方法和需要子类重写的空方法两种。</p>
-<p>一般钩子方法是用于判断的逻辑方法，这类方法名一般为isXxx，返回值类型为boolean类型。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>具体子类（Concrete Class）：实现抽象类中所定义的抽象方法和钩子方法，它们是一个顶级逻辑的组成步骤。</p>
-</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】炒菜</p>
-<p>炒菜的步骤是固定的，分为倒油、热油、倒蔬菜、倒调料品、翻炒等步骤。现通过模板方法模式来用代码模拟。类图如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">cookProcess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//第一步：倒油</span></span><br><span class="line">        <span class="keyword">this</span>.pourOil();</span><br><span class="line">        <span class="comment">//第二步：热油</span></span><br><span class="line">        <span class="keyword">this</span>.heatOil();</span><br><span class="line">        <span class="comment">//第三步：倒蔬菜</span></span><br><span class="line">        <span class="keyword">this</span>.pourVegetable();</span><br><span class="line">        <span class="comment">//第四步：倒调味料</span></span><br><span class="line">        <span class="keyword">this</span>.pourSauce();</span><br><span class="line">        <span class="comment">//第五步：翻炒</span></span><br><span class="line">        <span class="keyword">this</span>.fry();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourOil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;倒油&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第二步：热油是一样的，所以直接实现</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heatOil</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;热油&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第三步：倒蔬菜是不一样的（一个下包菜，一个是下菜心）</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第四步：倒调味料是不一样</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//第五步：翻炒是一样的，所以直接实现</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fry</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;炒啊炒啊炒到熟啊&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteClass_BaoCai</span> <span class="keyword">extends</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的蔬菜是包菜&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的酱料是辣椒&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteClass_CaiXin</span> <span class="keyword">extends</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourVegetable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的蔬菜是菜心&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourSauce</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;下锅的酱料是蒜蓉&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//炒手撕包菜</span></span><br><span class="line">        ConcreteClass_BaoCai baoCai = <span class="keyword">new</span> ConcreteClass_BaoCai();</span><br><span class="line">        baoCai.cookProcess();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//炒蒜蓉菜心</span></span><br><span class="line">        ConcreteClass_CaiXin caiXin = <span class="keyword">new</span> ConcreteClass_CaiXin();</span><br><span class="line">        caiXin.cookProcess();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：为防止恶意操作，一般模板方法都加上 final 关键词。</p>
-</blockquote>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点：</strong></p>
-<ul>
-<li><p>提高代码复用性</p>
-<p>将相同部分的代码放在抽象的父类中，而将不同的代码放入不同的子类中。</p>
-</li>
-<li><p>实现了反向控制</p>
-<p>通过一个父类调用其子类的操作，通过对子类的具体实现扩展不同的行为，实现了反向控制 ，并符合“开闭原则”。</p>
-</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>对每个不同的实现都需要定义一个子类，这会导致类的个数增加，系统更加庞大，设计也更加抽象。</li>
-<li>父类中的抽象方法由子类实现，子类执行的结果会影响父类的结果，这导致一种反向的控制结构，它提高了代码阅读的难度。</li>
-</ul>
-<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><ul>
-<li>算法的整体步骤很固定，但其中个别部分易变时，这时候可以使用模板方法模式，将容易变的部分抽象出来，供子类实现。</li>
-<li>需要通过子类来决定父类算法中某个步骤是否执行，实现子类对父类的反向控制。</li>
-</ul>
-<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>InputStream类就使用了模板方法模式。在InputStream类中定义了多个 <code>read()</code> 方法，如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">InputStream</span> <span class="keyword">implements</span> <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">    <span class="comment">//抽象方法，要求子类必须重写</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span> b[])</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> read(b, <span class="number">0</span>, b.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span> b[], <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (b == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (off &lt; <span class="number">0</span> || len &lt; <span class="number">0</span> || len &gt; b.length - off) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> c = read(); <span class="comment">//调用了无参的read方法，该方法是每次读取一个字节数据</span></span><br><span class="line">        <span class="keyword">if</span> (c == -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        b[off] = (<span class="keyword">byte</span>)c;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (; i &lt; len ; i++) &#123;</span><br><span class="line">                c = read();</span><br><span class="line">                <span class="keyword">if</span> (c == -<span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                b[off + i] = (<span class="keyword">byte</span>)c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ee) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从上面代码可以看到，无参的 <code>read()</code> 方法是抽象方法，要求子类必须实现。而 <code>read(byte b[])</code> 方法调用了 <code>read(byte b[], int off, int len)</code> 方法，所以在此处重点看的方法是带三个参数的方法。 </p>
-<p>在该方法中第18行、27行，可以看到调用了无参的抽象的 <code>read()</code> 方法。</p>
-<p>总结如下： 在InputStream父类中已经定义好了读取一个字节数组数据的方法是每次读取一个字节，并将其存储到数组的第一个索引位置，读取len个字节数据。具体如何读取一个字节数据呢？由子类实现。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>行为型模式</category>
-      </categories>
-      <tags>
-        <tag>模板方法模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>适配器模式</title>
     <url>/2021/09/12/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>如果去欧洲国家去旅游的话，他们的插座如下图最左边，是欧洲标准。而我们使用的插头如下图最右边的。因此我们的笔记本电脑，手机在当地不能直接充电。所以就需要一个插座转换器，转换器第1面插入当地的插座，第2面供我们充电，这样使得我们的插头在当地能使用。生活中这样的例子很多，手机充电器（将220v转换为5v的电压），读卡器等，其实就是使用到了适配器模式。</p>
@@ -1269,7 +1269,7 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudioUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Long TIME_CONVERSION = <span class="number">1000L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取音频时长</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">audioDuration</span><span class="params">(File file)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Long times = <span class="number">0L</span>;</span><br><span class="line">        FFmpegFrameGrabber ff = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ff = <span class="keyword">new</span> FFmpegFrameGrabber(file);</span><br><span class="line">            ff.start();</span><br><span class="line">            times = ff.getLengthInTime() / TIME_CONVERSION;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;音频时长解析错误&quot;</span>, e);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (ff != <span class="keyword">null</span>) &#123;</span><br><span class="line">                ff.stop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> times;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>因为ffmpeg工具十分强大（博主没见过什么世面），<strong>上面这个工具类不仅能解析音频时长，还可以解析视频的时长</strong>。由于博主电脑里只有<code>.mp3</code>、<code>.wav</code>格式的音频和<code>.mp4</code>格式的视频所以只测试这几种格式的文案，时长解析是没有任何问题的。可以大胆上车！！</p>
+<p>因为ffmpeg工具十分强大（博主没见过什么世面），<strong>上面这个工具类不仅能解析音频时长，还可以解析视频的时长</strong>。由于博主电脑里只有<code>.mp3</code>、<code>.wav</code>格式的音频和<code>.mp4</code>格式的视频所以只测试这几种格式的文件，时长解析是没有任何问题的。可以大胆上车！！</p>
 </blockquote>
 <hr>
 <p>因为使用的是springboot，文件接收是用的MultipartFile，而我们的工具类传入的参数是File类型，所以我们还需要一个MultipartFile转File的工具类</p>
@@ -2211,6 +2211,179 @@
       </tags>
   </entry>
   <entry>
+    <title>工厂模式</title>
+    <url>/2021/09/11/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>需求：设计一个咖啡店点餐系统。  </p>
+<p>设计一个咖啡类（Coffee），并定义其两个子类（美式咖啡【AmericanCoffee】和拿铁咖啡【LatteCoffee】）；再设计一个咖啡店类（CoffeeStore），咖啡店具有点咖啡的功能。</p>
+<p>具体类的设计如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%BC%95%E5%85%A5.png"></p>
+<p>代码如下：</p>
+<p><strong>Coffee</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: Coffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 咖啡类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加糖</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addsugar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加糖&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加奶</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMilk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加奶&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>AmericanCoffee</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: AmericanCoffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 美式咖啡</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanCoffee</span> <span class="keyword">extends</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;美式咖啡&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>LatteCoffee</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: LatteCoffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 拿铁咖啡</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LatteCoffee</span> <span class="keyword">extends</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;拿铁咖啡&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>CoffeeStore</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//声明Coffee类型的变量，根据不同类型创建不同的coffee子类对象</span></span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;american&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;对不起，您所点的咖啡没有&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Client</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1,创建咖啡店类</span></span><br><span class="line">        CoffeeStore store = <span class="keyword">new</span> CoffeeStore();</span><br><span class="line">        <span class="comment">//2,点咖啡</span></span><br><span class="line">        Coffee coffee = store.orderCoffee(<span class="string">&quot;american&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(coffee.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在java中，万物皆对象，这些对象都需要创建，如果创建的时候直接new该对象，就会对该对象耦合严重，假如我们要更换对象，所有new对象的地方都需要修改一遍，这显然违背了软件设计的开闭原则。如果我们使用工厂来生产对象，我们就只和工厂打交道就可以了，彻底和对象解耦，如果要更换对象，直接在工厂里更换该对象即可，达到了与对象解耦的目的；所以说，工厂模式最大的优点就是：<strong>解耦</strong>。</p>
+<p>在本教程中会介绍三种工厂的使用</p>
+<ul>
+<li>简单工厂模式（不属于GOF的23种经典设计模式）</li>
+<li>工厂方法模式</li>
+<li>抽象工厂模式</li>
+</ul>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p>简单工厂不是一种设计模式，反而比较像是一种编程习惯。</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>简单工厂包含如下角色：</p>
+<ul>
+<li>抽象产品 ：定义了产品的规范，描述了产品的主要特性和功能。</li>
+<li>具体产品 ：实现或者继承抽象产品的子类</li>
+<li>具体工厂 ：提供了创建产品的方法，调用者通过该方法来获取产品。</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>现在使用简单工厂对上面案例进行改进，类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png"></p>
+<p>工厂类代码如下：</p>
+<p><strong>SimpleCoffeeFactory</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;americano&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanoCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>CoffeeStore</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        SimpleCoffeeFactory factory = <span class="keyword">new</span> SimpleCoffeeFactory();</span><br><span class="line">        <span class="comment">//调用生产咖啡的方法</span></span><br><span class="line">        Coffee coffee = factory.createCoffee(type);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>工厂（factory）处理创建对象的细节，一旦有了SimpleCoffeeFactory，CoffeeStore类中的orderCoffee()就变成此对象的客户，后期如果需要Coffee对象直接从工厂中获取即可。这样也就解除了和Coffee实现类的耦合，同时又产生了新的耦合，CoffeeStore对象和SimpleCoffeeFactory工厂对象的耦合，工厂对象和商品对象的耦合。</p>
+<p>后期如果再加新品种的咖啡，我们势必要需求修改SimpleCoffeeFactory的代码，违反了开闭原则。工厂类的客户端可能有很多，比如创建美团外卖等，这样只需要修改工厂类的代码，省去其他的修改操作。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
+<p>封装了创建对象的过程，可以通过参数直接获取对象。把对象的创建和业务逻辑层分开，这样以后就避免了修改客户代码，如果要实现新产品直接修改工厂类，而不需要在原代码中修改，这样就降低了客户代码修改的可能性，更加容易扩展。</p>
+<p><strong>缺点：</strong></p>
+<p>增加新产品时还是需要修改工厂类的代码，违背了“开闭原则”。</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p><strong>静态工厂</strong></p>
+<p>在开发中也有一部分人将工厂类中的创建对象的功能定义为静态的，这个就是静态工厂模式，它也不是23种设计模式中的。代码如下：</p>
+<p><strong>SimpleCoffeeFactory</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Coffee <span class="title">createCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;americano&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanoCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> coffe;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>CoffeeStore</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*SimpleCoffeeFactory factory = new SimpleCoffeeFactory();</span></span><br><span class="line"><span class="comment">        //调用生产咖啡的方法</span></span><br><span class="line"><span class="comment">        Coffee coffee = factory.createCoffee(type);*/</span></span><br><span class="line">        Coffee coffee = SimpleCoffeeFactory.createCoffee(type);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><p>针对上例中的缺点，使用工厂方法模式就可以完美的解决，完全遵循开闭原则。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>定义一个用于创建对象的接口，让子类决定实例化哪个产品类对象。工厂方法使一个产品类的实例化延迟到其工厂的子类。</p>
+<h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p>工厂方法模式的主要角色：</p>
+<ul>
+<li>抽象工厂（Abstract Factory）：提供了创建产品的接口，调用者通过它访问具体工厂的工厂方法来创建产品。</li>
+<li>具体工厂（ConcreteFactory）：主要是实现抽象工厂中的抽象方法，完成具体产品的创建。</li>
+<li>抽象产品（Product）：定义了产品的规范，描述了产品的主要特性和功能。</li>
+<li>具体产品（ConcreteProduct）：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。</li>
+</ul>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><p>使用工厂方法模式对上例进行改进，类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<p>抽象工厂：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: CoffeeFactory</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: CoffeeFactory ： 抽象工厂</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建咖啡对象的方法</span></span><br><span class="line">    <span class="function">Coffee <span class="title">createCoffee</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体工厂：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LatteCoffeeFactory</span> <span class="keyword">implements</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanCoffeeFactory</span> <span class="keyword">implements</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>咖啡店类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CoffeeFactory factory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CoffeeStore</span><span class="params">(CoffeeFactory factory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.factory = factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = factory.createCoffee();</span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Client</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建咖啡店对象</span></span><br><span class="line">        CoffeeStore store = <span class="keyword">new</span> CoffeeStore();</span><br><span class="line">        <span class="comment">//创建对象</span></span><br><span class="line">        <span class="comment">//CoffeeFactory factory = new AmericanCoffeeFactory();</span></span><br><span class="line">        CoffeeFactory factory = <span class="keyword">new</span> LatteCoffeeFactory();</span><br><span class="line">        store.setFactory(factory);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//点咖啡</span></span><br><span class="line">        Coffee coffee = store.orderCoffee();</span><br><span class="line"></span><br><span class="line">        System.out.println(coffee.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从以上的编写的代码可以看到，要增加产品类时也要相应地增加工厂类，不需要修改工厂类的代码了，这样就解决了简单工厂模式的缺点。</p>
+<p>工厂方法模式是简单工厂模式的进一步抽象。由于使用了多态性，工厂方法模式保持了简单工厂模式的优点，而且克服了它的缺点。</p>
+<h3 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
+<ul>
+<li>用户只需要知道具体工厂的名称就可得到所要的产品，无须知道产品的具体创建过程；</li>
+<li>在系统增加新的产品时只需要添加具体产品类和对应的具体工厂类，无须对原工厂进行任何修改，满足开闭原则；</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，这增加了系统的复杂度。</li>
+</ul>
+<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><p>前面介绍的工厂方法模式中考虑的是一类产品的生产，如畜牧场只养动物、电视机厂只生产电视机等。</p>
+<p>这些工厂只生产同种类产品，同种类产品称为同等级产品，也就是说：工厂方法模式只考虑生产同等级的产品，但是在现实生活中许多工厂是综合型的工厂，能生产多等级（种类） 的产品，如电器厂既生产电视机又生产洗衣机或空调，大学既有软件专业又有生物专业等。</p>
+<p>本节要介绍的抽象工厂模式将考虑多等级产品的生产，将同一个具体工厂所生产的位于不同等级的一组产品称为一个产品族，下图所示横轴是产品等级，也就是同一类产品；纵轴是产品族，也就是同一品牌的产品，同一品牌的产品产自同一个工厂。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200401214509176.png"></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200401222951963.png"></p>
+<h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>是一种为访问类提供一个创建一组相关或相互依赖对象的接口，且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。</p>
+<p>抽象工厂模式是工厂方法模式的升级版本，工厂方法模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品。</p>
+<h3 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h3><p>抽象工厂模式的主要角色如下：</p>
+<ul>
+<li>抽象工厂（Abstract Factory）：提供了创建产品的接口，它包含多个创建产品的方法，可以创建多个不同等级的产品。</li>
+<li>具体工厂（Concrete Factory）：主要是实现抽象工厂中的多个抽象方法，完成具体产品的创建。</li>
+<li>抽象产品（Product）：定义了产品的规范，描述了产品的主要特性和功能，抽象工厂模式有多个抽象产品。</li>
+<li>具体产品（ConcreteProduct）：实现了抽象产品角色所定义的接口，由具体工厂来创建，它 同具体工厂之间是多对一的关系。</li>
+</ul>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><p>现咖啡店业务发生改变，不仅要生产咖啡还要生产甜点，如提拉米苏、抹茶慕斯等，要是按照工厂方法模式，需要定义提拉米苏类、抹茶慕斯类、提拉米苏工厂、抹茶慕斯工厂、甜点工厂类，很容易发生类爆炸情况。其中拿铁咖啡、美式咖啡是一个产品等级，都是咖啡；提拉米苏、抹茶慕斯也是一个产品等级；拿铁咖啡和提拉米苏是同一产品族（也就是都属于意大利风味），美式咖啡和抹茶慕斯是同一产品族（也就是都属于美式风味）。所以这个案例可以使用抽象工厂模式实现。类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<p><strong>Dessert</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>MatchaMousse</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MatchaMousse</span> <span class="keyword">extends</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;抹茶慕斯&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Trimisu</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trimisu</span> <span class="keyword">extends</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;提拉米苏&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>抽象工厂：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生产咖啡的功能</span></span><br><span class="line">    <span class="function">Coffee <span class="title">createCoffee</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生产甜品的功能</span></span><br><span class="line">    <span class="function">Dessert <span class="title">createDessert</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体工厂：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//美式甜点工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanDessertFactory</span> <span class="keyword">implements</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Dessert <span class="title">createDessert</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MatchaMousse();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//意大利风味甜点工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItalyDessertFactory</span> <span class="keyword">implements</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Dessert <span class="title">createDessert</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Tiramisu();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果要加同一个产品族的话，只需要再加一个对应的工厂类即可，不需要修改其他的类。</p>
+<h3 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
+<p>当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p>
+<p><strong>缺点：</strong></p>
+<p>当产品族中需要增加一个新的产品时，所有的工厂类都需要进行修改。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li><p>当需要创建的对象是一系列相互关联或相互依赖的产品族时，如电器工厂中的电视机、洗衣机、空调等。</p>
+</li>
+<li><p>系统中有多个产品族，但每次只使用其中的某一族产品。如有人只喜欢穿某一个品牌的衣服和鞋。</p>
+</li>
+<li><p>系统中提供了产品的类库，且所有产品的接口相同，客户端不依赖产品实例的创建细节和内部结构。</p>
+</li>
+</ul>
+<p>如：输入法换皮肤，一整套一起换。生成不同操作系统的程序。</p>
+<h2 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h2><p><strong>简单工厂+配置文件解除耦合</strong></p>
+<p>可以通过工厂模式+配置文件的方式解除工厂对象和产品对象的耦合。在工厂类中加载配置文件中的全类名，并创建对象进行存储，客户端如果需要对象，直接进行获取即可。</p>
+<p>第一步：定义配置文件</p>
+<p>为了演示方便，我们使用properties文件作为配置文件，名称为bean.properties</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">american</span>=<span class="string">com.caicai.factory.config_factory.AmericanCoffee</span></span><br><span class="line"><span class="attr">latte</span>=<span class="string">com.caicai.factory.config_factory.LatteCoffee</span></span><br></pre></td></tr></table></figure>
+
+<p>第二步：改进工厂类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,Coffee&gt; map = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        Properties p = <span class="keyword">new</span> Properties();</span><br><span class="line">        InputStream is = CoffeeFactory.class.getClassLoader().getResourceAsStream(<span class="string">&quot;bean.properties&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            p.load(is);</span><br><span class="line">            <span class="comment">//遍历Properties集合对象</span></span><br><span class="line">            Set&lt;Object&gt; keys = p.keySet();</span><br><span class="line">            <span class="keyword">for</span> (Object key : keys) &#123;</span><br><span class="line">                <span class="comment">//根据键获取值（全类名）</span></span><br><span class="line">                String className = p.getProperty((String) key);</span><br><span class="line">                <span class="comment">//获取字节码对象</span></span><br><span class="line">                Class clazz = Class.forName(className);</span><br><span class="line">                Coffee obj = (Coffee) clazz.newInstance();</span><br><span class="line">                map.put((String)key,obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Coffee <span class="title">createCoffee</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> map.get(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>静态成员变量用来存储创建的对象（键存储的是名称，值存储的是对应的对象），而读取配置文件以及创建对象写在静态代码块中，目的就是只需要执行一次。</p>
+<h2 id="JDK源码解析-Collection-iterator方法"><a href="#JDK源码解析-Collection-iterator方法" class="headerlink" title="JDK源码解析-Collection.iterator方法"></a>JDK源码解析-Collection.iterator方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;令狐冲&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;风清扬&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;任我行&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取迭代器对象</span></span><br><span class="line">        Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line">        <span class="comment">//使用迭代器遍历</span></span><br><span class="line">        <span class="keyword">while</span>(it.hasNext()) &#123;</span><br><span class="line">            String ele = it.next();</span><br><span class="line">            System.out.println(ele);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/jdk%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png"></p>
+<p>Collection接口是抽象工厂类，ArrayList是具体的工厂类；Iterator接口是抽象商品类，ArrayList类中的Iter内部类是具体的商品类。在具体的工厂类中iterator()方法创建具体的商品类的对象。</p>
+<blockquote>
+<p>另：</p>
+<ul>
+<li><p>DateForamt类中的getInstance()方法使用的是工厂模式；</p>
+</li>
+<li><p>Calendar类中的getInstance()方法使用的是工厂模式；</p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>创建型模式</category>
+      </categories>
+      <tags>
+        <tag>工厂模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>实现Mysql的主从复制</title>
     <url>/2021/08/08/%E5%AE%9E%E7%8E%B0Mysql%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><ul>
@@ -2402,179 +2575,6 @@
       </categories>
       <tags>
         <tag>主从复制</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>工厂模式</title>
-    <url>/2021/09/11/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>需求：设计一个咖啡店点餐系统。  </p>
-<p>设计一个咖啡类（Coffee），并定义其两个子类（美式咖啡【AmericanCoffee】和拿铁咖啡【LatteCoffee】）；再设计一个咖啡店类（CoffeeStore），咖啡店具有点咖啡的功能。</p>
-<p>具体类的设计如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%BC%95%E5%85%A5.png"></p>
-<p>代码如下：</p>
-<p><strong>Coffee</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: Coffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 咖啡类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加糖</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addsugar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加糖&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加奶</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addMilk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加奶&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>AmericanCoffee</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: AmericanCoffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 美式咖啡</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanCoffee</span> <span class="keyword">extends</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;美式咖啡&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>LatteCoffee</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: LatteCoffee</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 拿铁咖啡</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LatteCoffee</span> <span class="keyword">extends</span> <span class="title">Coffee</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;拿铁咖啡&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>CoffeeStore</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//声明Coffee类型的变量，根据不同类型创建不同的coffee子类对象</span></span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;american&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;对不起，您所点的咖啡没有&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Client</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1,创建咖啡店类</span></span><br><span class="line">        CoffeeStore store = <span class="keyword">new</span> CoffeeStore();</span><br><span class="line">        <span class="comment">//2,点咖啡</span></span><br><span class="line">        Coffee coffee = store.orderCoffee(<span class="string">&quot;american&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(coffee.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在java中，万物皆对象，这些对象都需要创建，如果创建的时候直接new该对象，就会对该对象耦合严重，假如我们要更换对象，所有new对象的地方都需要修改一遍，这显然违背了软件设计的开闭原则。如果我们使用工厂来生产对象，我们就只和工厂打交道就可以了，彻底和对象解耦，如果要更换对象，直接在工厂里更换该对象即可，达到了与对象解耦的目的；所以说，工厂模式最大的优点就是：<strong>解耦</strong>。</p>
-<p>在本教程中会介绍三种工厂的使用</p>
-<ul>
-<li>简单工厂模式（不属于GOF的23种经典设计模式）</li>
-<li>工厂方法模式</li>
-<li>抽象工厂模式</li>
-</ul>
-<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p>简单工厂不是一种设计模式，反而比较像是一种编程习惯。</p>
-<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>简单工厂包含如下角色：</p>
-<ul>
-<li>抽象产品 ：定义了产品的规范，描述了产品的主要特性和功能。</li>
-<li>具体产品 ：实现或者继承抽象产品的子类</li>
-<li>具体工厂 ：提供了创建产品的方法，调用者通过该方法来获取产品。</li>
-</ul>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>现在使用简单工厂对上面案例进行改进，类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png"></p>
-<p>工厂类代码如下：</p>
-<p><strong>SimpleCoffeeFactory</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;americano&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanoCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>CoffeeStore</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        SimpleCoffeeFactory factory = <span class="keyword">new</span> SimpleCoffeeFactory();</span><br><span class="line">        <span class="comment">//调用生产咖啡的方法</span></span><br><span class="line">        Coffee coffee = factory.createCoffee(type);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>工厂（factory）处理创建对象的细节，一旦有了SimpleCoffeeFactory，CoffeeStore类中的orderCoffee()就变成此对象的客户，后期如果需要Coffee对象直接从工厂中获取即可。这样也就解除了和Coffee实现类的耦合，同时又产生了新的耦合，CoffeeStore对象和SimpleCoffeeFactory工厂对象的耦合，工厂对象和商品对象的耦合。</p>
-<p>后期如果再加新品种的咖啡，我们势必要需求修改SimpleCoffeeFactory的代码，违反了开闭原则。工厂类的客户端可能有很多，比如创建美团外卖等，这样只需要修改工厂类的代码，省去其他的修改操作。</p>
-<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
-<p>封装了创建对象的过程，可以通过参数直接获取对象。把对象的创建和业务逻辑层分开，这样以后就避免了修改客户代码，如果要实现新产品直接修改工厂类，而不需要在原代码中修改，这样就降低了客户代码修改的可能性，更加容易扩展。</p>
-<p><strong>缺点：</strong></p>
-<p>增加新产品时还是需要修改工厂类的代码，违背了“开闭原则”。</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p><strong>静态工厂</strong></p>
-<p>在开发中也有一部分人将工厂类中的创建对象的功能定义为静态的，这个就是静态工厂模式，它也不是23种设计模式中的。代码如下：</p>
-<p><strong>SimpleCoffeeFactory</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Coffee <span class="title">createCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;americano&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> AmericanoCoffee();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">&quot;latte&quot;</span>.equals(type)) &#123;</span><br><span class="line">            coffee = <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> coffe;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>CoffeeStore</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*SimpleCoffeeFactory factory = new SimpleCoffeeFactory();</span></span><br><span class="line"><span class="comment">        //调用生产咖啡的方法</span></span><br><span class="line"><span class="comment">        Coffee coffee = factory.createCoffee(type);*/</span></span><br><span class="line">        Coffee coffee = SimpleCoffeeFactory.createCoffee(type);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//加配料</span></span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><p>针对上例中的缺点，使用工厂方法模式就可以完美的解决，完全遵循开闭原则。</p>
-<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>定义一个用于创建对象的接口，让子类决定实例化哪个产品类对象。工厂方法使一个产品类的实例化延迟到其工厂的子类。</p>
-<h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p>工厂方法模式的主要角色：</p>
-<ul>
-<li>抽象工厂（Abstract Factory）：提供了创建产品的接口，调用者通过它访问具体工厂的工厂方法来创建产品。</li>
-<li>具体工厂（ConcreteFactory）：主要是实现抽象工厂中的抽象方法，完成具体产品的创建。</li>
-<li>抽象产品（Product）：定义了产品的规范，描述了产品的主要特性和功能。</li>
-<li>具体产品（ConcreteProduct）：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。</li>
-</ul>
-<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><p>使用工厂方法模式对上例进行改进，类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<p>抽象工厂：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> v1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span>: CoffeeFactory</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: CoffeeFactory ： 抽象工厂</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span>: caicai</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建咖啡对象的方法</span></span><br><span class="line">    <span class="function">Coffee <span class="title">createCoffee</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体工厂：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LatteCoffeeFactory</span> <span class="keyword">implements</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanCoffeeFactory</span> <span class="keyword">implements</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>咖啡店类：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CoffeeFactory factory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CoffeeStore</span><span class="params">(CoffeeFactory factory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.factory = factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">orderCoffee</span><span class="params">(String type)</span> </span>&#123;</span><br><span class="line">        Coffee coffee = factory.createCoffee();</span><br><span class="line">        coffee.addMilk();</span><br><span class="line">        coffee.addsugar();</span><br><span class="line">        <span class="keyword">return</span> coffee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Client</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建咖啡店对象</span></span><br><span class="line">        CoffeeStore store = <span class="keyword">new</span> CoffeeStore();</span><br><span class="line">        <span class="comment">//创建对象</span></span><br><span class="line">        <span class="comment">//CoffeeFactory factory = new AmericanCoffeeFactory();</span></span><br><span class="line">        CoffeeFactory factory = <span class="keyword">new</span> LatteCoffeeFactory();</span><br><span class="line">        store.setFactory(factory);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//点咖啡</span></span><br><span class="line">        Coffee coffee = store.orderCoffee();</span><br><span class="line"></span><br><span class="line">        System.out.println(coffee.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从以上的编写的代码可以看到，要增加产品类时也要相应地增加工厂类，不需要修改工厂类的代码了，这样就解决了简单工厂模式的缺点。</p>
-<p>工厂方法模式是简单工厂模式的进一步抽象。由于使用了多态性，工厂方法模式保持了简单工厂模式的优点，而且克服了它的缺点。</p>
-<h3 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
-<ul>
-<li>用户只需要知道具体工厂的名称就可得到所要的产品，无须知道产品的具体创建过程；</li>
-<li>在系统增加新的产品时只需要添加具体产品类和对应的具体工厂类，无须对原工厂进行任何修改，满足开闭原则；</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，这增加了系统的复杂度。</li>
-</ul>
-<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><p>前面介绍的工厂方法模式中考虑的是一类产品的生产，如畜牧场只养动物、电视机厂只生产电视机等。</p>
-<p>这些工厂只生产同种类产品，同种类产品称为同等级产品，也就是说：工厂方法模式只考虑生产同等级的产品，但是在现实生活中许多工厂是综合型的工厂，能生产多等级（种类） 的产品，如电器厂既生产电视机又生产洗衣机或空调，大学既有软件专业又有生物专业等。</p>
-<p>本节要介绍的抽象工厂模式将考虑多等级产品的生产，将同一个具体工厂所生产的位于不同等级的一组产品称为一个产品族，下图所示横轴是产品等级，也就是同一类产品；纵轴是产品族，也就是同一品牌的产品，同一品牌的产品产自同一个工厂。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200401214509176.png"></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200401222951963.png"></p>
-<h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>是一种为访问类提供一个创建一组相关或相互依赖对象的接口，且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。</p>
-<p>抽象工厂模式是工厂方法模式的升级版本，工厂方法模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品。</p>
-<h3 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h3><p>抽象工厂模式的主要角色如下：</p>
-<ul>
-<li>抽象工厂（Abstract Factory）：提供了创建产品的接口，它包含多个创建产品的方法，可以创建多个不同等级的产品。</li>
-<li>具体工厂（Concrete Factory）：主要是实现抽象工厂中的多个抽象方法，完成具体产品的创建。</li>
-<li>抽象产品（Product）：定义了产品的规范，描述了产品的主要特性和功能，抽象工厂模式有多个抽象产品。</li>
-<li>具体产品（ConcreteProduct）：实现了抽象产品角色所定义的接口，由具体工厂来创建，它 同具体工厂之间是多对一的关系。</li>
-</ul>
-<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><p>现咖啡店业务发生改变，不仅要生产咖啡还要生产甜点，如提拉米苏、抹茶慕斯等，要是按照工厂方法模式，需要定义提拉米苏类、抹茶慕斯类、提拉米苏工厂、抹茶慕斯工厂、甜点工厂类，很容易发生类爆炸情况。其中拿铁咖啡、美式咖啡是一个产品等级，都是咖啡；提拉米苏、抹茶慕斯也是一个产品等级；拿铁咖啡和提拉米苏是同一产品族（也就是都属于意大利风味），美式咖啡和抹茶慕斯是同一产品族（也就是都属于美式风味）。所以这个案例可以使用抽象工厂模式实现。类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<p><strong>Dessert</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>MatchaMousse</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MatchaMousse</span> <span class="keyword">extends</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;抹茶慕斯&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Trimisu</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trimisu</span> <span class="keyword">extends</span> <span class="title">Dessert</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;提拉米苏&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>抽象工厂：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生产咖啡的功能</span></span><br><span class="line">    <span class="function">Coffee <span class="title">createCoffee</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生产甜品的功能</span></span><br><span class="line">    <span class="function">Dessert <span class="title">createDessert</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>具体工厂：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//美式甜点工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AmericanDessertFactory</span> <span class="keyword">implements</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AmericanCoffee();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Dessert <span class="title">createDessert</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MatchaMousse();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//意大利风味甜点工厂</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItalyDessertFactory</span> <span class="keyword">implements</span> <span class="title">DessertFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Coffee <span class="title">createCoffee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LatteCoffee();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Dessert <span class="title">createDessert</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Tiramisu();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果要加同一个产品族的话，只需要再加一个对应的工厂类即可，不需要修改其他的类。</p>
-<h3 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点：</strong></p>
-<p>当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p>
-<p><strong>缺点：</strong></p>
-<p>当产品族中需要增加一个新的产品时，所有的工厂类都需要进行修改。</p>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li><p>当需要创建的对象是一系列相互关联或相互依赖的产品族时，如电器工厂中的电视机、洗衣机、空调等。</p>
-</li>
-<li><p>系统中有多个产品族，但每次只使用其中的某一族产品。如有人只喜欢穿某一个品牌的衣服和鞋。</p>
-</li>
-<li><p>系统中提供了产品的类库，且所有产品的接口相同，客户端不依赖产品实例的创建细节和内部结构。</p>
-</li>
-</ul>
-<p>如：输入法换皮肤，一整套一起换。生成不同操作系统的程序。</p>
-<h2 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h2><p><strong>简单工厂+配置文件解除耦合</strong></p>
-<p>可以通过工厂模式+配置文件的方式解除工厂对象和产品对象的耦合。在工厂类中加载配置文件中的全类名，并创建对象进行存储，客户端如果需要对象，直接进行获取即可。</p>
-<p>第一步：定义配置文件</p>
-<p>为了演示方便，我们使用properties文件作为配置文件，名称为bean.properties</p>
-<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">american</span>=<span class="string">com.caicai.factory.config_factory.AmericanCoffee</span></span><br><span class="line"><span class="attr">latte</span>=<span class="string">com.caicai.factory.config_factory.LatteCoffee</span></span><br></pre></td></tr></table></figure>
-
-<p>第二步：改进工厂类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,Coffee&gt; map = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        Properties p = <span class="keyword">new</span> Properties();</span><br><span class="line">        InputStream is = CoffeeFactory.class.getClassLoader().getResourceAsStream(<span class="string">&quot;bean.properties&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            p.load(is);</span><br><span class="line">            <span class="comment">//遍历Properties集合对象</span></span><br><span class="line">            Set&lt;Object&gt; keys = p.keySet();</span><br><span class="line">            <span class="keyword">for</span> (Object key : keys) &#123;</span><br><span class="line">                <span class="comment">//根据键获取值（全类名）</span></span><br><span class="line">                String className = p.getProperty((String) key);</span><br><span class="line">                <span class="comment">//获取字节码对象</span></span><br><span class="line">                Class clazz = Class.forName(className);</span><br><span class="line">                Coffee obj = (Coffee) clazz.newInstance();</span><br><span class="line">                map.put((String)key,obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Coffee <span class="title">createCoffee</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> map.get(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>静态成员变量用来存储创建的对象（键存储的是名称，值存储的是对应的对象），而读取配置文件以及创建对象写在静态代码块中，目的就是只需要执行一次。</p>
-<h2 id="JDK源码解析-Collection-iterator方法"><a href="#JDK源码解析-Collection-iterator方法" class="headerlink" title="JDK源码解析-Collection.iterator方法"></a>JDK源码解析-Collection.iterator方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;令狐冲&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;风清扬&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;任我行&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取迭代器对象</span></span><br><span class="line">        Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line">        <span class="comment">//使用迭代器遍历</span></span><br><span class="line">        <span class="keyword">while</span>(it.hasNext()) &#123;</span><br><span class="line">            String ele = it.next();</span><br><span class="line">            System.out.println(ele);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/jdk%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png"></p>
-<p>Collection接口是抽象工厂类，ArrayList是具体的工厂类；Iterator接口是抽象商品类，ArrayList类中的Iter内部类是具体的商品类。在具体的工厂类中iterator()方法创建具体的商品类的对象。</p>
-<blockquote>
-<p>另：</p>
-<ul>
-<li><p>DateForamt类中的getInstance()方法使用的是工厂模式；</p>
-</li>
-<li><p>Calendar类中的getInstance()方法使用的是工厂模式；</p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>创建型模式</category>
-      </categories>
-      <tags>
-        <tag>工厂模式</tag>
       </tags>
   </entry>
   <entry>
@@ -4726,13 +4726,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#x66;&#x6f;&#120;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x61;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#x66;&#x6f;&#120;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#x61;&#x6f;&#x5f;&#x62;&#x69;&#x6e;&#x67;&#64;&#x66;&#111;&#x78;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x6f;&#x5f;&#x62;&#x69;&#x6e;&#x67;&#64;&#x66;&#111;&#x78;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#x66;&#111;&#x78;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#97;&#111;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#x66;&#111;&#x78;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#x61;&#111;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#x66;&#x6f;&#x78;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x61;&#111;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#x66;&#x6f;&#x78;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#111;&#110;&#103;&#x77;&#101;&#x69;&#x2e;&#x68;&#117;&#64;&#116;&#117;&#x79;&#x61;&#x2e;&#99;&#x6f;&#109;">&#122;&#111;&#110;&#103;&#x77;&#101;&#x69;&#x2e;&#x68;&#117;&#64;&#116;&#117;&#x79;&#x61;&#x2e;&#99;&#x6f;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#111;&#110;&#x67;&#119;&#101;&#105;&#46;&#104;&#x75;&#64;&#116;&#x75;&#121;&#97;&#x2e;&#x63;&#x6f;&#109;">&#122;&#111;&#110;&#x67;&#119;&#101;&#105;&#46;&#104;&#x75;&#64;&#116;&#x75;&#121;&#97;&#x2e;&#x63;&#x6f;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -4740,7 +4740,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#108;&#119;&#50;&#x36;&#51;&#56;&#56;&#x38;&#x40;&#97;&#x6c;&#105;&#98;&#97;&#98;&#97;&#x2d;&#x69;&#x6e;&#x63;&#x2e;&#99;&#111;&#x6d;">&#108;&#119;&#50;&#x36;&#51;&#56;&#56;&#x38;&#x40;&#97;&#x6c;&#105;&#98;&#97;&#98;&#97;&#x2d;&#x69;&#x6e;&#x63;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#x6c;&#x77;&#50;&#x36;&#x33;&#x38;&#x38;&#x38;&#x40;&#97;&#x6c;&#x69;&#x62;&#x61;&#98;&#97;&#x2d;&#105;&#110;&#99;&#x2e;&#99;&#111;&#x6d;">&#x6c;&#x77;&#50;&#x36;&#x33;&#x38;&#x38;&#x38;&#x40;&#97;&#x6c;&#x69;&#x62;&#x61;&#98;&#97;&#x2d;&#105;&#110;&#99;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -4748,7 +4748,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#106;&#111;&#115;&#x68;&#117;&#97;&#x2e;&#x6c;&#105;&#102;&#x66;&#x40;&#97;&#108;&#x69;&#98;&#x61;&#x62;&#97;&#45;&#105;&#110;&#x63;&#x2e;&#x63;&#111;&#x6d;">&#106;&#111;&#115;&#x68;&#117;&#97;&#x2e;&#x6c;&#105;&#102;&#x66;&#x40;&#97;&#108;&#x69;&#98;&#x61;&#x62;&#97;&#45;&#105;&#110;&#x63;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#x6a;&#111;&#x73;&#104;&#117;&#x61;&#x2e;&#108;&#x69;&#x66;&#102;&#64;&#x61;&#x6c;&#x69;&#98;&#97;&#98;&#x61;&#x2d;&#x69;&#110;&#x63;&#x2e;&#99;&#x6f;&#109;">&#x6a;&#111;&#x73;&#104;&#117;&#x61;&#x2e;&#108;&#x69;&#x66;&#102;&#64;&#x61;&#x6c;&#x69;&#98;&#97;&#98;&#x61;&#x2d;&#x69;&#110;&#x63;&#x2e;&#99;&#x6f;&#109;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -4776,7 +4776,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#102;&#105;&#103;&#104;&#116;&#x69;&#110;&#x67;&#x63;&#114;&#x61;&#x70;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#102;&#105;&#103;&#104;&#116;&#x69;&#110;&#x67;&#x63;&#114;&#x61;&#x70;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#102;&#x69;&#x67;&#x68;&#x74;&#x69;&#110;&#x67;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#102;&#x69;&#x67;&#x68;&#x74;&#x69;&#110;&#x67;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
