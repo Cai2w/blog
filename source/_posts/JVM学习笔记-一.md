@@ -2,6 +2,7 @@
 title: JVM学习笔记(一)
 date: 2021-10-03 00:06:20
 tags:
+- JVM
 - 内存结构
 categories:
 - [Java,JVM]

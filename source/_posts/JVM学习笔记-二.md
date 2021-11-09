@@ -2,6 +2,7 @@
 title: JVM学习笔记(二)
 date: 2021-10-03 20:19:50
 tags:
+- JVM
 - 垃圾回收
 categories:
 - [Java,JVM]
