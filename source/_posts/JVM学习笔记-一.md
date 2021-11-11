@@ -46,7 +46,7 @@ JVM、JRE、JDK 的关系如下图所示
 
 ### 学习路线
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004423.png)
+![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211110234226.png)
 
 ClassLoader：Java 代码编译成二进制后，会经过类加载器，这样才能加载到 JVM 中运行。
 Method Area：类是放在方法区中。
