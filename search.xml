@@ -1,6 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ElasticSearch7.X安装及集群搭建+Kibana安装连接</title>
+    <url>/2021/11/14/ElasticSearch7-X%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Kibana%E5%AE%89%E8%A3%85%E8%BF%9E%E6%8E%A5/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="下载ES安装包"><a href="#下载ES安装包" class="headerlink" title="下载ES安装包"></a>下载ES安装包</h2><p>ElasticSearch下载地址：<a href="https://www.elastic.co/downloads/past-releases#elasticsearch">点我</a></p>
+<p>我这里是下载的linux已经编译好的包，直接配置启动就行了，因为它自带了JDK等环境。</p>
+<p>如果你想要使用你自己配置好的 Java 版本，需要设置 <code>JAVA_HOME</code> 环境变量 —— <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html">参考</a></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114143304.png"></p>
+<p>下载好之后，我们进行<code>tar</code>包解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建es文件夹</span></span><br><span class="line">mkdir /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 进入创建的文件夹</span></span><br><span class="line"><span class="built_in">cd</span> /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf elasticsearch-7.15.1-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>解压后的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html#targz-layout">目录组成</a>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── bin # 二进制脚本存放目录，包括 elasticsearch 来指定运行一个 node，包括 elasticsearch-plugin 来安装 plugins</span><br><span class="line">├── config # 包含了 elasticsearch.yml 配置文件</span><br><span class="line">├── data # 节点上分配的每个 index/分片 的数据文件</span><br><span class="line">├── lib</span><br><span class="line">├── LICENSE.txt</span><br><span class="line">├── logs</span><br><span class="line">├── modules</span><br><span class="line">├── NOTICE.txt</span><br><span class="line">├── plugins # 插键文件存放的位置</span><br><span class="line">└── README.textile</span><br></pre></td></tr></table></figure>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><blockquote>
+<p>不能使用 root 用户启动 es，否则会报错：</p>
+<p><code>Caused by: java.lang.RuntimeException: can not run elasticsearch as root</code></p>
+</blockquote>
+<p>我们需要新建一个操作es的用户：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建用户</span></span><br><span class="line"><span class="comment"># 给用户分配组：useradd –g 用户组 用户名</span></span><br><span class="line">useradd -g es es</span><br><span class="line"><span class="comment"># 修改密码</span></span><br><span class="line">passwd es</span><br></pre></td></tr></table></figure>
+
+<p>为了让我们的es用户能更好的操作es应用，我们修改es的文件所有者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 递归修改es文件所有者</span></span><br><span class="line">chown -R es:es elasticsearch-7.15.1</span><br></pre></td></tr></table></figure>
+
+<h2 id="ElasticSearch相关配置"><a href="#ElasticSearch相关配置" class="headerlink" title="ElasticSearch相关配置"></a>ElasticSearch相关配置</h2><h3 id="单节点"><a href="#单节点" class="headerlink" title="单节点"></a>单节点</h3><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p>192.168.200.130</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<p>192.168.200.131</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-131</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<p>192.168.200.132</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-132</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里的配置基本上和单机启动一样，只不过在discovery.seed_hosts中指定了节点列表。然后将每个节点启动即可，然后分别访问各服务的9200端口，查看服务是否正常启动。</p>
+<p>同时，也可以访问任意节点的<a href="http://host:9200/_cluster/health%E6%9F%A5%E7%9C%8B%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%EF%BC%9Agreen%E8%A1%A8%E7%A4%BA%E6%AD%A3%E5%B8%B8%EF%BC%8Cyellow%E8%A1%A8%E7%A4%BA%E8%AD%A6%E5%91%8A%EF%BC%8Cred%E8%A1%A8%E7%A4%BA%E5%BC%82%E5%B8%B8">http://host:9200/_cluster/health查看集群状态：green表示正常，yellow表示警告，red表示异常</a></p>
+<p><strong>注：并不是每个节点都需要配置cluster.initial_master_nodes</strong></p>
+</blockquote>
+<h2 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h2><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/jvm-options.html#jvm-options">JVM 参数设置</a>可以通过 <code>jvm.options</code> 文件（推荐方式）或者 <code>ES_JAVA_OPTS</code> 环境变量来修改。</p>
+<p><code>jvm.options</code> 位于</p>
+<ul>
+<li><code>$ES_HOME/config/jvm.options</code> 当通过 <code>tar</code> or <code>zip</code> 包安装</li>
+<li><code>/etc/elasticsearch/jvm.options</code> 当通过 Debian or RPM packages</li>
+</ul>
+<p>官网也介绍了如何<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html">设置堆大小</a>。</p>
+<p>默认情况，ES 告诉 JVM 使用一个最小和最大都为 1GB 的堆。但是到了生产环境，这个配置就比较重要了，确保 ES 有足够堆空间可用。</p>
+<p>ES 使用 <code>Xms(minimum heap size)</code> 和 <code>Xmx(maxmimum heap size)</code> 设置堆大小。你应该将这两个值设为同样的大小。</p>
+<p><strong><code>Xms</code> 和 <code>Xmx</code> 不能大于你物理机内存的 50%。</strong></p>
+<p>设置的示例：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-Xms2g </span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#启动es</span></span><br><span class="line">./bin/elasticsearch &amp;</span><br><span class="line"><span class="comment">#测试es启动是否成功</span></span><br><span class="line">curl -get localhost:9200</span><br></pre></td></tr></table></figure>
+
+<h2 id="ES-FAQ"><a href="#ES-FAQ" class="headerlink" title="ES-FAQ"></a>ES-FAQ</h2><h3 id="Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144"><a href="#Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144" class="headerlink" title="Q1：[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]"></a>Q1：<code>[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;vm.max_map_count=262144&quot; &gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536"><a href="#Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536" class="headerlink" title="Q2：max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]"></a>Q2：<code>max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/security/limits.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入以下内容</span></span><br><span class="line">* soft nofile 300000</span><br><span class="line">* hard nofile 300000</span><br><span class="line">* soft nproc 102400</span><br><span class="line">* soft memlock unlimited</span><br><span class="line">* hard memlock unlimited</span><br></pre></td></tr></table></figure>
+
+<p>修改了limits.conf，不需要重启，重新登录即生效。</p>
+<p>查看当前用户的软限制</p>
+<p>命令：ulimit -n  等价于 ulimit -S -n</p>
+<p>查看当前用户的硬限制</p>
+<p>命令：ulimit -H -n</p>
+<h3 id="Q3：master-not-discovered-exception"><a href="#Q3：master-not-discovered-exception" class="headerlink" title="Q3：master_not_discovered_exception"></a>Q3：<code>master_not_discovered_exception</code></h3><p>主节点指定的名字要保证存在，别指定了不存在的节点名</p>
+<h2 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h2><p>我们使用浏览器连接es可能无法连接上，这时候看一看是不是防火墙端口是否放行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看防火墙状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"><span class="comment">#查询端口是否开放</span></span><br><span class="line">firewall-cmd --query-port=9200/tcp</span><br><span class="line">firewall-cmd --query-port=9300/tcp</span><br><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=9200/tcp</span><br><span class="line">firewall-cmd --permanent --add-port=9300/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h2 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h2><p>ElasticSearch应用时，我们常常会使用到中文，这样ElasticSearch原来的分词器就不够用了，需要安装一个中文分词器，用的多的就是IK分词器，下载地址（下载.zip包）：<a href="https://github.com/medcl/elasticsearch-analysis-ik/releases">https://github.com/medcl/elasticsearch-analysis-ik/releases</a></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114163251.png"></p>
+<p>下载好之后，在ElasticSearch主目录下的plugins目录新建一个目录，然后将下载好的ik分词器压缩包放进去，再使用unzip解压:　</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在ElasticSearch主目录下的plugins目录新建一个目录：analysis-ik</span></span><br><span class="line">mkdir plugins/analysis-ik</span><br><span class="line"><span class="comment"># 将下载好的ik分词器压缩包放进去</span></span><br><span class="line">mv elasticsearch-analysis-ik-7.15.1.zip plugins/analysis-ik/</span><br><span class="line"><span class="comment"># 进入新建的analysis-ik目录进行解压</span></span><br><span class="line"><span class="built_in">cd</span> plugins/analysis-ik</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">unzip elasticsearch-analysis-ik-7.15.1.zip</span><br></pre></td></tr></table></figure>
+
+<p>做完之后重启ElasticSearch就可以了</p>
+<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h2><p>Kibana下载地址：<a href="https://www.elastic.co/downloads/past-releases#kibana">https://www.elastic.co/downloads/past-releases#kibana</a></p>
+<p>同样的，下载编译好的包（7.15.1）</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152259.png"></p>
+<p>然后解压，然后修改config/kibana.yml，添加ElasticSearch的节点配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 服务端口，默认5601</span></span><br><span class="line"><span class="attr">server.port:</span> <span class="number">5601</span></span><br><span class="line"><span class="comment"># 启动地址，默认localhost，如果不修改，那么远程无法访问</span></span><br><span class="line"><span class="attr">server.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># elasticsearch集群地址，旧版本是elasticsearch.url</span></span><br><span class="line"><span class="attr">elasticsearch.hosts:</span> [<span class="string">&quot;http://192.168.200.130:9200&quot;</span>,<span class="string">&quot;http://192.168.200.131:9200&quot;</span>,<span class="string">&quot;http://192.168.200.132:9200&quot;</span>]</span><br><span class="line"><span class="comment"># 如果ES有设置账号密码，则添加下面的账号密码设置</span></span><br><span class="line"><span class="comment">#elasticsearch.username: username</span></span><br><span class="line"><span class="comment">#elasticsearch.password: passwor</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就可以启动了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改文件所有者</span></span><br><span class="line">chown -R es:es kibana-7.15.1-linux-x86_64</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">kibana-7.12.0-linux-x86_64/bin/kibana</span><br></pre></td></tr></table></figure>
+
+<p>防火墙放行端口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=5601/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>启动之后，访问<a href="http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。">http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。</a></p>
+<p>不过我们开发常用的就是它的Dev-Tools了，用来发送Restfull的请求来访问操作ElasticSearch：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152522.png"></p>
+<p>进入dev-tools后就可以自行操作了：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152543.png"></p>
+]]></content>
+      <categories>
+        <category>ElasticSearch</category>
+      </categories>
+      <tags>
+        <tag>ElasticSearch</tag>
+        <tag>Kibana</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java后端开发学习路线</title>
     <url>/2021/08/13/Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="编程基础"><a href="#编程基础" class="headerlink" title="编程基础"></a>编程基础</h2><h3 id="Java语言"><a href="#Java语言" class="headerlink" title="Java语言"></a>Java语言</h3><ul>
@@ -513,6 +612,77 @@
       </tags>
   </entry>
   <entry>
+    <title>享元模式</title>
+    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
+<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
+<ol>
+<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
+<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
+</ol>
+<p>享元模式的主要有以下角色：</p>
+<ul>
+<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
+<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
+<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
+<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
+<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
+
+<p><strong>先来看类图：</strong></p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p><strong>代码如下：</strong></p>
+<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
+<ul>
+<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
+<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
+<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
+</ul>
+<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行上面代码，结果如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
+
+<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>享元模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>代理模式</title>
     <url>/2021/09/12/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>结构型模式描述如何将类或对象按某种布局组成更大的结构。它分为类结构型模式和对象结构型模式，前者采用继承机制来组织接口和类，后者釆用组合或聚合来组合对象。</p>
@@ -619,77 +789,6 @@
         <tag>代理模式</tag>
         <tag>动态代理</tag>
         <tag>静态代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>享元模式</title>
-    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
-<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
-<ol>
-<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
-<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
-</ol>
-<p>享元模式的主要有以下角色：</p>
-<ul>
-<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
-<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
-<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
-<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
-<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
-
-<p><strong>先来看类图：</strong></p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p><strong>代码如下：</strong></p>
-<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
-<ul>
-<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
-<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
-<p><strong>使用场景：</strong></p>
-<ul>
-<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
-<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
-<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
-</ul>
-<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行上面代码，结果如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
-
-<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>结构型模式</category>
-      </categories>
-      <tags>
-        <tag>享元模式</tag>
       </tags>
   </entry>
   <entry>
@@ -878,6 +977,57 @@
       </tags>
   </entry>
   <entry>
+    <title>外观模式</title>
+    <url>/2021/09/20/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>有些人可能炒过股票，但其实大部分人都不太懂，这种没有足够了解证券知识的情况下做股票是很容易亏钱的，刚开始炒股肯定都会想，如果有个懂行的帮帮手就好，其实基金就是个好帮手，支付宝里就有许多的基金，它将投资者分散的资金集中起来，交由专业的经理人进行管理，投资于股票、债券、外汇等领域，而基金投资的收益归持有者所有，管理机构收取一定比例的托管管理费用。</p>
+<p><strong>定义：</strong></p>
+<p>​    又名门面模式，是一种通过为多个复杂的子系统提供一个一致的接口，而使这些子系统更加容易被访问的模式。该模式对外有一个统一接口，外部应用程序不用关心内部子系统的具体的细节，这样会大大降低应用程序的复杂度，提高了程序的可维护性。</p>
+<p>​    外观（Facade）模式是“迪米特法则”的典型应用</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%E5%BC%95%E5%85%A5.jpg"></p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>外观（Facade）模式包含以下主要角色：</p>
+<ul>
+<li>外观（Facade）角色：为多个子系统对外提供一个共同的接口。</li>
+<li>子系统（Sub System）角色：实现系统的部分功能，客户可以通过外观角色访问它。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】智能家电控制</p>
+<p>小明的爷爷已经60岁了，一个人在家生活：每次都需要打开灯、打开电视、打开空调；睡觉时关闭灯、关闭电视、关闭空调；操作起来都比较麻烦。所以小明给爷爷买了智能音箱，可以通过语音直接控制这些智能家电的开启和关闭。类图如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//灯类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Light</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了灯....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了灯....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//电视类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TV</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了电视....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了电视....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//控制类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AirCondition</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了空调....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了空调....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//智能音箱</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SmartAppliancesFacade</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Light light;</span><br><span class="line">    <span class="keyword">private</span> TV tv;</span><br><span class="line">    <span class="keyword">private</span> AirCondition airCondition;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SmartAppliancesFacade</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        light = <span class="keyword">new</span> Light();</span><br><span class="line">        tv = <span class="keyword">new</span> TV();</span><br><span class="line">        airCondition = <span class="keyword">new</span> AirCondition();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(message.contains(<span class="string">&quot;打开&quot;</span>)) &#123;</span><br><span class="line">            on();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(message.contains(<span class="string">&quot;关闭&quot;</span>)) &#123;</span><br><span class="line">            off();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我还听不懂你说的！！！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//起床后一键开电器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;起床了&quot;</span>);</span><br><span class="line">        light.on();</span><br><span class="line">        tv.on();</span><br><span class="line">        airCondition.on();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//睡觉一键关电器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;睡觉了&quot;</span>);</span><br><span class="line">        light.off();</span><br><span class="line">        tv.off();</span><br><span class="line">        airCondition.off();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建外观对象</span></span><br><span class="line">        SmartAppliancesFacade facade = <span class="keyword">new</span> SmartAppliancesFacade();</span><br><span class="line">        <span class="comment">//客户端直接与外观对象进行交互</span></span><br><span class="line">        facade.say(<span class="string">&quot;打开家电&quot;</span>);</span><br><span class="line">        facade.say(<span class="string">&quot;关闭家电&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>好处：</strong></p>
+<ul>
+<li>降低了子系统与客户端之间的耦合度，使得子系统的变化不会影响调用它的客户类。</li>
+<li>对客户屏蔽了子系统组件，减少了客户处理的对象数目，并使得子系统使用起来更加容易。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>不符合开闭原则，修改很麻烦</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>对分层结构系统构建时，使用外观模式定义子系统中每层的入口点可以简化子系统之间的依赖关系。</li>
+<li>当一个复杂系统的子系统很多时，外观模式可以为系统设计一个简单的接口供外界访问。</li>
+<li>当客户端与多个子系统之间存在很大的联系时，引入外观模式可将它们分离，从而提高子系统的独立性和可移植性。</li>
+</ul>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><p>使用tomcat作为web容器时，接收浏览器发送过来的请求，tomcat会将请求信息封装成ServletRequest对象，如下图①处对象。但是大家想想ServletRequest是一个接口，它还有一个子接口HttpServletRequest，而我们知道该request对象肯定是一个HttpServletRequest对象的子实现类对象，到底是哪个类的对象呢？可以通过输出request对象，我们就会发现是一个名为RequestFacade的类的对象。</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207234545691.png" style="zoom:60%;" />
+
+<p>RequestFacade类就使用了外观模式。先看结构图：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F-jdk%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png" style="zoom:70%;" />
+
+<p><strong>为什么在此处使用外观模式呢？</strong></p>
+<p>​    定义 RequestFacade 类，分别实现 ServletRequest ，同时定义私有成员变量 Request ，并且方法的实现调用 Request  的实现。然后，将 RequestFacade上转为 ServletRequest  传给 servlet 的 service 方法，这样即使在 servlet 中被下转为 RequestFacade ，也不能访问私有成员变量对象中的方法。既用了 Request ，又能防止其中方法被不合理的访问。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>外观模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>建造者模式</title>
     <url>/2021/09/12/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>将一个复杂对象的构建与表示分离，使得同样的构建过程可以创建不同的表示。</p>
@@ -948,52 +1098,6 @@
       </categories>
       <tags>
         <tag>建造者模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>桥接模式</title>
-    <url>/2021/09/20/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现在有一个需求，需要创建不同的图形，并且每个图形都有可能会有不同的颜色。我们可以利用继承的方式来设计类的关系：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207194617620.png"></p>
-<p>我们可以发现有很多的类，假如我们再增加一个形状或再增加一种颜色，就需要创建更多的类。</p>
-<p>试想，在一个有多种可能会变化的维度的系统中，用继承方式会造成类爆炸，扩展起来不灵活。每次在一个维度上新增一个具体实现都要增加多个子类。为了更加灵活的设计系统，我们此时可以考虑使用桥接模式。</p>
-<p><strong>定义：</strong></p>
-<p>​    将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>桥接（Bridge）模式包含以下主要角色：</p>
-<ul>
-<li>抽象化（Abstraction）角色 ：定义抽象类，并包含一个对实现化对象的引用。</li>
-<li>扩展抽象化（Refined  Abstraction）角色 ：是抽象化角色的子类，实现父类中的业务方法，并通过组合关系调用实现化角色中的业务方法。</li>
-<li>实现化（Implementor）角色 ：定义实现化角色的接口，供扩展抽象化角色调用。</li>
-<li>具体实现化（Concrete Implementor）角色 ：给出实现化角色接口的具体实现。</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】视频播放器</p>
-<p>需要开发一个跨平台视频播放器，可以在不同操作系统平台（如Windows、Mac、Linux等）上播放多种格式的视频文件，常见的视频格式包括RMVB、AVI、WMV等。该播放器包含了两个维度，适合使用桥接模式。</p>
-<p>类图如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//视频文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//avi文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVIFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;avi视频文件：&quot;</span>+ fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//rmvb文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">REVBBFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;rmvb文件：&quot;</span> + fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//操作系统版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> VideoFile videoFile;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OperatingSystemVersion</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.videoFile = videoFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Windows版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Windows</span> <span class="keyword">extends</span> <span class="title">OperatingSystem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Windows</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//mac版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mac</span> <span class="keyword">extends</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mac</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">		videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        OperatingSystem os = <span class="keyword">new</span> Windows(<span class="keyword">new</span> AVIFile());</span><br><span class="line">        os.play(<span class="string">&quot;战狼3&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>好处：</strong></p>
-<ul>
-<li><p>桥接模式提高了系统的可扩充性，在两个变化维度中任意扩展一个维度，都不需要修改原有系统。</p>
-<p>如：如果现在还有一种视频文件类型wmv，我们只需要再定义一个类实现VideoFile接口即可，其他类不需要发生变化。</p>
-</li>
-<li><p>实现细节对客户透明</p>
-</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li>当一个类存在两个独立变化的维度，且这两个维度都需要进行扩展时。</li>
-<li>当一个系统不希望使用继承或因为多层次继承导致系统类的个数急剧增加时。</li>
-<li>当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时。避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>结构型模式</category>
-      </categories>
-      <tags>
-        <tag>桥接模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1132,6 +1236,52 @@
 ]]></content>
       <tags>
         <tag>第一篇博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>桥接模式</title>
+    <url>/2021/09/20/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现在有一个需求，需要创建不同的图形，并且每个图形都有可能会有不同的颜色。我们可以利用继承的方式来设计类的关系：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207194617620.png"></p>
+<p>我们可以发现有很多的类，假如我们再增加一个形状或再增加一种颜色，就需要创建更多的类。</p>
+<p>试想，在一个有多种可能会变化的维度的系统中，用继承方式会造成类爆炸，扩展起来不灵活。每次在一个维度上新增一个具体实现都要增加多个子类。为了更加灵活的设计系统，我们此时可以考虑使用桥接模式。</p>
+<p><strong>定义：</strong></p>
+<p>​    将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>桥接（Bridge）模式包含以下主要角色：</p>
+<ul>
+<li>抽象化（Abstraction）角色 ：定义抽象类，并包含一个对实现化对象的引用。</li>
+<li>扩展抽象化（Refined  Abstraction）角色 ：是抽象化角色的子类，实现父类中的业务方法，并通过组合关系调用实现化角色中的业务方法。</li>
+<li>实现化（Implementor）角色 ：定义实现化角色的接口，供扩展抽象化角色调用。</li>
+<li>具体实现化（Concrete Implementor）角色 ：给出实现化角色接口的具体实现。</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】视频播放器</p>
+<p>需要开发一个跨平台视频播放器，可以在不同操作系统平台（如Windows、Mac、Linux等）上播放多种格式的视频文件，常见的视频格式包括RMVB、AVI、WMV等。该播放器包含了两个维度，适合使用桥接模式。</p>
+<p>类图如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//视频文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//avi文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVIFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;avi视频文件：&quot;</span>+ fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//rmvb文件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">REVBBFile</span> <span class="keyword">implements</span> <span class="title">VideoFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;rmvb文件：&quot;</span> + fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//操作系统版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> VideoFile videoFile;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OperatingSystemVersion</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.videoFile = videoFile;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Windows版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Windows</span> <span class="keyword">extends</span> <span class="title">OperatingSystem</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Windows</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">        videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//mac版本</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mac</span> <span class="keyword">extends</span> <span class="title">OperatingSystemVersion</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mac</span><span class="params">(VideoFile videoFile)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(videoFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">		videoFile.decode(fileName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        OperatingSystem os = <span class="keyword">new</span> Windows(<span class="keyword">new</span> AVIFile());</span><br><span class="line">        os.play(<span class="string">&quot;战狼3&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>好处：</strong></p>
+<ul>
+<li><p>桥接模式提高了系统的可扩充性，在两个变化维度中任意扩展一个维度，都不需要修改原有系统。</p>
+<p>如：如果现在还有一种视频文件类型wmv，我们只需要再定义一个类实现VideoFile接口即可，其他类不需要发生变化。</p>
+</li>
+<li><p>实现细节对客户透明</p>
+</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>当一个类存在两个独立变化的维度，且这两个维度都需要进行扩展时。</li>
+<li>当一个系统不希望使用继承或因为多层次继承导致系统类的个数急剧增加时。</li>
+<li>当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时。避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>桥接模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1465,57 +1615,6 @@
       </categories>
       <tags>
         <tag>音频时长解析</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>外观模式</title>
-    <url>/2021/09/20/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>有些人可能炒过股票，但其实大部分人都不太懂，这种没有足够了解证券知识的情况下做股票是很容易亏钱的，刚开始炒股肯定都会想，如果有个懂行的帮帮手就好，其实基金就是个好帮手，支付宝里就有许多的基金，它将投资者分散的资金集中起来，交由专业的经理人进行管理，投资于股票、债券、外汇等领域，而基金投资的收益归持有者所有，管理机构收取一定比例的托管管理费用。</p>
-<p><strong>定义：</strong></p>
-<p>​    又名门面模式，是一种通过为多个复杂的子系统提供一个一致的接口，而使这些子系统更加容易被访问的模式。该模式对外有一个统一接口，外部应用程序不用关心内部子系统的具体的细节，这样会大大降低应用程序的复杂度，提高了程序的可维护性。</p>
-<p>​    外观（Facade）模式是“迪米特法则”的典型应用</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%E5%BC%95%E5%85%A5.jpg"></p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>外观（Facade）模式包含以下主要角色：</p>
-<ul>
-<li>外观（Facade）角色：为多个子系统对外提供一个共同的接口。</li>
-<li>子系统（Sub System）角色：实现系统的部分功能，客户可以通过外观角色访问它。</li>
-</ul>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>【例】智能家电控制</p>
-<p>小明的爷爷已经60岁了，一个人在家生活：每次都需要打开灯、打开电视、打开空调；睡觉时关闭灯、关闭电视、关闭空调；操作起来都比较麻烦。所以小明给爷爷买了智能音箱，可以通过语音直接控制这些智能家电的开启和关闭。类图如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//灯类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Light</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了灯....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了灯....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//电视类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TV</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了电视....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了电视....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//控制类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AirCondition</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;打开了空调....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;关闭了空调....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//智能音箱</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SmartAppliancesFacade</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Light light;</span><br><span class="line">    <span class="keyword">private</span> TV tv;</span><br><span class="line">    <span class="keyword">private</span> AirCondition airCondition;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SmartAppliancesFacade</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        light = <span class="keyword">new</span> Light();</span><br><span class="line">        tv = <span class="keyword">new</span> TV();</span><br><span class="line">        airCondition = <span class="keyword">new</span> AirCondition();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(message.contains(<span class="string">&quot;打开&quot;</span>)) &#123;</span><br><span class="line">            on();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(message.contains(<span class="string">&quot;关闭&quot;</span>)) &#123;</span><br><span class="line">            off();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我还听不懂你说的！！！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//起床后一键开电器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">on</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;起床了&quot;</span>);</span><br><span class="line">        light.on();</span><br><span class="line">        tv.on();</span><br><span class="line">        airCondition.on();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//睡觉一键关电器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">off</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;睡觉了&quot;</span>);</span><br><span class="line">        light.off();</span><br><span class="line">        tv.off();</span><br><span class="line">        airCondition.off();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建外观对象</span></span><br><span class="line">        SmartAppliancesFacade facade = <span class="keyword">new</span> SmartAppliancesFacade();</span><br><span class="line">        <span class="comment">//客户端直接与外观对象进行交互</span></span><br><span class="line">        facade.say(<span class="string">&quot;打开家电&quot;</span>);</span><br><span class="line">        facade.say(<span class="string">&quot;关闭家电&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>好处：</strong></p>
-<ul>
-<li>降低了子系统与客户端之间的耦合度，使得子系统的变化不会影响调用它的客户类。</li>
-<li>对客户屏蔽了子系统组件，减少了客户处理的对象数目，并使得子系统使用起来更加容易。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>不符合开闭原则，修改很麻烦</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li>对分层结构系统构建时，使用外观模式定义子系统中每层的入口点可以简化子系统之间的依赖关系。</li>
-<li>当一个复杂系统的子系统很多时，外观模式可以为系统设计一个简单的接口供外界访问。</li>
-<li>当客户端与多个子系统之间存在很大的联系时，引入外观模式可将它们分离，从而提高子系统的独立性和可移植性。</li>
-</ul>
-<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><p>使用tomcat作为web容器时，接收浏览器发送过来的请求，tomcat会将请求信息封装成ServletRequest对象，如下图①处对象。但是大家想想ServletRequest是一个接口，它还有一个子接口HttpServletRequest，而我们知道该request对象肯定是一个HttpServletRequest对象的子实现类对象，到底是哪个类的对象呢？可以通过输出request对象，我们就会发现是一个名为RequestFacade的类的对象。</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200207234545691.png" style="zoom:60%;" />
-
-<p>RequestFacade类就使用了外观模式。先看结构图：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F-jdk%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.png" style="zoom:70%;" />
-
-<p><strong>为什么在此处使用外观模式呢？</strong></p>
-<p>​    定义 RequestFacade 类，分别实现 ServletRequest ，同时定义私有成员变量 Request ，并且方法的实现调用 Request  的实现。然后，将 RequestFacade上转为 ServletRequest  传给 servlet 的 service 方法，这样即使在 servlet 中被下转为 RequestFacade ，也不能访问私有成员变量对象中的方法。既用了 Request ，又能防止其中方法被不合理的访问。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>结构型模式</category>
-      </categories>
-      <tags>
-        <tag>外观模式</tag>
       </tags>
   </entry>
   <entry>
@@ -4961,13 +5060,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#95;&#x62;&#x69;&#110;&#x67;&#64;&#102;&#111;&#x78;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#97;&#111;&#95;&#x62;&#x69;&#110;&#x67;&#64;&#102;&#111;&#x78;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#x61;&#x6f;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#102;&#111;&#120;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#x61;&#x6f;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#102;&#111;&#120;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#x5f;&#98;&#x69;&#x6e;&#x67;&#x40;&#102;&#x6f;&#x78;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#97;&#111;&#x5f;&#98;&#x69;&#x6e;&#x67;&#x40;&#102;&#x6f;&#x78;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#x66;&#x6f;&#x78;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x6f;&#95;&#98;&#x69;&#110;&#x67;&#x40;&#x66;&#x6f;&#x78;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#x6f;&#110;&#x67;&#x77;&#101;&#x69;&#x2e;&#104;&#x75;&#64;&#x74;&#x75;&#121;&#x61;&#46;&#x63;&#x6f;&#109;">&#122;&#x6f;&#110;&#x67;&#x77;&#101;&#x69;&#x2e;&#104;&#x75;&#64;&#x74;&#x75;&#121;&#x61;&#46;&#x63;&#x6f;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#111;&#110;&#x67;&#119;&#x65;&#x69;&#46;&#x68;&#117;&#x40;&#x74;&#x75;&#x79;&#x61;&#46;&#x63;&#111;&#109;">&#122;&#111;&#110;&#x67;&#119;&#x65;&#x69;&#46;&#x68;&#117;&#x40;&#x74;&#x75;&#x79;&#x61;&#46;&#x63;&#111;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -4975,7 +5074,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#108;&#x77;&#x32;&#54;&#51;&#x38;&#56;&#x38;&#64;&#x61;&#x6c;&#x69;&#98;&#x61;&#x62;&#97;&#45;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#109;">&#108;&#x77;&#x32;&#54;&#51;&#x38;&#56;&#x38;&#64;&#x61;&#x6c;&#x69;&#98;&#x61;&#x62;&#97;&#45;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#109;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#108;&#x77;&#x32;&#54;&#x33;&#56;&#x38;&#x38;&#x40;&#97;&#108;&#x69;&#x62;&#x61;&#x62;&#x61;&#x2d;&#x69;&#x6e;&#99;&#x2e;&#99;&#111;&#x6d;">&#108;&#x77;&#x32;&#54;&#x33;&#56;&#x38;&#x38;&#x40;&#97;&#108;&#x69;&#x62;&#x61;&#x62;&#x61;&#x2d;&#x69;&#x6e;&#99;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -4983,7 +5082,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#x6a;&#x6f;&#x73;&#x68;&#x75;&#x61;&#46;&#108;&#x69;&#x66;&#x66;&#x40;&#97;&#108;&#x69;&#98;&#97;&#98;&#97;&#x2d;&#105;&#x6e;&#x63;&#46;&#x63;&#111;&#109;">&#x6a;&#x6f;&#x73;&#x68;&#x75;&#x61;&#46;&#108;&#x69;&#x66;&#x66;&#x40;&#97;&#108;&#x69;&#98;&#97;&#98;&#97;&#x2d;&#105;&#x6e;&#x63;&#46;&#x63;&#111;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#x6a;&#111;&#x73;&#x68;&#x75;&#x61;&#46;&#x6c;&#x69;&#102;&#102;&#x40;&#97;&#x6c;&#x69;&#98;&#97;&#98;&#97;&#45;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#x6d;">&#x6a;&#111;&#x73;&#x68;&#x75;&#x61;&#46;&#x6c;&#x69;&#102;&#102;&#x40;&#97;&#x6c;&#x69;&#98;&#97;&#98;&#97;&#45;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#x6d;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -5011,7 +5110,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#102;&#105;&#x67;&#x68;&#116;&#x69;&#x6e;&#103;&#99;&#114;&#x61;&#x70;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;">&#102;&#105;&#x67;&#x68;&#116;&#x69;&#x6e;&#103;&#99;&#114;&#x61;&#x70;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#102;&#x69;&#x67;&#x68;&#x74;&#105;&#110;&#x67;&#99;&#114;&#97;&#x70;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#102;&#x69;&#x67;&#x68;&#x74;&#105;&#110;&#x67;&#99;&#114;&#97;&#x70;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
