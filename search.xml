@@ -851,6 +851,67 @@
       </tags>
   </entry>
   <entry>
+    <title>命令模式</title>
+    <url>/2021/11/11/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>日常生活中，我们出去吃饭都会遇到下面的场景。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200211130313251.png"></p>
+<p><strong>定义：</strong></p>
+<p>将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行存储、传递、调用、增加与管理。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>命令模式包含以下主要角色：</p>
+<ul>
+<li>抽象命令类（Command）角色： 定义命令的接口，声明执行的方法。</li>
+<li>具体命令（Concrete  Command）角色：具体的命令，实现命令接口；通常会持有接收者，并调用接收者的功能来完成命令要执行的操作。</li>
+<li>实现者/接收者（Receiver）角色： 接收者，真正执行命令的对象。任何类都可能成为一个接收者，只要它能够实现命令要求实现的相应功能。</li>
+<li>调用者/请求者（Invoker）角色： 要求命令对象执行请求，通常会持有命令对象，可以持有很多的命令对象。这个是客户端真正触发命令并要求命令执行相应操作的地方，也就是说相当于使用命令对象的入口。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>将上面的案例用代码实现，那我们就需要分析命令模式的角色在该案例中由谁来充当。</p>
+<p>服务员： 就是调用者角色，由她来发起命令。</p>
+<p>资深大厨： 就是接收者角色，真正命令执行的对象。</p>
+<p>订单： 命令中包含订单。</p>
+<p>类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;<span class="comment">//只需要定义一个统一的执行方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCommand</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//持有接受者对象</span></span><br><span class="line">    <span class="keyword">private</span> SeniorChef receiver;</span><br><span class="line">    <span class="keyword">private</span> Order order;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OrderCommand</span><span class="params">(SeniorChef receiver, Order order)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">        <span class="keyword">this</span>.order = order;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span>  </span>&#123;</span><br><span class="line">        System.out.println(order.getDiningTable() + <span class="string">&quot;桌的订单：&quot;</span>);</span><br><span class="line">        Set&lt;String&gt; keys = order.getFoodDic().keySet();</span><br><span class="line">        <span class="keyword">for</span> (String key : keys) &#123;</span><br><span class="line">            receiver.makeFood(order.getFoodDic().get(key),key);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">100</span>);<span class="comment">//停顿一下 模拟做饭的过程</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(order.getDiningTable() + <span class="string">&quot;桌的饭弄好了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 餐桌号码</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> diningTable;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用来存储餐名并记录份数</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Integer&gt; foodDic = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDiningTable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> diningTable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDiningTable</span><span class="params">(<span class="keyword">int</span> diningTable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.diningTable = diningTable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Integer&gt; <span class="title">getFoodDic</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> foodDic;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFoodDic</span><span class="params">(String name, <span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        foodDic.put(name,num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资深大厨类 是命令的Receiver</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SeniorChef</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeFood</span><span class="params">(<span class="keyword">int</span> num,String foodName)</span> </span>&#123;</span><br><span class="line">        System.out.println(num + <span class="string">&quot;份&quot;</span> + foodName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Waitor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Command&gt; commands;<span class="comment">//可以持有很多的命令对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Waitor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        commands = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCommand</span><span class="params">(Command cmd)</span></span>&#123;</span><br><span class="line">        commands.add(cmd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发出命令 喊 订单来了，厨师开始执行</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">orderUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;美女服务员：叮咚，大厨，新订单来了.......&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; commands.size(); i++) &#123;</span><br><span class="line">            Command cmd = commands.get(i);</span><br><span class="line">            <span class="keyword">if</span> (cmd != <span class="keyword">null</span>) &#123;</span><br><span class="line">                cmd.execute();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建2个order</span></span><br><span class="line">        Order order1 = <span class="keyword">new</span> Order();</span><br><span class="line">        order1.setDiningTable(<span class="number">1</span>);</span><br><span class="line">        order1.getFoodDic().put(<span class="string">&quot;西红柿鸡蛋面&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        order1.getFoodDic().put(<span class="string">&quot;小杯可乐&quot;</span>,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        Order order2 = <span class="keyword">new</span> Order();</span><br><span class="line">        order2.setDiningTable(<span class="number">3</span>);</span><br><span class="line">        order2.getFoodDic().put(<span class="string">&quot;尖椒肉丝盖饭&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        order2.getFoodDic().put(<span class="string">&quot;小杯雪碧&quot;</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建接收者</span></span><br><span class="line">        SeniorChef receiver=<span class="keyword">new</span> SeniorChef();</span><br><span class="line">        <span class="comment">//将订单和接收者封装成命令对象</span></span><br><span class="line">        OrderCommand cmd1 = <span class="keyword">new</span> OrderCommand(receiver, order1);</span><br><span class="line">        OrderCommand cmd2 = <span class="keyword">new</span> OrderCommand(receiver, order2);</span><br><span class="line">        <span class="comment">//创建调用者 waitor</span></span><br><span class="line">        Waitor invoker = <span class="keyword">new</span> Waitor();</span><br><span class="line">        invoker.setCommand(cmd1);</span><br><span class="line">        invoker.setCommand(cmd2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将订单带到柜台 并向厨师喊 订单来了</span></span><br><span class="line">        invoker.orderUp();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
+<ul>
+<li>降低系统的耦合度。命令模式能将调用操作的对象与实现该操作的对象解耦。</li>
+<li>增加或删除命令非常方便。采用命令模式增加与删除命令不会影响其他类，它满足“开闭原则”，对扩展比较灵活。</li>
+<li>可以实现宏命令。命令模式可以与组合模式结合，将多个命令装配成一个组合命令，即宏命令。</li>
+<li>方便实现 Undo 和 Redo 操作。命令模式可以与后面介绍的备忘录模式结合，实现命令的撤销与恢复。</li>
+</ul>
+<p><strong>2，缺点：</strong></p>
+<ul>
+<li>使用命令模式可能会导致某些系统有过多的具体命令类。</li>
+<li>系统结构更加复杂。</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。</li>
+<li>系统需要在不同的时间指定请求、将请求排队和执行请求。</li>
+<li>系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作。</li>
+</ul>
+<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Runable是一个典型命令模式，Runnable担当命令的角色，Thread充当的是调用者，start方法就是其执行方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//命令接口(抽象命令角色)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用者</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Runnable target;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会调用一个native方法start0(),调用系统方法，开启一个线程。而接收者是对程序员开放的，可以自己定义接收者。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * jdk Runnable 命令模式</span></span><br><span class="line"><span class="comment"> *		TurnOffThread ： 属于具体</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TurnOffThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">     <span class="keyword">private</span> Receiver receiver;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">TurnOffThread</span><span class="params">(Receiver receiver)</span> </span>&#123;</span><br><span class="line">     	<span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     	receiver.turnOFF();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         Receiver receiver = <span class="keyword">new</span> Receiver();</span><br><span class="line">         TurnOffThread turnOffThread = <span class="keyword">new</span> TurnOffThread(receiver);</span><br><span class="line">         Thread thread = <span class="keyword">new</span> Thread(turnOffThread);</span><br><span class="line">         thread.start();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>行为型模式</category>
+      </categories>
+      <tags>
+        <tag>命令模式</tag>
+        <tag>行为型模式</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>图片转码？缩略图生成？这个工具带你飞！！</title>
     <url>/2021/11/09/%E5%9B%BE%E7%89%87%E8%BD%AC%E7%A0%81%EF%BC%9F%E7%BC%A9%E7%95%A5%E5%9B%BE%E7%94%9F%E6%88%90%EF%BC%9F%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%B8%A6%E4%BD%A0%E9%A3%9E%EF%BC%81%EF%BC%81/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
@@ -913,67 +974,6 @@
         <tag>JavaUtils</tag>
         <tag>图片转码</tag>
         <tag>缩略图</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>命令模式</title>
-    <url>/2021/11/11/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>日常生活中，我们出去吃饭都会遇到下面的场景。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200211130313251.png"></p>
-<p><strong>定义：</strong></p>
-<p>将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。这样两者之间通过命令对象进行沟通，这样方便将命令对象进行存储、传递、调用、增加与管理。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>命令模式包含以下主要角色：</p>
-<ul>
-<li>抽象命令类（Command）角色： 定义命令的接口，声明执行的方法。</li>
-<li>具体命令（Concrete  Command）角色：具体的命令，实现命令接口；通常会持有接收者，并调用接收者的功能来完成命令要执行的操作。</li>
-<li>实现者/接收者（Receiver）角色： 接收者，真正执行命令的对象。任何类都可能成为一个接收者，只要它能够实现命令要求实现的相应功能。</li>
-<li>调用者/请求者（Invoker）角色： 要求命令对象执行请求，通常会持有命令对象，可以持有很多的命令对象。这个是客户端真正触发命令并要求命令执行相应操作的地方，也就是说相当于使用命令对象的入口。</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>将上面的案例用代码实现，那我们就需要分析命令模式的角色在该案例中由谁来充当。</p>
-<p>服务员： 就是调用者角色，由她来发起命令。</p>
-<p>资深大厨： 就是接收者角色，真正命令执行的对象。</p>
-<p>订单： 命令中包含订单。</p>
-<p>类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;<span class="comment">//只需要定义一个统一的执行方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCommand</span> <span class="keyword">implements</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//持有接受者对象</span></span><br><span class="line">    <span class="keyword">private</span> SeniorChef receiver;</span><br><span class="line">    <span class="keyword">private</span> Order order;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OrderCommand</span><span class="params">(SeniorChef receiver, Order order)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">        <span class="keyword">this</span>.order = order;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span>  </span>&#123;</span><br><span class="line">        System.out.println(order.getDiningTable() + <span class="string">&quot;桌的订单：&quot;</span>);</span><br><span class="line">        Set&lt;String&gt; keys = order.getFoodDic().keySet();</span><br><span class="line">        <span class="keyword">for</span> (String key : keys) &#123;</span><br><span class="line">            receiver.makeFood(order.getFoodDic().get(key),key);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">100</span>);<span class="comment">//停顿一下 模拟做饭的过程</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(order.getDiningTable() + <span class="string">&quot;桌的饭弄好了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 餐桌号码</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> diningTable;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用来存储餐名并记录份数</span></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Integer&gt; foodDic = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDiningTable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> diningTable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDiningTable</span><span class="params">(<span class="keyword">int</span> diningTable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.diningTable = diningTable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Integer&gt; <span class="title">getFoodDic</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> foodDic;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFoodDic</span><span class="params">(String name, <span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        foodDic.put(name,num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资深大厨类 是命令的Receiver</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SeniorChef</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeFood</span><span class="params">(<span class="keyword">int</span> num,String foodName)</span> </span>&#123;</span><br><span class="line">        System.out.println(num + <span class="string">&quot;份&quot;</span> + foodName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Waitor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;Command&gt; commands;<span class="comment">//可以持有很多的命令对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Waitor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        commands = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCommand</span><span class="params">(Command cmd)</span></span>&#123;</span><br><span class="line">        commands.add(cmd);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发出命令 喊 订单来了，厨师开始执行</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">orderUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;美女服务员：叮咚，大厨，新订单来了.......&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; commands.size(); i++) &#123;</span><br><span class="line">            Command cmd = commands.get(i);</span><br><span class="line">            <span class="keyword">if</span> (cmd != <span class="keyword">null</span>) &#123;</span><br><span class="line">                cmd.execute();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建2个order</span></span><br><span class="line">        Order order1 = <span class="keyword">new</span> Order();</span><br><span class="line">        order1.setDiningTable(<span class="number">1</span>);</span><br><span class="line">        order1.getFoodDic().put(<span class="string">&quot;西红柿鸡蛋面&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        order1.getFoodDic().put(<span class="string">&quot;小杯可乐&quot;</span>,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        Order order2 = <span class="keyword">new</span> Order();</span><br><span class="line">        order2.setDiningTable(<span class="number">3</span>);</span><br><span class="line">        order2.getFoodDic().put(<span class="string">&quot;尖椒肉丝盖饭&quot;</span>,<span class="number">1</span>);</span><br><span class="line">        order2.getFoodDic().put(<span class="string">&quot;小杯雪碧&quot;</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建接收者</span></span><br><span class="line">        SeniorChef receiver=<span class="keyword">new</span> SeniorChef();</span><br><span class="line">        <span class="comment">//将订单和接收者封装成命令对象</span></span><br><span class="line">        OrderCommand cmd1 = <span class="keyword">new</span> OrderCommand(receiver, order1);</span><br><span class="line">        OrderCommand cmd2 = <span class="keyword">new</span> OrderCommand(receiver, order2);</span><br><span class="line">        <span class="comment">//创建调用者 waitor</span></span><br><span class="line">        Waitor invoker = <span class="keyword">new</span> Waitor();</span><br><span class="line">        invoker.setCommand(cmd1);</span><br><span class="line">        invoker.setCommand(cmd2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将订单带到柜台 并向厨师喊 订单来了</span></span><br><span class="line">        invoker.orderUp();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
-<ul>
-<li>降低系统的耦合度。命令模式能将调用操作的对象与实现该操作的对象解耦。</li>
-<li>增加或删除命令非常方便。采用命令模式增加与删除命令不会影响其他类，它满足“开闭原则”，对扩展比较灵活。</li>
-<li>可以实现宏命令。命令模式可以与组合模式结合，将多个命令装配成一个组合命令，即宏命令。</li>
-<li>方便实现 Undo 和 Redo 操作。命令模式可以与后面介绍的备忘录模式结合，实现命令的撤销与恢复。</li>
-</ul>
-<p><strong>2，缺点：</strong></p>
-<ul>
-<li>使用命令模式可能会导致某些系统有过多的具体命令类。</li>
-<li>系统结构更加复杂。</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li>系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。</li>
-<li>系统需要在不同的时间指定请求、将请求排队和执行请求。</li>
-<li>系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作。</li>
-</ul>
-<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Runable是一个典型命令模式，Runnable担当命令的角色，Thread充当的是调用者，start方法就是其执行方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//命令接口(抽象命令角色)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用者</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Runnable target;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (threadStatus != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line"></span><br><span class="line">        group.add(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> started = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            start0();</span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!started) &#123;</span><br><span class="line">                    group.threadStartFailed(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable ignore) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">start0</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>会调用一个native方法start0(),调用系统方法，开启一个线程。而接收者是对程序员开放的，可以自己定义接收者。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * jdk Runnable 命令模式</span></span><br><span class="line"><span class="comment"> *		TurnOffThread ： 属于具体</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TurnOffThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">     <span class="keyword">private</span> Receiver receiver;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="title">TurnOffThread</span><span class="params">(Receiver receiver)</span> </span>&#123;</span><br><span class="line">     	<span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     	receiver.turnOFF();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         Receiver receiver = <span class="keyword">new</span> Receiver();</span><br><span class="line">         TurnOffThread turnOffThread = <span class="keyword">new</span> TurnOffThread(receiver);</span><br><span class="line">         Thread thread = <span class="keyword">new</span> Thread(turnOffThread);</span><br><span class="line">         thread.start();</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>行为型模式</category>
-      </categories>
-      <tags>
-        <tag>命令模式</tag>
-        <tag>行为型模式</tag>
-        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1098,51 +1098,6 @@
       </categories>
       <tags>
         <tag>建造者模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>第一篇博客</title>
-    <url>/2021/08/08/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hello,world!</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p> 相信大部分从事编程开发的朋友们，都是从<code>Hello,World</code>开始的，这是我的第一篇博客，我也想从再次从这里开始。</p>
-</blockquote>
-<h2 id="为什么写博客？"><a href="#为什么写博客？" class="headerlink" title="为什么写博客？"></a>为什么写博客？</h2><ul>
-<li><strong>内卷</strong></li>
-</ul>
-<blockquote>
-<p>如今互联网行业越来越卷，不卷不行呀，所以才有了这个博客网站。</p>
-</blockquote>
-<ul>
-<li><strong>好记性不如烂笔头</strong></li>
-</ul>
-<blockquote>
-<p>计算机行业的知识点太多，想要用大脑记住几乎不可能，俗话说的好，<strong>好记性不如烂笔头</strong>，更何况我也不是好记性，所以就更有写博客的必要了</p>
-</blockquote>
-<ul>
-<li><strong>在一个地方不能跌倒两次</strong></li>
-</ul>
-<blockquote>
-<p>记录一下自己在工作中或者工作之外遇到的一些问题，以后再次遇到相容的问题能有快速解决。</p>
-</blockquote>
-<ul>
-<li><strong>分享内容，帮助他人</strong></li>
-</ul>
-<blockquote>
-<p>把自己踩过的坑，走过的弯路用文字的形式表达出来，帮助他人避免入坑。</p>
-</blockquote>
-<ul>
-<li><strong>提升自己</strong></li>
-</ul>
-<blockquote>
-<p>学过的东西，记录下来更加加深自己的理解，提升自己的能力。</p>
-</blockquote>
-<p>有一句话想送给大家，也包括我：<strong>生活不止眼前的苟且，还有诗和远方。</strong></p>
-<p>累了就休息一下，身体是革命的本钱。加油！</p>
-]]></content>
-      <tags>
-        <tag>第一篇博客</tag>
       </tags>
   </entry>
   <entry>
@@ -1282,6 +1237,106 @@
         <tag>行为型模式</tag>
         <tag>设计模式</tag>
         <tag>模板方法模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>状态模式</title>
+    <url>/2021/11/17/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>【例】通过按钮来控制一个电梯的状态，一个电梯有开门状态，关门状态，停止状态，运行状态。每一种状态改变，都有可能要根据其他状态来更新处理。例如，如果电梯门现在处于运行时状态，就不能进行开门操作，而如果电梯门是停止状态，就可以执行开门操作。</p>
+<p>类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E5%89%8D.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="comment">//电梯的4个状态</span></span><br><span class="line">    <span class="comment">//开门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> OPENING_STATE = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//关门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> CLOSING_STATE = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//运行状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> RUNNING_STATE = <span class="number">3</span>;</span><br><span class="line">    <span class="comment">//停止状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STOPPING_STATE = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置电梯的状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lift</span> <span class="keyword">implements</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行关门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯关门了。。。&quot;</span>);<span class="comment">//只有开门状态可以关闭电梯门，可以对应电梯状态表来看</span></span><br><span class="line">                <span class="keyword">this</span>.setState(CLOSING_STATE);<span class="comment">//关门之后电梯就是关闭状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //已经是关门状态，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //运行时电梯门是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //停止时电梯也是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行开门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//门已经开了，不能再开门了</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门状态，门打开:</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门打开了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 运行时电梯不能开门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门开了。。。&quot;</span>);<span class="comment">//电梯停了，可以开门了</span></span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行运行动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//电梯不能开着门就走</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//门关了，可以运行了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);<span class="comment">//现在是运行状态</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 已经是运行状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行停止动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE: <span class="comment">//开门的电梯已经是是停止的了(正常情况下)</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门时才可以停止</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:<span class="comment">//运行时当然可以停止了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Lift lift = <span class="keyword">new</span> Lift();</span><br><span class="line">        lift.setState(ILift.STOPPING_STATE);<span class="comment">//电梯是停止的</span></span><br><span class="line">        lift.open();<span class="comment">//开门</span></span><br><span class="line">        lift.close();<span class="comment">//关门</span></span><br><span class="line">        lift.run();<span class="comment">//运行</span></span><br><span class="line">        lift.stop();<span class="comment">//停止</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问题分析：</p>
+<ul>
+<li>使用了大量的switch…case这样的判断（if…else也是一样)，使程序的可阅读性变差。</li>
+<li>扩展性很差。如果新加了断电的状态，我们需要修改上面判断逻辑</li>
+</ul>
+<p><strong>定义：</strong></p>
+<p>对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>状态模式包含以下主要角色。</p>
+<ul>
+<li>环境（Context）角色：也称为上下文，它定义了客户程序需要的接口，维护一个当前状态，并将与状态相关的操作委托给当前状态对象来处理。</li>
+<li>抽象状态（State）角色：定义一个接口，用以封装环境对象中的特定状态所对应的行为。</li>
+<li>具体状态（Concrete  State）角色：实现抽象状态所对应的行为。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>对上述电梯的案例使用状态模式进行改进。类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//抽象状态类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个环境角色，也就是封装状态的变化引起的功能变化</span></span><br><span class="line">    <span class="keyword">protected</span> Context context;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯开门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯关门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯运行动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯停止动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//开启状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OpenningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开启当然可以关闭了，我就想测试一下电梯门开关功能</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门开启...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门不能开着就跑，这里什么也不做</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开门状态已经是停止的了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//运行状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运行的时候开电梯门？你疯了！电梯不会给你开的</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关闭？这是肯定了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这是在运行状态下要实现的方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯正在运行...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//停止状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StoppingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态，开门，那是要的！</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态再跑起来，正常的很</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态是怎么发生的呢？当然是停止方法执行了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯停止了...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClosingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//电梯门关闭，这是关闭状态要实现的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门关闭...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了再打开，逗你玩呢，那这个允许呀</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="keyword">super</span>.context.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了就跑，这是再正常不过了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="keyword">super</span>.context.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关着，我就不按楼层</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//环境角色</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义出所有的电梯状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> OpenningState openningState = <span class="keyword">new</span> OpenningState();<span class="comment">//开门状态，这时候电梯只能关闭</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> ClosingState closeingState = <span class="keyword">new</span> ClosingState();<span class="comment">//关闭状态，这时候电梯可以运行、停止和开门</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> RunningState runningState = <span class="keyword">new</span> RunningState();<span class="comment">//运行状态，这时候电梯只能停止</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> StoppingState stoppingState = <span class="keyword">new</span> StoppingState();<span class="comment">//停止状态，这时候电梯可以开门、运行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个当前电梯状态</span></span><br><span class="line">    <span class="keyword">private</span> LiftState liftState;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiftState <span class="title">getLiftState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.liftState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLiftState</span><span class="params">(LiftState liftState)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//当前环境改变</span></span><br><span class="line">        <span class="keyword">this</span>.liftState = liftState;</span><br><span class="line">        <span class="comment">//把当前的环境通知到各个实现类中</span></span><br><span class="line">        <span class="keyword">this</span>.liftState.setContext(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Context context = <span class="keyword">new</span> Context();</span><br><span class="line">        context.setLiftState(<span class="keyword">new</span> ClosingState());</span><br><span class="line"></span><br><span class="line">        context.open();</span><br><span class="line">        context.close();</span><br><span class="line">        context.run();</span><br><span class="line">        context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
+<ul>
+<li>将所有与某个状态有关的行为放到一个类中，并且可以方便地增加新的状态，只需要改变对象状态即可改变对象的行为。</li>
+<li>允许状态转换逻辑与状态对象合成一体，而不是某一个巨大的条件语句块。</li>
+</ul>
+<p><strong>2，缺点：</strong></p>
+<ul>
+<li>状态模式的使用必然会增加系统类和对象的个数。 </li>
+<li>状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱。</li>
+<li>状态模式对”开闭原则”的支持并不太好。</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>当一个对象的行为取决于它的状态，并且它必须在运行时根据状态改变它的行为时，就可以考虑使用状态模式。</li>
+<li>一个操作中含有庞大的分支结构，并且这些分支决定于对象的状态时。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>行为型模式</category>
+      </categories>
+      <tags>
+        <tag>行为型模式</tag>
+        <tag>设计模式</tag>
+        <tag>状态模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2021/08/08/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hello,world!</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 相信大部分从事编程开发的朋友们，都是从<code>Hello,World</code>开始的，这是我的第一篇博客，我也想从再次从这里开始。</p>
+</blockquote>
+<h2 id="为什么写博客？"><a href="#为什么写博客？" class="headerlink" title="为什么写博客？"></a>为什么写博客？</h2><ul>
+<li><strong>内卷</strong></li>
+</ul>
+<blockquote>
+<p>如今互联网行业越来越卷，不卷不行呀，所以才有了这个博客网站。</p>
+</blockquote>
+<ul>
+<li><strong>好记性不如烂笔头</strong></li>
+</ul>
+<blockquote>
+<p>计算机行业的知识点太多，想要用大脑记住几乎不可能，俗话说的好，<strong>好记性不如烂笔头</strong>，更何况我也不是好记性，所以就更有写博客的必要了</p>
+</blockquote>
+<ul>
+<li><strong>在一个地方不能跌倒两次</strong></li>
+</ul>
+<blockquote>
+<p>记录一下自己在工作中或者工作之外遇到的一些问题，以后再次遇到相容的问题能有快速解决。</p>
+</blockquote>
+<ul>
+<li><strong>分享内容，帮助他人</strong></li>
+</ul>
+<blockquote>
+<p>把自己踩过的坑，走过的弯路用文字的形式表达出来，帮助他人避免入坑。</p>
+</blockquote>
+<ul>
+<li><strong>提升自己</strong></li>
+</ul>
+<blockquote>
+<p>学过的东西，记录下来更加加深自己的理解，提升自己的能力。</p>
+</blockquote>
+<p>有一句话想送给大家，也包括我：<strong>生活不止眼前的苟且，还有诗和远方。</strong></p>
+<p>累了就休息一下，身体是革命的本钱。加油！</p>
+]]></content>
+      <tags>
+        <tag>第一篇博客</tag>
       </tags>
   </entry>
   <entry>
@@ -1686,6 +1741,249 @@
       </tags>
   </entry>
   <entry>
+    <title>JVM学习笔记(一)</title>
+    <url>/2021/10/03/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%80/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="什么是JVM？"><a href="#什么是JVM？" class="headerlink" title="什么是JVM？"></a>什么是JVM？</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p><code>Java Virtual Machine</code>，Java 程序的<strong>运行环境</strong>（Java 二进制字节码的运行环境）</p>
+<h4 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h4><ul>
+<li>一次编译，处处执行</li>
+<li>自动的内存管理，垃圾回收机制</li>
+<li>数组下标越界检查</li>
+<li>多态：JVM内部使用虚方法调用的机制实现了多态</li>
+</ul>
+<h4 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h4><p>JVM、JRE、JDK 的关系如下图所示</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003172846.png"></p>
+<h3 id="学习JVM有什么用？"><a href="#学习JVM有什么用？" class="headerlink" title="学习JVM有什么用？"></a>学习JVM有什么用？</h3><ul>
+<li>面试必备</li>
+<li>中高级程序员必备</li>
+<li>想走的长远，就需要懂原理，比如：自动装箱、自动拆箱是怎么实现的，反射是怎么实现的，垃圾回收机制是怎么回事，动态代理是怎么实现的……  JVM 是必须掌握的</li>
+</ul>
+<h3 id="常见的JVM"><a href="#常见的JVM" class="headerlink" title="常见的JVM"></a>常见的JVM</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004321.png"></p>
+<p>我们主要学习的是 HotSpot 版本的虚拟机。</p>
+<h3 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211110234226.png"></p>
+<p>ClassLoader：Java 代码编译成二进制后，会经过类加载器，这样才能加载到 JVM 中运行。<br>Method Area：类是放在方法区中。<br>Heap：类的实例对象。<br>当类调用方法时，会用到 JVM Stacks、PC Register、本地方法栈。<br>方法执行时的每行代码是有执行引擎中的解释器逐行执行，方法中的热点代码频繁调用的方法，由 JIT 编译器优化后执行，GC 会对堆中不用的对象进行回收。需要和操作系统打交道就需要使用到本地方法接口。</p>
+<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083245.png"></p>
+<h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>Program Counter Register 程序计数器（寄存器）</p>
+<ul>
+<li>作用：是记录下一条 jvm 指令的执行地址行号</li>
+<li>特点：<ul>
+<li>是线程私有的，随着线程创建而创建，随着线程销毁而销毁</li>
+<li>不会存在内存溢出</li>
+<li>是一块较小的内存空间、</li>
+</ul>
+</li>
+</ul>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003005633.png"></p>
+<ul>
+<li>解释器会解释指令为机器码交给 cpu 执行，<strong>程序计数器会记录下一条jvm指令的执行地址</strong>，这样下一次解释器会从程序计数器拿到指令地址，获取对应指令然后进行解释执行。</li>
+</ul>
+<blockquote>
+<p>程序计数器在物理上是通过寄存器来实现的，因为寄存器是整个cpu中读取速度最快的一个单元，我们读取指令地址这个动作是非常频繁的，所以java虚拟机在设计的时候把cpu中的寄存器当作程序计数器，用它来存储地址，将来来读取这个地址</p>
+</blockquote>
+<h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083648.png"></p>
+<h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><p>Java Virtual Machine Stacks （Java 虚拟机栈）</p>
+<ul>
+<li>每个线程运行需要的内存空间，称为虚拟机栈</li>
+<li>每个栈由多个栈帧（Frame）组成，对应着每次调用方法时所占用的内存</li>
+<li>每个线程只能有一个活动栈帧，对应着当前正在执行的方法</li>
+</ul>
+<p>问题辨析：</p>
+<ol>
+<li>垃圾回收是否涉及栈内存？<ul>
+<li>不会。栈内存是方法调用产生的，方法调用结束后会弹出栈 。</li>
+</ul>
+</li>
+<li>栈内存分配越大越好吗？<ul>
+<li>不是。因为物理内存是一定的，栈内存越大，可以支持更多的递归调用，但是可执行的线程数就会越少。</li>
+</ul>
+</li>
+<li>方法内的局部变量是否线程安全<ol>
+<li>如果方法内部的变量没有逃离方法的作用访问，它是线程安全的</li>
+<li>如果是局部变量引用了对象，并逃离了方法的访问，那就要考虑线程安全问题。</li>
+</ol>
+</li>
+</ol>
+<h4 id="栈内存溢出"><a href="#栈内存溢出" class="headerlink" title="栈内存溢出"></a>栈内存溢出</h4><ul>
+<li><p>栈帧过多导致栈内存溢出 </p>
+</li>
+<li><p>栈帧过大导致栈内存溢出</p>
+</li>
+</ul>
+<blockquote>
+<p>栈帧过大、过多、或者第三方类库操作，都有可能造成栈内存溢出 java.lang.stackOverflowError ，使用 <code>-Xss256k</code> 指定栈内存大小！一般都是栈帧过多导致内存溢出</p>
+</blockquote>
+<h4 id="线程运行诊断"><a href="#线程运行诊断" class="headerlink" title="线程运行诊断"></a>线程运行诊断</h4><p>案例一：cpu 占用过多</p>
+<p>解决方法：Linux 环境下运行某些程序的时候，可能导致 CPU 的占用过高，这时需要定位占用 CPU 过高的线程</p>
+<ul>
+<li><code>top</code> 命令，查看是哪个进程占用 CPU 过高</li>
+<li><code>ps H -eo pid, tid（线程id）, %cpu | grep 刚才通过 top 查到的进程号</code>（通过 ps 命令进一步查看是哪个线程占用 CPU 过高）</li>
+<li><code>jstack 进程 id</code> 通过查看进程中的线程的 nid ，刚才通过 ps 命令看到的 tid 来对比定位，<strong>注意 jstack 查找出的线程 id 是 16 进制的，需要转换。</strong></li>
+</ul>
+<blockquote>
+<p>生产环境不推荐jstack，因为打印线程信息jvm会暂停其他线程</p>
+</blockquote>
+<p>案例二：程序运行很长时间没有结果</p>
+<p>可能是由于多个线程发生了死锁</p>
+<p>我们同样可以使用jstack进行问题的定位</p>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091103.png"></p>
+<blockquote>
+<p>jvm调用一些本地方法时需要给这些本地方法提供的一个内存空间。一些带有 native 关键字的方法就是需要 JAVA 去调用本地的C或者C++方法，因为 JAVA 有时候没法直接和操作系统底层交互，所以需要用到本地方法栈，服务于带 native 关键字的方法。</p>
+</blockquote>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><blockquote>
+<ul>
+<li>程序计数器、虚拟机栈、本地方法栈都是线程私有的</li>
+<li>堆、方法区时线程共享的区</li>
+</ul>
+</blockquote>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091601.png"></p>
+<h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><p>Heap 堆</p>
+<ul>
+<li>通过new关键字创建的对象都会被放在堆内存</li>
+</ul>
+<p>特点</p>
+<ul>
+<li>它是线程共享，堆内存中的对象都需要考虑线程安全问题</li>
+<li>有垃圾回收机制</li>
+</ul>
+<h4 id="堆内存溢出"><a href="#堆内存溢出" class="headerlink" title="堆内存溢出"></a>堆内存溢出</h4><p>java.lang.OutofMemoryError ：java heap space. 堆内存溢出<br>可以使用 <code>-Xmx8m</code> 来指定堆内存大小。</p>
+<h4 id="堆内存诊断"><a href="#堆内存诊断" class="headerlink" title="堆内存诊断"></a>堆内存诊断</h4><ol>
+<li>jps 工具<ul>
+<li>查看当前系统中有哪些 java 进程</li>
+</ul>
+</li>
+<li>jmap 工具<ul>
+<li>查看堆内存占用情况 <code>jmap -heap 进程id</code></li>
+</ul>
+</li>
+<li>jconsole 工具<ul>
+<li>图形界面的，多功能的监测工具，可以连续监测</li>
+</ul>
+</li>
+<li>jvisualvm 工具</li>
+</ol>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003100533.png"></p>
+<h4 id="定义-4"><a href="#定义-4" class="headerlink" title="定义"></a>定义</h4><p>Java 虚拟机有一个在所有 Java 虚拟机线程之间共享的方法区域。方法区域类似于用于传统语言的编译代码的存储区域，或者类似于操作系统进程中的“文本”段。它存储每个类的结构，例如运行时常量池、字段和方法数据，以及方法和构造函数的代码，包括特殊方法，用于类和实例初始化以及接口初始化方法区域是在虚拟机启动时创建的。尽管<strong>方法区域在逻辑上是堆的一部分</strong>，但简单的实现可能不会选择垃圾收集或压缩它。此规范不强制指定方法区的位置或用于管理已编译代码的策略。方法区域可以具有固定的大小，或者可以根据计算的需要进行扩展，并且如果不需要更大的方法区域，则可以收缩。方法区域的内存不需要是连续的！</p>
+<blockquote>
+<p>官方解释：<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html">JVM规范-方法区定义</a></p>
+<p>Oracle的HotSpot虚拟机在jdk1.8之前的实现叫做永久代，永久代就是使用堆内存的一部分作为方法区；但是在jdk1.8之后把永久代移除了，换了个实现，这个实现叫原空间，原空间用的不是堆的内存，用的是本地内存，也就是操作系统的内存</p>
+<p><strong>方法区是规范，永久代和原空间是实现</strong></p>
+</blockquote>
+<h4 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h4><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113021.png"></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113034.png"></p>
+<h4 id="方法区内存溢出"><a href="#方法区内存溢出" class="headerlink" title="方法区内存溢出"></a>方法区内存溢出</h4><ul>
+<li>1.8 之前会导致永久代内存溢出<ul>
+<li>使用 <code>-XX:MaxPermSize=8m</code> 指定永久代内存大小</li>
+<li>演示永久代内存溢出java.lang.OutOfMemoryError: PermGen space</li>
+</ul>
+</li>
+<li>1.8 之后会导致元空间内存溢出<ul>
+<li>使用 <code>-XX:MaxMetaspaceSize=8m</code> 指定元空间大小</li>
+<li>演示元空间内存溢出 java.lang.OutOfMemoryError: Metaspace</li>
+</ul>
+</li>
+</ul>
+<p>场景：</p>
+<ul>
+<li>spring</li>
+<li>mybatis</li>
+<li>……</li>
+</ul>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>二进制字节码包含（类的基本信息，常量池，类方法定义，包含了虚拟机的指令）<br>首先看看常量池是什么，编译如下代码(<code>javac Test.java</code>)：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 <code>javap -v Test.class</code> 命令反编译查看结果。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121254.png"></p>
+<p>每条指令都会对应常量池表中一个地址，常量池表中的地址可能对应着一个类名、方法名、参数类型等信息。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121312.png"></p>
+<p><strong>常量池</strong>：<br>就是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量信息<br><strong>运行时常量池</strong>：<br>常量池是 *.class 文件中的，当该类被加载以后，它的常量池信息就会放入运行时常量池，并把里面的符号地址变为真实地址</p>
+<h4 id="StringTable"><a href="#StringTable" class="headerlink" title="StringTable"></a>StringTable</h4><p>先看几道面试题：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">String s4 = s1 + s2;</span><br><span class="line">String s5 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;</span><br><span class="line">String s6 = s4.intern();</span><br><span class="line"><span class="comment">// 问</span></span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//false</span></span><br><span class="line">System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">System.out.println(s3 == s6);<span class="comment">//true</span></span><br><span class="line">String x2 = <span class="keyword">new</span> String(<span class="string">&quot;c&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">String x1 = <span class="string">&quot;cd&quot;</span>;</span><br><span class="line">x2.intern();</span><br><span class="line"><span class="comment">// 问，如果调换了【最后两行代码】的位置呢，如果是jdk1.6呢</span></span><br><span class="line">System.out.println(x1 == x2);<span class="comment">//false</span></span><br><span class="line"><span class="comment">//如果调换最后两行代码的位置就是true</span></span><br><span class="line"><span class="comment">//如果是jdk1.6，调换两行代码的位置，x2.intern();会产生一个&quot;cd&quot;副本，将副本入常量池，而x2还是指向的堆中的new string(&quot;ab&quot;),而x1指向的是常量池中的&quot;cd&quot;,所以为false</span></span><br></pre></td></tr></table></figure>
+
+<p>反编译之后的分析：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// StringTable [ &quot;a&quot;, &quot;b&quot; ,&quot;ab&quot; ]  hashtable 结构，不能扩容</span></span><br><span class="line"><span class="comment">// 常量池中的信息，都会被加载到运行时常量池中， 这时 a b ab 都是常量池中的符号，还没有变为 java 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #2 会把 a 符号变为 &quot;a&quot; 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #3 会把 b 符号变为 &quot;b&quot; 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #4 会把 ab 符号变为 &quot;ab&quot; 字符串对象</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span>; <span class="comment">// 懒惰的</span></span><br><span class="line">    String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2; <span class="comment">// new StringBuilder().append(&quot;a&quot;).append(&quot;b&quot;).toString()  new String(&quot;ab&quot;)</span></span><br><span class="line">    String s5 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;  <span class="comment">// javac 在编译期间的优化，结果已经在编译期确定为ab</span></span><br><span class="line">    System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  [&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;]</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String x = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;)</span></span><br><span class="line">    String s2 = s.intern(); <span class="comment">// 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</span></span><br><span class="line">    System.out.println( s2 == x);<span class="comment">//true</span></span><br><span class="line">    System.out.println( s == x );<span class="comment">//false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  [&quot;a&quot;, &quot;b&quot;, &quot;ab&quot;]</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;)</span></span><br><span class="line">    String s2 = s.intern(); <span class="comment">// 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</span></span><br><span class="line">    System.out.println( s2 == <span class="string">&quot;ab&quot;</span>);<span class="comment">//true</span></span><br><span class="line">    System.out.println( s == <span class="string">&quot;ab&quot;</span> );<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常量池中的字符串仅是符号，只有在被用到时才会转化为对象</li>
+<li>利用串池的机制，来避免重复创建字符串对象</li>
+<li>字符串变量拼接的原理是StringBuilder</li>
+<li>字符串常量拼接的原理是编译器优化</li>
+<li>可以使用intern方法，主动将串池中还没有的字符串对象放入串池中<ul>
+<li>1.8 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</li>
+<li>1.6 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有会把此对象复制一份，放入串池， 会把串池中的对象返回</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>无论放入是否成功，都会返回串池中的字符串对象</p>
+</blockquote>
+<h4 id="StringTable的位置"><a href="#StringTable的位置" class="headerlink" title="StringTable的位置"></a>StringTable的位置</h4><p>jdk1.6 StringTable 位置是在永久代中，1.8 StringTable 位置是在堆中。</p>
+<blockquote>
+<p>永久代的回收效率低，只有在<code>Full GC</code>的时候才会触发垃圾回收，而<code>Full GC</code>要等到老年代的空间不足时才会触发</p>
+</blockquote>
+<h4 id="StringTable-垃圾回收"><a href="#StringTable-垃圾回收" class="headerlink" title="StringTable 垃圾回收"></a>StringTable 垃圾回收</h4><p>-Xmx10m 指定堆内存大小<br>-XX:+PrintStringTableStatistics 打印字符串常量池信息<br>-XX:+PrintGCDetails<br>-verbose:gc 打印 gc 的次数，耗费时间等信息</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 演示 StringTable 垃圾回收</span></span><br><span class="line"><span class="comment"> * -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_05_StringTableTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000</span>; j++) &#123; <span class="comment">// j = 100, j = 10000</span></span><br><span class="line">                String.valueOf(j).intern();</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="StringTable-性能调优"><a href="#StringTable-性能调优" class="headerlink" title="StringTable 性能调优"></a>StringTable 性能调优</h4><ul>
+<li>因为StringTable是由HashTable实现的，所以可以适当增加HashTable桶的个数，来减少字符串放入串池所需要的时间</li>
+</ul>
+<blockquote>
+<p>-XX:StringTableSize=桶个数（最少设置为 1009 以上）</p>
+</blockquote>
+<ul>
+<li>考虑是否需要将字符串对象入池，可以通过 intern 方法减少重复入池</li>
+</ul>
+<h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><h4 id="定义-5"><a href="#定义-5" class="headerlink" title="定义"></a>定义</h4><p>直接内存（Direct Memory）就是系统内存</p>
+<ul>
+<li>常见于 NIO 操作时，用于数据缓冲区</li>
+<li>分配回收成本较高，但读写性能高</li>
+<li>不受 JVM 内存回收管理</li>
+</ul>
+<h4 id="使用直接内存的好处"><a href="#使用直接内存的好处" class="headerlink" title="使用直接内存的好处"></a>使用直接内存的好处</h4><p>文件读写流程：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170018.png"></p>
+<p>因为 java 不能直接操作文件管理，需要切换到内核态，使用本地方法进行操作，然后读取磁盘文件，会在系统内存中创建一个缓冲区，将数据读到系统缓冲区， 然后在将系统缓冲区数据，复制到 java 堆内存中。缺点是数据存储了两份，在系统内存中有一份，java 堆中有一份，造成了不必要的复制。</p>
+<p><strong>使用了 DirectBuffer 文件读取流程</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170052.png"></p>
+<p>直接内存是操作系统和 Java 代码都可以访问的一块区域，无需将代码从系统内存复制到 Java 堆内存，从而提高了效率。</p>
+<h4 id="直接内存回收原理"><a href="#直接内存回收原理" class="headerlink" title="直接内存回收原理"></a>直接内存回收原理</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_06_DirectMemoryTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> _1GB = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, NoSuchFieldException, IllegalAccessException </span>&#123;</span><br><span class="line"><span class="comment">//        method();</span></span><br><span class="line">        method1();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 演示 直接内存 是被 unsafe 创建与回收</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> <span class="keyword">throws</span> IOException, NoSuchFieldException, IllegalAccessException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Field field = Unsafe.class.getDeclaredField(<span class="string">&quot;theUnsafe&quot;</span>);</span><br><span class="line">        field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Unsafe unsafe = (Unsafe)field.get(Unsafe.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> base = unsafe.allocateMemory(_1GB);</span><br><span class="line">        unsafe.setMemory(base,_1GB, (<span class="keyword">byte</span>)<span class="number">0</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line"></span><br><span class="line">        unsafe.freeMemory(base);</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 演示 直接内存被 释放</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="keyword">null</span>;</span><br><span class="line">        System.gc(); <span class="comment">// 手动 gc</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>直接内存的回收不是通过 JVM 的垃圾回收来释放的，而是通过<code>unsafe.freeMemory</code> 来手动释放。<br>第一步：allocateDirect 的实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocateDirect</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DirectByteBuffer(capacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>底层是创建了一个 DirectByteBuffer 对象。<br>第二步：DirectByteBuffer 类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DirectByteBuffer(<span class="keyword">int</span> cap) &#123;   <span class="comment">// package-private</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">super</span>(-<span class="number">1</span>, <span class="number">0</span>, cap, cap);</span><br><span class="line">    <span class="keyword">boolean</span> pa = VM.isDirectMemoryPageAligned();</span><br><span class="line">    <span class="keyword">int</span> ps = Bits.pageSize();</span><br><span class="line">    <span class="keyword">long</span> size = Math.max(<span class="number">1L</span>, (<span class="keyword">long</span>)cap + (pa ? ps : <span class="number">0</span>));</span><br><span class="line">    Bits.reserveMemory(size, cap);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> base = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        base = unsafe.allocateMemory(size); <span class="comment">// 申请内存</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (OutOfMemoryError x) &#123;</span><br><span class="line">        Bits.unreserveMemory(size, cap);</span><br><span class="line">        <span class="keyword">throw</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    unsafe.setMemory(base, size, (<span class="keyword">byte</span>) <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (pa &amp;&amp; (base % ps != <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="comment">// Round up to page boundary</span></span><br><span class="line">        address = base + ps - (base &amp; (ps - <span class="number">1</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        address = base;</span><br><span class="line">    &#125;</span><br><span class="line">    cleaner = Cleaner.create(<span class="keyword">this</span>, <span class="keyword">new</span> Deallocator(base, size, cap)); <span class="comment">// 通过虚引用，来实现直接内存的释放，this为虚引用的实际对象, 第二个参数是一个回调，实现了 runnable 接口，run 方法中通过 unsafe 释放内存。</span></span><br><span class="line">    att = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里调用了一个 Cleaner 的 create 方法，且后台线程还会对虚引用的对象监测，如果虚引用的实际对象（这里是 DirectByteBuffer ）被回收以后，就会调用 Cleaner 的 clean 方法，来清除直接内存中占用的内存。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clean</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (remove(<span class="keyword">this</span>)) &#123;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">// 都用函数的 run 方法, 释放内存</span></span><br><span class="line">               <span class="keyword">this</span>.thunk.run();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (<span class="keyword">final</span> Throwable var2) &#123;</span><br><span class="line">               AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;Void&gt;() &#123;</span><br><span class="line">                   <span class="function"><span class="keyword">public</span> Void <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                       <span class="keyword">if</span> (System.err != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           (<span class="keyword">new</span> Error(<span class="string">&quot;Cleaner terminated abnormally&quot;</span>, var2)).printStackTrace();</span><br><span class="line">                       &#125;</span><br><span class="line"></span><br><span class="line">                       System.exit(<span class="number">1</span>);</span><br><span class="line">                       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到关键的一行代码， this.thunk.run()，thunk 是 Runnable 对象。run 方法就是回调 Deallocator 中的 run 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (address == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="comment">// Paranoia</span></span><br><span class="line">              <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 释放内存</span></span><br><span class="line">          unsafe.freeMemory(address);</span><br><span class="line">          address = <span class="number">0</span>;</span><br><span class="line">          Bits.unreserveMemory(size, capacity);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>直接内存的回收机制总结</strong></p>
+<ul>
+<li>使用了 Unsafe 类来完成直接内存的分配回收，回收需要主动调用freeMemory 方法</li>
+<li>ByteBuffer 的实现内部使用了 Cleaner（虚引用）来检测 ByteBuffer 。一旦ByteBuffer 被垃圾回收，那么会由 ReferenceHandler（守护线程） 来调用 Cleaner 的 clean 方法调用 freeMemory 来释放内存</li>
+</ul>
+<p><strong>注意：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * -XX:+DisableExplicitGC 显示的</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="keyword">null</span>;</span><br><span class="line">        System.gc(); <span class="comment">// 手动 gc 失效</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>一般用 jvm 调优时，会加上下面的参数：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">-XX:+DisableExplicitGC  <span class="comment">// 静止显示的 GC</span></span><br></pre></td></tr></table></figure>
+
+<p>意思就是禁止我们手动的 GC，比如手动 System.gc() 无效，它是一种 full gc，会回收新生代、老年代，会造成程序执行的时间比较长。所以我们就通过 unsafe 对象调用 freeMemory 的方式释放内存</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JVM</category>
+      </categories>
+      <tags>
+        <tag>JVM</tag>
+        <tag>内存结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JVM学习笔记(二)</title>
     <url>/2021/10/03/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><h3 id="如果判断对象可以回收"><a href="#如果判断对象可以回收" class="headerlink" title="如果判断对象可以回收"></a>如果判断对象可以回收</h3><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>当一个对象被引用时，就当引用对象的值加1，当一个变量不在引用该对象时，计数就减1，当值为 0 时，就表示该对象不被引用，可以被垃圾收集器回收。<br>这个引用计数法听起来不错，但是有一个弊端，如下图所示，循环引用时，两个对象的计数都为1，导致两个对象都无法被释放。</p>
@@ -2026,249 +2324,6 @@
       <tags>
         <tag>JVM</tag>
         <tag>垃圾回收</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JVM学习笔记(一)</title>
-    <url>/2021/10/03/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%80/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="什么是JVM？"><a href="#什么是JVM？" class="headerlink" title="什么是JVM？"></a>什么是JVM？</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p><code>Java Virtual Machine</code>，Java 程序的<strong>运行环境</strong>（Java 二进制字节码的运行环境）</p>
-<h4 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h4><ul>
-<li>一次编译，处处执行</li>
-<li>自动的内存管理，垃圾回收机制</li>
-<li>数组下标越界检查</li>
-<li>多态：JVM内部使用虚方法调用的机制实现了多态</li>
-</ul>
-<h4 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h4><p>JVM、JRE、JDK 的关系如下图所示</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003172846.png"></p>
-<h3 id="学习JVM有什么用？"><a href="#学习JVM有什么用？" class="headerlink" title="学习JVM有什么用？"></a>学习JVM有什么用？</h3><ul>
-<li>面试必备</li>
-<li>中高级程序员必备</li>
-<li>想走的长远，就需要懂原理，比如：自动装箱、自动拆箱是怎么实现的，反射是怎么实现的，垃圾回收机制是怎么回事，动态代理是怎么实现的……  JVM 是必须掌握的</li>
-</ul>
-<h3 id="常见的JVM"><a href="#常见的JVM" class="headerlink" title="常见的JVM"></a>常见的JVM</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004321.png"></p>
-<p>我们主要学习的是 HotSpot 版本的虚拟机。</p>
-<h3 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211110234226.png"></p>
-<p>ClassLoader：Java 代码编译成二进制后，会经过类加载器，这样才能加载到 JVM 中运行。<br>Method Area：类是放在方法区中。<br>Heap：类的实例对象。<br>当类调用方法时，会用到 JVM Stacks、PC Register、本地方法栈。<br>方法执行时的每行代码是有执行引擎中的解释器逐行执行，方法中的热点代码频繁调用的方法，由 JIT 编译器优化后执行，GC 会对堆中不用的对象进行回收。需要和操作系统打交道就需要使用到本地方法接口。</p>
-<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083245.png"></p>
-<h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>Program Counter Register 程序计数器（寄存器）</p>
-<ul>
-<li>作用：是记录下一条 jvm 指令的执行地址行号</li>
-<li>特点：<ul>
-<li>是线程私有的，随着线程创建而创建，随着线程销毁而销毁</li>
-<li>不会存在内存溢出</li>
-<li>是一块较小的内存空间、</li>
-</ul>
-</li>
-</ul>
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003005633.png"></p>
-<ul>
-<li>解释器会解释指令为机器码交给 cpu 执行，<strong>程序计数器会记录下一条jvm指令的执行地址</strong>，这样下一次解释器会从程序计数器拿到指令地址，获取对应指令然后进行解释执行。</li>
-</ul>
-<blockquote>
-<p>程序计数器在物理上是通过寄存器来实现的，因为寄存器是整个cpu中读取速度最快的一个单元，我们读取指令地址这个动作是非常频繁的，所以java虚拟机在设计的时候把cpu中的寄存器当作程序计数器，用它来存储地址，将来来读取这个地址</p>
-</blockquote>
-<h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083648.png"></p>
-<h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><p>Java Virtual Machine Stacks （Java 虚拟机栈）</p>
-<ul>
-<li>每个线程运行需要的内存空间，称为虚拟机栈</li>
-<li>每个栈由多个栈帧（Frame）组成，对应着每次调用方法时所占用的内存</li>
-<li>每个线程只能有一个活动栈帧，对应着当前正在执行的方法</li>
-</ul>
-<p>问题辨析：</p>
-<ol>
-<li>垃圾回收是否涉及栈内存？<ul>
-<li>不会。栈内存是方法调用产生的，方法调用结束后会弹出栈 。</li>
-</ul>
-</li>
-<li>栈内存分配越大越好吗？<ul>
-<li>不是。因为物理内存是一定的，栈内存越大，可以支持更多的递归调用，但是可执行的线程数就会越少。</li>
-</ul>
-</li>
-<li>方法内的局部变量是否线程安全<ol>
-<li>如果方法内部的变量没有逃离方法的作用访问，它是线程安全的</li>
-<li>如果是局部变量引用了对象，并逃离了方法的访问，那就要考虑线程安全问题。</li>
-</ol>
-</li>
-</ol>
-<h4 id="栈内存溢出"><a href="#栈内存溢出" class="headerlink" title="栈内存溢出"></a>栈内存溢出</h4><ul>
-<li><p>栈帧过多导致栈内存溢出 </p>
-</li>
-<li><p>栈帧过大导致栈内存溢出</p>
-</li>
-</ul>
-<blockquote>
-<p>栈帧过大、过多、或者第三方类库操作，都有可能造成栈内存溢出 java.lang.stackOverflowError ，使用 <code>-Xss256k</code> 指定栈内存大小！一般都是栈帧过多导致内存溢出</p>
-</blockquote>
-<h4 id="线程运行诊断"><a href="#线程运行诊断" class="headerlink" title="线程运行诊断"></a>线程运行诊断</h4><p>案例一：cpu 占用过多</p>
-<p>解决方法：Linux 环境下运行某些程序的时候，可能导致 CPU 的占用过高，这时需要定位占用 CPU 过高的线程</p>
-<ul>
-<li><code>top</code> 命令，查看是哪个进程占用 CPU 过高</li>
-<li><code>ps H -eo pid, tid（线程id）, %cpu | grep 刚才通过 top 查到的进程号</code>（通过 ps 命令进一步查看是哪个线程占用 CPU 过高）</li>
-<li><code>jstack 进程 id</code> 通过查看进程中的线程的 nid ，刚才通过 ps 命令看到的 tid 来对比定位，<strong>注意 jstack 查找出的线程 id 是 16 进制的，需要转换。</strong></li>
-</ul>
-<blockquote>
-<p>生产环境不推荐jstack，因为打印线程信息jvm会暂停其他线程</p>
-</blockquote>
-<p>案例二：程序运行很长时间没有结果</p>
-<p>可能是由于多个线程发生了死锁</p>
-<p>我们同样可以使用jstack进行问题的定位</p>
-<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091103.png"></p>
-<blockquote>
-<p>jvm调用一些本地方法时需要给这些本地方法提供的一个内存空间。一些带有 native 关键字的方法就是需要 JAVA 去调用本地的C或者C++方法，因为 JAVA 有时候没法直接和操作系统底层交互，所以需要用到本地方法栈，服务于带 native 关键字的方法。</p>
-</blockquote>
-<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><blockquote>
-<ul>
-<li>程序计数器、虚拟机栈、本地方法栈都是线程私有的</li>
-<li>堆、方法区时线程共享的区</li>
-</ul>
-</blockquote>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091601.png"></p>
-<h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><p>Heap 堆</p>
-<ul>
-<li>通过new关键字创建的对象都会被放在堆内存</li>
-</ul>
-<p>特点</p>
-<ul>
-<li>它是线程共享，堆内存中的对象都需要考虑线程安全问题</li>
-<li>有垃圾回收机制</li>
-</ul>
-<h4 id="堆内存溢出"><a href="#堆内存溢出" class="headerlink" title="堆内存溢出"></a>堆内存溢出</h4><p>java.lang.OutofMemoryError ：java heap space. 堆内存溢出<br>可以使用 <code>-Xmx8m</code> 来指定堆内存大小。</p>
-<h4 id="堆内存诊断"><a href="#堆内存诊断" class="headerlink" title="堆内存诊断"></a>堆内存诊断</h4><ol>
-<li>jps 工具<ul>
-<li>查看当前系统中有哪些 java 进程</li>
-</ul>
-</li>
-<li>jmap 工具<ul>
-<li>查看堆内存占用情况 <code>jmap -heap 进程id</code></li>
-</ul>
-</li>
-<li>jconsole 工具<ul>
-<li>图形界面的，多功能的监测工具，可以连续监测</li>
-</ul>
-</li>
-<li>jvisualvm 工具</li>
-</ol>
-<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003100533.png"></p>
-<h4 id="定义-4"><a href="#定义-4" class="headerlink" title="定义"></a>定义</h4><p>Java 虚拟机有一个在所有 Java 虚拟机线程之间共享的方法区域。方法区域类似于用于传统语言的编译代码的存储区域，或者类似于操作系统进程中的“文本”段。它存储每个类的结构，例如运行时常量池、字段和方法数据，以及方法和构造函数的代码，包括特殊方法，用于类和实例初始化以及接口初始化方法区域是在虚拟机启动时创建的。尽管<strong>方法区域在逻辑上是堆的一部分</strong>，但简单的实现可能不会选择垃圾收集或压缩它。此规范不强制指定方法区的位置或用于管理已编译代码的策略。方法区域可以具有固定的大小，或者可以根据计算的需要进行扩展，并且如果不需要更大的方法区域，则可以收缩。方法区域的内存不需要是连续的！</p>
-<blockquote>
-<p>官方解释：<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html">JVM规范-方法区定义</a></p>
-<p>Oracle的HotSpot虚拟机在jdk1.8之前的实现叫做永久代，永久代就是使用堆内存的一部分作为方法区；但是在jdk1.8之后把永久代移除了，换了个实现，这个实现叫原空间，原空间用的不是堆的内存，用的是本地内存，也就是操作系统的内存</p>
-<p><strong>方法区是规范，永久代和原空间是实现</strong></p>
-</blockquote>
-<h4 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h4><p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113021.png"></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113034.png"></p>
-<h4 id="方法区内存溢出"><a href="#方法区内存溢出" class="headerlink" title="方法区内存溢出"></a>方法区内存溢出</h4><ul>
-<li>1.8 之前会导致永久代内存溢出<ul>
-<li>使用 <code>-XX:MaxPermSize=8m</code> 指定永久代内存大小</li>
-<li>演示永久代内存溢出java.lang.OutOfMemoryError: PermGen space</li>
-</ul>
-</li>
-<li>1.8 之后会导致元空间内存溢出<ul>
-<li>使用 <code>-XX:MaxMetaspaceSize=8m</code> 指定元空间大小</li>
-<li>演示元空间内存溢出 java.lang.OutOfMemoryError: Metaspace</li>
-</ul>
-</li>
-</ul>
-<p>场景：</p>
-<ul>
-<li>spring</li>
-<li>mybatis</li>
-<li>……</li>
-</ul>
-<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>二进制字节码包含（类的基本信息，常量池，类方法定义，包含了虚拟机的指令）<br>首先看看常量池是什么，编译如下代码(<code>javac Test.java</code>)：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后使用 <code>javap -v Test.class</code> 命令反编译查看结果。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121254.png"></p>
-<p>每条指令都会对应常量池表中一个地址，常量池表中的地址可能对应着一个类名、方法名、参数类型等信息。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121312.png"></p>
-<p><strong>常量池</strong>：<br>就是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量信息<br><strong>运行时常量池</strong>：<br>常量池是 *.class 文件中的，当该类被加载以后，它的常量池信息就会放入运行时常量池，并把里面的符号地址变为真实地址</p>
-<h4 id="StringTable"><a href="#StringTable" class="headerlink" title="StringTable"></a>StringTable</h4><p>先看几道面试题：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">String s4 = s1 + s2;</span><br><span class="line">String s5 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;</span><br><span class="line">String s6 = s4.intern();</span><br><span class="line"><span class="comment">// 问</span></span><br><span class="line">System.out.println(s3 == s4); <span class="comment">//false</span></span><br><span class="line">System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">System.out.println(s3 == s6);<span class="comment">//true</span></span><br><span class="line">String x2 = <span class="keyword">new</span> String(<span class="string">&quot;c&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">String x1 = <span class="string">&quot;cd&quot;</span>;</span><br><span class="line">x2.intern();</span><br><span class="line"><span class="comment">// 问，如果调换了【最后两行代码】的位置呢，如果是jdk1.6呢</span></span><br><span class="line">System.out.println(x1 == x2);<span class="comment">//false</span></span><br><span class="line"><span class="comment">//如果调换最后两行代码的位置就是true</span></span><br><span class="line"><span class="comment">//如果是jdk1.6，调换两行代码的位置，x2.intern();会产生一个&quot;cd&quot;副本，将副本入常量池，而x2还是指向的堆中的new string(&quot;ab&quot;),而x1指向的是常量池中的&quot;cd&quot;,所以为false</span></span><br></pre></td></tr></table></figure>
-
-<p>反编译之后的分析：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// StringTable [ &quot;a&quot;, &quot;b&quot; ,&quot;ab&quot; ]  hashtable 结构，不能扩容</span></span><br><span class="line"><span class="comment">// 常量池中的信息，都会被加载到运行时常量池中， 这时 a b ab 都是常量池中的符号，还没有变为 java 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #2 会把 a 符号变为 &quot;a&quot; 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #3 会把 b 符号变为 &quot;b&quot; 字符串对象</span></span><br><span class="line"><span class="comment">// ldc #4 会把 ab 符号变为 &quot;ab&quot; 字符串对象</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span>; <span class="comment">// 懒惰的</span></span><br><span class="line">    String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2; <span class="comment">// new StringBuilder().append(&quot;a&quot;).append(&quot;b&quot;).toString()  new String(&quot;ab&quot;)</span></span><br><span class="line">    String s5 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;  <span class="comment">// javac 在编译期间的优化，结果已经在编译期确定为ab</span></span><br><span class="line">    System.out.println(s3 == s5);<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  [&quot;ab&quot;, &quot;a&quot;, &quot;b&quot;]</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String x = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;)</span></span><br><span class="line">    String s2 = s.intern(); <span class="comment">// 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</span></span><br><span class="line">    System.out.println( s2 == x);<span class="comment">//true</span></span><br><span class="line">    System.out.println( s == x );<span class="comment">//false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  [&quot;a&quot;, &quot;b&quot;, &quot;ab&quot;]</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 堆  new String(&quot;a&quot;)   new String(&quot;b&quot;) new String(&quot;ab&quot;)</span></span><br><span class="line">    String s2 = s.intern(); <span class="comment">// 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</span></span><br><span class="line">    System.out.println( s2 == <span class="string">&quot;ab&quot;</span>);<span class="comment">//true</span></span><br><span class="line">    System.out.println( s == <span class="string">&quot;ab&quot;</span> );<span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常量池中的字符串仅是符号，只有在被用到时才会转化为对象</li>
-<li>利用串池的机制，来避免重复创建字符串对象</li>
-<li>字符串变量拼接的原理是StringBuilder</li>
-<li>字符串常量拼接的原理是编译器优化</li>
-<li>可以使用intern方法，主动将串池中还没有的字符串对象放入串池中<ul>
-<li>1.8 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有则放入串池， 会把串池中的对象返回</li>
-<li>1.6 将这个字符串对象尝试放入串池，如果有则并不会放入，如果没有会把此对象复制一份，放入串池， 会把串池中的对象返回</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>无论放入是否成功，都会返回串池中的字符串对象</p>
-</blockquote>
-<h4 id="StringTable的位置"><a href="#StringTable的位置" class="headerlink" title="StringTable的位置"></a>StringTable的位置</h4><p>jdk1.6 StringTable 位置是在永久代中，1.8 StringTable 位置是在堆中。</p>
-<blockquote>
-<p>永久代的回收效率低，只有在<code>Full GC</code>的时候才会触发垃圾回收，而<code>Full GC</code>要等到老年代的空间不足时才会触发</p>
-</blockquote>
-<h4 id="StringTable-垃圾回收"><a href="#StringTable-垃圾回收" class="headerlink" title="StringTable 垃圾回收"></a>StringTable 垃圾回收</h4><p>-Xmx10m 指定堆内存大小<br>-XX:+PrintStringTableStatistics 打印字符串常量池信息<br>-XX:+PrintGCDetails<br>-verbose:gc 打印 gc 的次数，耗费时间等信息</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 演示 StringTable 垃圾回收</span></span><br><span class="line"><span class="comment"> * -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_05_StringTableTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000</span>; j++) &#123; <span class="comment">// j = 100, j = 10000</span></span><br><span class="line">                String.valueOf(j).intern();</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="StringTable-性能调优"><a href="#StringTable-性能调优" class="headerlink" title="StringTable 性能调优"></a>StringTable 性能调优</h4><ul>
-<li>因为StringTable是由HashTable实现的，所以可以适当增加HashTable桶的个数，来减少字符串放入串池所需要的时间</li>
-</ul>
-<blockquote>
-<p>-XX:StringTableSize=桶个数（最少设置为 1009 以上）</p>
-</blockquote>
-<ul>
-<li>考虑是否需要将字符串对象入池，可以通过 intern 方法减少重复入池</li>
-</ul>
-<h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><h4 id="定义-5"><a href="#定义-5" class="headerlink" title="定义"></a>定义</h4><p>直接内存（Direct Memory）就是系统内存</p>
-<ul>
-<li>常见于 NIO 操作时，用于数据缓冲区</li>
-<li>分配回收成本较高，但读写性能高</li>
-<li>不受 JVM 内存回收管理</li>
-</ul>
-<h4 id="使用直接内存的好处"><a href="#使用直接内存的好处" class="headerlink" title="使用直接内存的好处"></a>使用直接内存的好处</h4><p>文件读写流程：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170018.png"></p>
-<p>因为 java 不能直接操作文件管理，需要切换到内核态，使用本地方法进行操作，然后读取磁盘文件，会在系统内存中创建一个缓冲区，将数据读到系统缓冲区， 然后在将系统缓冲区数据，复制到 java 堆内存中。缺点是数据存储了两份，在系统内存中有一份，java 堆中有一份，造成了不必要的复制。</p>
-<p><strong>使用了 DirectBuffer 文件读取流程</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170052.png"></p>
-<p>直接内存是操作系统和 Java 代码都可以访问的一块区域，无需将代码从系统内存复制到 Java 堆内存，从而提高了效率。</p>
-<h4 id="直接内存回收原理"><a href="#直接内存回收原理" class="headerlink" title="直接内存回收原理"></a>直接内存回收原理</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_06_DirectMemoryTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> _1GB = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, NoSuchFieldException, IllegalAccessException </span>&#123;</span><br><span class="line"><span class="comment">//        method();</span></span><br><span class="line">        method1();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 演示 直接内存 是被 unsafe 创建与回收</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> <span class="keyword">throws</span> IOException, NoSuchFieldException, IllegalAccessException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Field field = Unsafe.class.getDeclaredField(<span class="string">&quot;theUnsafe&quot;</span>);</span><br><span class="line">        field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Unsafe unsafe = (Unsafe)field.get(Unsafe.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> base = unsafe.allocateMemory(_1GB);</span><br><span class="line">        unsafe.setMemory(base,_1GB, (<span class="keyword">byte</span>)<span class="number">0</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line"></span><br><span class="line">        unsafe.freeMemory(base);</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 演示 直接内存被 释放</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="keyword">null</span>;</span><br><span class="line">        System.gc(); <span class="comment">// 手动 gc</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>直接内存的回收不是通过 JVM 的垃圾回收来释放的，而是通过<code>unsafe.freeMemory</code> 来手动释放。<br>第一步：allocateDirect 的实现</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocateDirect</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DirectByteBuffer(capacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>底层是创建了一个 DirectByteBuffer 对象。<br>第二步：DirectByteBuffer 类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DirectByteBuffer(<span class="keyword">int</span> cap) &#123;   <span class="comment">// package-private</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">super</span>(-<span class="number">1</span>, <span class="number">0</span>, cap, cap);</span><br><span class="line">    <span class="keyword">boolean</span> pa = VM.isDirectMemoryPageAligned();</span><br><span class="line">    <span class="keyword">int</span> ps = Bits.pageSize();</span><br><span class="line">    <span class="keyword">long</span> size = Math.max(<span class="number">1L</span>, (<span class="keyword">long</span>)cap + (pa ? ps : <span class="number">0</span>));</span><br><span class="line">    Bits.reserveMemory(size, cap);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> base = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        base = unsafe.allocateMemory(size); <span class="comment">// 申请内存</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (OutOfMemoryError x) &#123;</span><br><span class="line">        Bits.unreserveMemory(size, cap);</span><br><span class="line">        <span class="keyword">throw</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    unsafe.setMemory(base, size, (<span class="keyword">byte</span>) <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (pa &amp;&amp; (base % ps != <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="comment">// Round up to page boundary</span></span><br><span class="line">        address = base + ps - (base &amp; (ps - <span class="number">1</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        address = base;</span><br><span class="line">    &#125;</span><br><span class="line">    cleaner = Cleaner.create(<span class="keyword">this</span>, <span class="keyword">new</span> Deallocator(base, size, cap)); <span class="comment">// 通过虚引用，来实现直接内存的释放，this为虚引用的实际对象, 第二个参数是一个回调，实现了 runnable 接口，run 方法中通过 unsafe 释放内存。</span></span><br><span class="line">    att = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里调用了一个 Cleaner 的 create 方法，且后台线程还会对虚引用的对象监测，如果虚引用的实际对象（这里是 DirectByteBuffer ）被回收以后，就会调用 Cleaner 的 clean 方法，来清除直接内存中占用的内存。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clean</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (remove(<span class="keyword">this</span>)) &#123;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">// 都用函数的 run 方法, 释放内存</span></span><br><span class="line">               <span class="keyword">this</span>.thunk.run();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (<span class="keyword">final</span> Throwable var2) &#123;</span><br><span class="line">               AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;Void&gt;() &#123;</span><br><span class="line">                   <span class="function"><span class="keyword">public</span> Void <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                       <span class="keyword">if</span> (System.err != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           (<span class="keyword">new</span> Error(<span class="string">&quot;Cleaner terminated abnormally&quot;</span>, var2)).printStackTrace();</span><br><span class="line">                       &#125;</span><br><span class="line"></span><br><span class="line">                       System.exit(<span class="number">1</span>);</span><br><span class="line">                       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到关键的一行代码， this.thunk.run()，thunk 是 Runnable 对象。run 方法就是回调 Deallocator 中的 run 方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (address == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="comment">// Paranoia</span></span><br><span class="line">              <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 释放内存</span></span><br><span class="line">          unsafe.freeMemory(address);</span><br><span class="line">          address = <span class="number">0</span>;</span><br><span class="line">          Bits.unreserveMemory(size, capacity);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>直接内存的回收机制总结</strong></p>
-<ul>
-<li>使用了 Unsafe 类来完成直接内存的分配回收，回收需要主动调用freeMemory 方法</li>
-<li>ByteBuffer 的实现内部使用了 Cleaner（虚引用）来检测 ByteBuffer 。一旦ByteBuffer 被垃圾回收，那么会由 ReferenceHandler（守护线程） 来调用 Cleaner 的 clean 方法调用 freeMemory 来释放内存</li>
-</ul>
-<p><strong>注意：</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * -XX:+DisableExplicitGC 显示的</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">        System.out.println(<span class="string">&quot;分配完毕&quot;</span>);</span><br><span class="line">        System.in.read();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始释放&quot;</span>);</span><br><span class="line">        byteBuffer = <span class="keyword">null</span>;</span><br><span class="line">        System.gc(); <span class="comment">// 手动 gc 失效</span></span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>一般用 jvm 调优时，会加上下面的参数：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">-XX:+DisableExplicitGC  <span class="comment">// 静止显示的 GC</span></span><br></pre></td></tr></table></figure>
-
-<p>意思就是禁止我们手动的 GC，比如手动 System.gc() 无效，它是一种 full gc，会回收新生代、老年代，会造成程序执行的时间比较长。所以我们就通过 unsafe 对象调用 freeMemory 的方式释放内存</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JVM</category>
-      </categories>
-      <tags>
-        <tag>JVM</tag>
-        <tag>内存结构</tag>
       </tags>
   </entry>
   <entry>
@@ -5128,13 +5183,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#x6f;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#x66;&#x6f;&#120;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x6f;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#x66;&#x6f;&#120;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#x5f;&#98;&#105;&#110;&#x67;&#x40;&#x66;&#x6f;&#120;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;">&#97;&#x6f;&#x5f;&#98;&#105;&#110;&#x67;&#x40;&#x66;&#x6f;&#120;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#111;&#95;&#x62;&#105;&#x6e;&#103;&#x40;&#102;&#111;&#120;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;">&#x61;&#111;&#95;&#x62;&#105;&#x6e;&#103;&#x40;&#102;&#111;&#120;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#x5f;&#98;&#105;&#110;&#103;&#64;&#102;&#x6f;&#120;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x6f;&#x5f;&#98;&#105;&#110;&#103;&#64;&#102;&#x6f;&#120;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#x6f;&#x6e;&#x67;&#x77;&#x65;&#x69;&#46;&#x68;&#x75;&#64;&#x74;&#x75;&#x79;&#x61;&#46;&#99;&#x6f;&#x6d;">&#x7a;&#x6f;&#x6e;&#x67;&#x77;&#x65;&#x69;&#46;&#x68;&#x75;&#64;&#x74;&#x75;&#x79;&#x61;&#46;&#99;&#x6f;&#x6d;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#x6f;&#110;&#x67;&#119;&#101;&#105;&#46;&#104;&#x75;&#64;&#x74;&#117;&#x79;&#x61;&#46;&#99;&#111;&#109;">&#x7a;&#x6f;&#110;&#x67;&#119;&#101;&#105;&#46;&#104;&#x75;&#64;&#x74;&#117;&#x79;&#x61;&#46;&#99;&#111;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -5142,7 +5197,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#x6c;&#119;&#x32;&#x36;&#51;&#56;&#x38;&#56;&#x40;&#x61;&#108;&#105;&#98;&#x61;&#98;&#97;&#45;&#105;&#x6e;&#99;&#x2e;&#99;&#x6f;&#109;">&#x6c;&#119;&#x32;&#x36;&#51;&#56;&#x38;&#56;&#x40;&#x61;&#108;&#105;&#98;&#x61;&#98;&#97;&#45;&#105;&#x6e;&#99;&#x2e;&#99;&#x6f;&#109;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#108;&#119;&#50;&#54;&#x33;&#x38;&#56;&#x38;&#x40;&#x61;&#x6c;&#105;&#x62;&#97;&#98;&#97;&#45;&#x69;&#110;&#99;&#x2e;&#99;&#111;&#x6d;">&#108;&#119;&#50;&#54;&#x33;&#x38;&#56;&#x38;&#x40;&#x61;&#x6c;&#105;&#x62;&#97;&#98;&#97;&#45;&#x69;&#110;&#99;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -5150,7 +5205,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#x6a;&#x6f;&#115;&#104;&#x75;&#x61;&#46;&#x6c;&#x69;&#102;&#x66;&#64;&#x61;&#x6c;&#105;&#x62;&#97;&#98;&#97;&#45;&#105;&#x6e;&#99;&#x2e;&#x63;&#111;&#x6d;">&#x6a;&#x6f;&#115;&#104;&#x75;&#x61;&#46;&#x6c;&#x69;&#102;&#x66;&#64;&#x61;&#x6c;&#105;&#x62;&#97;&#98;&#97;&#45;&#105;&#x6e;&#99;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#106;&#x6f;&#x73;&#x68;&#117;&#97;&#46;&#108;&#105;&#x66;&#102;&#x40;&#97;&#x6c;&#105;&#98;&#97;&#x62;&#97;&#45;&#105;&#x6e;&#x63;&#46;&#99;&#111;&#109;">&#106;&#x6f;&#x73;&#x68;&#117;&#97;&#46;&#108;&#105;&#x66;&#102;&#x40;&#97;&#x6c;&#105;&#98;&#97;&#x62;&#97;&#45;&#105;&#x6e;&#x63;&#46;&#99;&#111;&#109;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -5178,7 +5233,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#102;&#x69;&#103;&#x68;&#x74;&#x69;&#110;&#103;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#102;&#x69;&#103;&#x68;&#x74;&#x69;&#110;&#103;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#102;&#x69;&#x67;&#x68;&#116;&#x69;&#110;&#x67;&#x63;&#x72;&#97;&#x70;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#102;&#x69;&#x67;&#x68;&#116;&#x69;&#110;&#x67;&#x63;&#x72;&#97;&#x70;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
