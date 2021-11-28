@@ -505,6 +505,82 @@
       </tags>
   </entry>
   <entry>
+    <title>UML类图介绍</title>
+    <url>/2021/09/07/UML%E7%B1%BB%E5%9B%BE%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
+<p>统一建模语言（Unified Modeling Language，UML）是用来设计软件的可视化建模语言。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。</p>
+<p>UML 从目标系统的不同角度出发，定义了用例图、类图、对象图、状态图、活动图、时序图、协作图、构件图、部署图等 9 种图。</p>
+</blockquote>
+<h2 id="类图概述"><a href="#类图概述" class="headerlink" title="类图概述"></a>类图概述</h2><p>类图(Class diagram)是显示了模型的静态结构，特别是模型中存在的类、类的内部结构以及它们与其他类的关系等。类图不显示暂时性的信息。类图是面向对象建模的主要组成部分。</p>
+<h2 id="类图的作用"><a href="#类图的作用" class="headerlink" title="类图的作用"></a>类图的作用</h2><ul>
+<li>在软件工程中，类图是一种静态的结构图，描述了系统的类的集合，类的属性和类之间的关系，可以简化了人们对系统的理解；</li>
+<li>类图是系统分析和设计阶段的重要产物，是系统编码和测试的重要模型。</li>
+</ul>
+<h2 id="类图表示法"><a href="#类图表示法" class="headerlink" title="类图表示法"></a>类图表示法</h2><h3 id="类的表示方式"><a href="#类的表示方式" class="headerlink" title="类的表示方式"></a>类的表示方式</h3><p>在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name,age和address这3个属性，以及work()方法。 </p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Employee.jpg"></p>
+<p>属性/方法名称前加的加号和减号表示了这个属性/方法的可见性，UML类图中表示可见性的符号有三种：</p>
+<ul>
+<li><p>+：表示public</p>
+</li>
+<li><p>-：表示private</p>
+</li>
+<li><p>#：表示protected</p>
+</li>
+</ul>
+<p>属性的完整表示方式是： <strong>可见性  名称 ：类型 [ = 缺省值]</strong>  </p>
+<p>方法的完整表示方式是： <strong>可见性  名称(参数列表) [ ： 返回类型]</strong></p>
+<blockquote>
+<p>注意：</p>
+<p>​    1，中括号中的内容表示是可选的</p>
+<p>​    2，也有将类型放在变量名前面，返回值类型放在方法名前面</p>
+</blockquote>
+<p><strong>举个&#x1F330;：</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/demo.png"></p>
+<p>上图Demo类定义了三个方法：</p>
+<ul>
+<li>method()方法：修饰符为public，没有参数，没有返回值。</li>
+<li>method1()方法：修饰符为private，没有参数，返回值类型为String。</li>
+<li>method2()方法：修饰符为protected，接收两个参数，第一个参数类型为int，第二个参数类型为String，返回值类型是int。</li>
+</ul>
+<h3 id="类与类之间关系的表示方式"><a href="#类与类之间关系的表示方式" class="headerlink" title="类与类之间关系的表示方式"></a>类与类之间关系的表示方式</h3><h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><p>关联关系是对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系，如老师和学生、师傅和徒弟、丈夫和妻子等。关联关系是类与类之间最常用的一种关系，分为一般关联关系、聚合关系和组合关系。我们先介绍一般关联。</p>
+<p>关联又可以分为单向关联，双向关联，自关联。</p>
+<p><strong>1，单向关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_address.png"></p>
+<p>在UML类图中单向关联用一个带箭头的实线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。</p>
+<p><strong>2，双向关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_product.png"></p>
+<p>从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。</p>
+<p>在UML类图中，双向关联用一个不带箭头的直线表示。上图中在Customer类中维护一个List&lt;Product&gt;，表示一个顾客可以购买多个商品；在Product类中维护一个Customer类型的成员变量表示这个产品被哪个顾客所购买。</p>
+<p><strong>3，自关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/node.png"></p>
+<p>自关联在UML类图中用一个带有箭头且指向自身的线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。</p>
+<h4 id="聚合关系"><a href="#聚合关系" class="headerlink" title="聚合关系"></a>聚合关系</h4><p>聚合关系是关联关系的一种，是强关联关系，是整体和部分之间的关系。</p>
+<p>聚合关系也是通过成员对象来实现的，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。例如，学校与老师的关系，学校包含老师，但如果学校停办了，老师依然存在。</p>
+<p>在 UML 类图中，聚合关系可以用带空心菱形的实线来表示，菱形指向整体。下图所示是大学和教师的关系图：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173422328.png"></p>
+<h4 id="组合关系"><a href="#组合关系" class="headerlink" title="组合关系"></a>组合关系</h4><p>组合表示类之间的整体与部分的关系，但它是一种更强烈的聚合关系。</p>
+<p>在组合关系中，整体对象可以控制部分对象的生命周期，一旦整体对象不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在。例如，头和嘴的关系，没有了头，嘴也就不存在了。</p>
+<p>在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。下图所示是头和嘴的关系图：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173455149.png"></p>
+<h4 id="依赖关系"><a href="#依赖关系" class="headerlink" title="依赖关系"></a>依赖关系</h4><p>依赖关系是一种使用关系，它是对象之间耦合度最弱的一种关联方式，是临时性的关联。在代码中，某个类的方法通过局部变量、方法的参数或者对静态方法的调用来访问另一个类（被依赖类）中的某些方法来完成一些职责。</p>
+<p>在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。下图所示是司机和汽车的关系图，司机驾驶汽车：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173518926.png"></p>
+<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><p>继承关系是对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系。</p>
+<p>在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下图所示：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173539838.png"></p>
+<h4 id="实现关系"><a href="#实现关系" class="headerlink" title="实现关系"></a>实现关系</h4><p>实现关系是接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作。</p>
+<p>在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如图所示。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173554296.png"></p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>相关内容介绍</category>
+      </categories>
+      <tags>
+        <tag>UML图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis安装</title>
     <url>/2021/11/28/Redis%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="Redis官方网站下载安装包"><a href="#Redis官方网站下载安装包" class="headerlink" title="Redis官方网站下载安装包"></a>Redis官方网站下载安装包</h2><ol>
@@ -600,82 +676,6 @@
       </tags>
   </entry>
   <entry>
-    <title>UML类图介绍</title>
-    <url>/2021/09/07/UML%E7%B1%BB%E5%9B%BE%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
-<p>统一建模语言（Unified Modeling Language，UML）是用来设计软件的可视化建模语言。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。</p>
-<p>UML 从目标系统的不同角度出发，定义了用例图、类图、对象图、状态图、活动图、时序图、协作图、构件图、部署图等 9 种图。</p>
-</blockquote>
-<h2 id="类图概述"><a href="#类图概述" class="headerlink" title="类图概述"></a>类图概述</h2><p>类图(Class diagram)是显示了模型的静态结构，特别是模型中存在的类、类的内部结构以及它们与其他类的关系等。类图不显示暂时性的信息。类图是面向对象建模的主要组成部分。</p>
-<h2 id="类图的作用"><a href="#类图的作用" class="headerlink" title="类图的作用"></a>类图的作用</h2><ul>
-<li>在软件工程中，类图是一种静态的结构图，描述了系统的类的集合，类的属性和类之间的关系，可以简化了人们对系统的理解；</li>
-<li>类图是系统分析和设计阶段的重要产物，是系统编码和测试的重要模型。</li>
-</ul>
-<h2 id="类图表示法"><a href="#类图表示法" class="headerlink" title="类图表示法"></a>类图表示法</h2><h3 id="类的表示方式"><a href="#类的表示方式" class="headerlink" title="类的表示方式"></a>类的表示方式</h3><p>在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name,age和address这3个属性，以及work()方法。 </p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Employee.jpg"></p>
-<p>属性/方法名称前加的加号和减号表示了这个属性/方法的可见性，UML类图中表示可见性的符号有三种：</p>
-<ul>
-<li><p>+：表示public</p>
-</li>
-<li><p>-：表示private</p>
-</li>
-<li><p>#：表示protected</p>
-</li>
-</ul>
-<p>属性的完整表示方式是： <strong>可见性  名称 ：类型 [ = 缺省值]</strong>  </p>
-<p>方法的完整表示方式是： <strong>可见性  名称(参数列表) [ ： 返回类型]</strong></p>
-<blockquote>
-<p>注意：</p>
-<p>​    1，中括号中的内容表示是可选的</p>
-<p>​    2，也有将类型放在变量名前面，返回值类型放在方法名前面</p>
-</blockquote>
-<p><strong>举个&#x1F330;：</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/demo.png"></p>
-<p>上图Demo类定义了三个方法：</p>
-<ul>
-<li>method()方法：修饰符为public，没有参数，没有返回值。</li>
-<li>method1()方法：修饰符为private，没有参数，返回值类型为String。</li>
-<li>method2()方法：修饰符为protected，接收两个参数，第一个参数类型为int，第二个参数类型为String，返回值类型是int。</li>
-</ul>
-<h3 id="类与类之间关系的表示方式"><a href="#类与类之间关系的表示方式" class="headerlink" title="类与类之间关系的表示方式"></a>类与类之间关系的表示方式</h3><h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><p>关联关系是对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系，如老师和学生、师傅和徒弟、丈夫和妻子等。关联关系是类与类之间最常用的一种关系，分为一般关联关系、聚合关系和组合关系。我们先介绍一般关联。</p>
-<p>关联又可以分为单向关联，双向关联，自关联。</p>
-<p><strong>1，单向关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_address.png"></p>
-<p>在UML类图中单向关联用一个带箭头的实线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。</p>
-<p><strong>2，双向关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_product.png"></p>
-<p>从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。</p>
-<p>在UML类图中，双向关联用一个不带箭头的直线表示。上图中在Customer类中维护一个List&lt;Product&gt;，表示一个顾客可以购买多个商品；在Product类中维护一个Customer类型的成员变量表示这个产品被哪个顾客所购买。</p>
-<p><strong>3，自关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/node.png"></p>
-<p>自关联在UML类图中用一个带有箭头且指向自身的线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。</p>
-<h4 id="聚合关系"><a href="#聚合关系" class="headerlink" title="聚合关系"></a>聚合关系</h4><p>聚合关系是关联关系的一种，是强关联关系，是整体和部分之间的关系。</p>
-<p>聚合关系也是通过成员对象来实现的，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。例如，学校与老师的关系，学校包含老师，但如果学校停办了，老师依然存在。</p>
-<p>在 UML 类图中，聚合关系可以用带空心菱形的实线来表示，菱形指向整体。下图所示是大学和教师的关系图：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173422328.png"></p>
-<h4 id="组合关系"><a href="#组合关系" class="headerlink" title="组合关系"></a>组合关系</h4><p>组合表示类之间的整体与部分的关系，但它是一种更强烈的聚合关系。</p>
-<p>在组合关系中，整体对象可以控制部分对象的生命周期，一旦整体对象不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在。例如，头和嘴的关系，没有了头，嘴也就不存在了。</p>
-<p>在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。下图所示是头和嘴的关系图：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173455149.png"></p>
-<h4 id="依赖关系"><a href="#依赖关系" class="headerlink" title="依赖关系"></a>依赖关系</h4><p>依赖关系是一种使用关系，它是对象之间耦合度最弱的一种关联方式，是临时性的关联。在代码中，某个类的方法通过局部变量、方法的参数或者对静态方法的调用来访问另一个类（被依赖类）中的某些方法来完成一些职责。</p>
-<p>在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。下图所示是司机和汽车的关系图，司机驾驶汽车：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173518926.png"></p>
-<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><p>继承关系是对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系。</p>
-<p>在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下图所示：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173539838.png"></p>
-<h4 id="实现关系"><a href="#实现关系" class="headerlink" title="实现关系"></a>实现关系</h4><p>实现关系是接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作。</p>
-<p>在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如图所示。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173554296.png"></p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>相关内容介绍</category>
-      </categories>
-      <tags>
-        <tag>UML图</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo-butterfly挂载自己的网页？</title>
     <url>/2021/11/03/hexo-butterfly%E6%8C%82%E8%BD%BD%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E9%A1%B5%EF%BC%9F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
@@ -761,6 +761,77 @@
         <tag>中介者模式</tag>
         <tag>行为型模式</tag>
         <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>享元模式</title>
+    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
+<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
+<ol>
+<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
+<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
+</ol>
+<p>享元模式的主要有以下角色：</p>
+<ul>
+<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
+<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
+<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
+<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
+<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
+
+<p><strong>先来看类图：</strong></p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
+
+<p><strong>代码如下：</strong></p>
+<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
+<ul>
+<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
+<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
+<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
+</ul>
+<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行上面代码，结果如下：</p>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
+
+<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>结构型模式</category>
+      </categories>
+      <tags>
+        <tag>享元模式</tag>
       </tags>
   </entry>
   <entry>
@@ -870,77 +941,6 @@
         <tag>代理模式</tag>
         <tag>动态代理</tag>
         <tag>静态代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>享元模式</title>
-    <url>/2021/09/22/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>定义：</strong></p>
-<p>​    运用共享技术来有效地支持大量细粒度对象的复用。它通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似对象的开销，从而提高系统资源的利用率。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>享元（Flyweight ）模式中存在以下两种状态：</p>
-<ol>
-<li>内部状态，即不会随着环境的改变而改变的可共享部分。</li>
-<li>外部状态，指随环境改变而改变的不可以共享的部分。享元模式的实现要领就是区分应用中的这两种状态，并将外部状态外部化。</li>
-</ol>
-<p>享元模式的主要有以下角色：</p>
-<ul>
-<li>抽象享元角色（Flyweight）：通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
-<li>具体享元（Concrete Flyweight）角色 ：它实现了抽象享元类，称为享元对象；在具体享元类中为内部状态提供了存储空间。通常我们可以结合单例模式来设计具体享元类，为每一个具体享元类提供唯一的享元对象。</li>
-<li>非享元（Unsharable Flyweight)角色 ：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
-<li>享元工厂（Flyweight Factory）角色 ：负责创建和管理享元角色。当客户对象请求一个享元对象时，享元工厂检査系统中是否存在符合要求的享元对象，如果存在则提供给客户；如果不存在的话，则创建一个新的享元对象。</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】俄罗斯方块</p>
-<p>下面的图片是众所周知的俄罗斯方块中的一个个方块，如果在俄罗斯方块这个游戏中，每个不同的方块都是一个实例对象，这些对象就要占用很多的内存空间，下面利用享元模式进行实现。</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.jpeg" style="zoom:60%;" />
-
-<p><strong>先来看类图：</strong></p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F.png" style="zoom:80%;" />
-
-<p><strong>代码如下：</strong></p>
-<p>俄罗斯方块有不同的形状，我们可以对这些形状向上抽取出AbstractBox，用来定义共性的属性和行为。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getShape</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">(String color)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方块形状：&quot;</span> + <span class="keyword">this</span>.getShape() + <span class="string">&quot; 颜色：&quot;</span> + color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接下来就是定义不同的形状了，IBox类、LBox类、OBox类等。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;I&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;L&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OBox</span> <span class="keyword">extends</span> <span class="title">AbstractBox</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getShape</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;O&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>提供了一个工厂类（BoxFactory），用来管理享元对象（也就是AbstractBox子类对象），该工厂类对象只需要一个，所以可以使用单例模式。并给工厂类提供一个获取形状的方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoxFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HashMap&lt;String, AbstractBox&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BoxFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;String, AbstractBox&gt;();</span><br><span class="line">        AbstractBox iBox = <span class="keyword">new</span> IBox();</span><br><span class="line">        AbstractBox lBox = <span class="keyword">new</span> LBox();</span><br><span class="line">        AbstractBox oBox = <span class="keyword">new</span> OBox();</span><br><span class="line">        map.put(<span class="string">&quot;I&quot;</span>, iBox);</span><br><span class="line">        map.put(<span class="string">&quot;L&quot;</span>, lBox);</span><br><span class="line">        map.put(<span class="string">&quot;O&quot;</span>, oBox);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> BoxFactory INSTANCE = <span class="keyword">new</span> BoxFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AbstractBox <span class="title">getBox</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点和使用场景"><a href="#优缺点和使用场景" class="headerlink" title="优缺点和使用场景"></a>优缺点和使用场景</h2><p><strong>优点</strong></p>
-<ul>
-<li>极大减少内存中相似或相同对象数量，节约系统资源，提供系统性能</li>
-<li>享元模式中的外部状态相对独立，且不影响内部状态</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<p>为了使对象可以共享，需要将享元对象的部分状态外部化，分离内部状态和外部状态，使程序逻辑复杂</p>
-<p><strong>使用场景：</strong></p>
-<ul>
-<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
-<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。</li>
-<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
-</ul>
-<h2 id="JDK源码解析"><a href="#JDK源码解析" class="headerlink" title="JDK源码解析"></a>JDK源码解析</h2><p>Integer类使用了享元模式。我们先看下面的例子：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = <span class="number">127</span>;</span><br><span class="line">        Integer i2 = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i1和i2对象是否是同一个对象？&quot;</span> + (i1 == i2));</span><br><span class="line"></span><br><span class="line">        Integer i3 = <span class="number">128</span>;</span><br><span class="line">        Integer i4 = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;i3和i4对象是否是同一个对象？&quot;</span> + (i3 == i4));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行上面代码，结果如下：</p>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20200208212930857.png" style="zoom:80%;" />
-
-<p>为什么第一个输出语句输出的是true，第二个输出语句输出的是false？通过反编译软件进行反编译，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer i1 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        Integer i2 Integer.valueOf((<span class="keyword">int</span>)<span class="number">127</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i1\u548ci2\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i1 == i2)).toString());</span><br><span class="line">        Integer i3 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        Integer i4 = Integer.valueOf((<span class="keyword">int</span>)<span class="number">128</span>);</span><br><span class="line">        System.out.println((String)<span class="keyword">new</span> StringBuilder().append((String)<span class="string">&quot;i3\u548ci4\u5bf9\u8c61\u662f\u5426\u662f\u540c\u4e00\u4e2a\u5bf9\u8c61\uff1f&quot;</span>).append((<span class="keyword">boolean</span>)(i3 == i4)).toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码可以看到，直接给Integer类型的变量赋值基本数据类型数据的操作底层使用的是 <code>valueOf()</code> ，所以只需要看该方法即可</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Integer</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">            <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line">            String integerCacheHighPropValue =</span><br><span class="line">                sun.misc.VM.getSavedProperty(<span class="string">&quot;java.lang.Integer.IntegerCache.high&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (integerCacheHighPropValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> i = parseInt(integerCacheHighPropValue);</span><br><span class="line">                    i = Math.max(i, <span class="number">127</span>);</span><br><span class="line">                    <span class="comment">// Maximum array size is Integer.MAX_VALUE</span></span><br><span class="line">                    h = Math.min(i, Integer.MAX_VALUE - (-low) -<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span>( NumberFormatException nfe) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            high = h;</span><br><span class="line">            cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br><span class="line">            <span class="comment">// range [-128, 127] must be interned (JLS7 5.1.7)</span></span><br><span class="line">            <span class="keyword">assert</span> IntegerCache.high &gt;= <span class="number">127</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">IntegerCache</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到 <code>Integer</code> 默认先创建并缓存 <code>-128 ~ 127</code> 之间数的 <code>Integer</code> 对象，当调用 <code>valueOf</code> 时如果参数在 <code>-128 ~ 127</code> 之间则计算下标并从缓存中返回，否则创建一个新的 <code>Integer</code> 对象。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>结构型模式</category>
-      </categories>
-      <tags>
-        <tag>享元模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1129,6 +1129,85 @@
       </tags>
   </entry>
   <entry>
+    <title>备忘录模式</title>
+    <url>/2021/11/23/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，很多软件都提供了撤销（Undo）操作，如 Word、记事本、Photoshop、IDEA等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有在 浏览器 中的后退键、数据库事务管理中的回滚操作、玩游戏时的中间结果存档功能、数据库与操作系统的备份操作、棋类游戏中的悔棋功能等都属于这类。</p>
+<p><strong>定义：</strong></p>
+<p>又叫快照模式，在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后当需要时能将该对象恢复到原先保存的状态。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>备忘录模式的主要角色如下：</p>
+<ul>
+<li>发起人（Originator）角色：记录当前时刻的内部状态信息，提供创建备忘录和恢复备忘录数据的功能，实现其他业务功能，它可以访问备忘录里的所有信息。</li>
+<li>备忘录（Memento）角色：负责存储发起人的内部状态，在需要的时候提供这些内部状态给发起人。</li>
+<li>管理者（Caretaker）角色：对备忘录进行管理，提供保存与获取备忘录的功能，但其不能对备忘录的内容进行访问与修改。</li>
+</ul>
+<blockquote>
+<p>备忘录有两个等效的接口：</p>
+<ul>
+<li><strong>窄接口</strong>：管理者(Caretaker)对象（和其他发起人对象之外的任何对象）看到的是备忘录的窄接口(narror Interface)，这个窄接口只允许他把备忘录对象传给其他的对象。</li>
+<li><strong>宽接口</strong>：与管理者看到的窄接口相反，发起人对象可以看到一个宽接口(wide Interface)，这个宽接口允许它读取所有的数据，以便根据这些数据恢复这个发起人对象的内部状态。</li>
+</ul>
+</blockquote>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】游戏挑战BOSS</p>
+<p>游戏中的某个场景，一游戏角色有生命力、攻击力、防御力等数据，在打Boss前和后一定会不一样的，我们允许玩家如果感觉与Boss决斗的效果不理想可以让游戏恢复到决斗之前的状态。</p>
+<p>要实现上述案例，有两种方式：</p>
+<ul>
+<li>“白箱”备忘录模式</li>
+<li>“黑箱”备忘录模式</li>
+</ul>
+<h3 id="“白箱”备忘录模式"><a href="#“白箱”备忘录模式" class="headerlink" title="“白箱”备忘录模式"></a>“白箱”备忘录模式</h3><p>备忘录角色对任何对象都提供一个接口，即宽接口，备忘录角色的内部所存储的状态就对所有对象公开。类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%99%BD%E7%AE%B1%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//游戏角色类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GameRole</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit; <span class="comment">//生命力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk; <span class="comment">//攻击力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def; <span class="comment">//防御力</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//战斗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//保存角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RoleStateMemento <span class="title">saveState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoleStateMemento(vit, atk, def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//回复角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recoverState</span><span class="params">(RoleStateMemento roleStateMemento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = roleStateMemento.getVit();</span><br><span class="line">        <span class="keyword">this</span>.atk = roleStateMemento.getAtk();</span><br><span class="line">        <span class="keyword">this</span>.def = roleStateMemento.getDef();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stateDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;角色生命力：&quot;</span> + vit);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色攻击力：&quot;</span> + atk);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色防御力：&quot;</span> + def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//游戏状态存储类(备忘录类)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateMemento</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RoleStateMemento</span><span class="params">(<span class="keyword">int</span> vit, <span class="keyword">int</span> atk, <span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//角色状态管理者类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateCaretaker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> RoleStateMemento roleStateMemento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RoleStateMemento <span class="title">getRoleStateMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> roleStateMemento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRoleStateMemento</span><span class="params">(RoleStateMemento roleStateMemento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.roleStateMemento = roleStateMemento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss前------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss前</span></span><br><span class="line">        GameRole gameRole = <span class="keyword">new</span> GameRole();</span><br><span class="line">        gameRole.initState();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//保存进度</span></span><br><span class="line">        RoleStateCaretaker roleStateCaretaker = <span class="keyword">new</span> RoleStateCaretaker();</span><br><span class="line">        roleStateCaretaker.setRoleStateMemento(gameRole.saveState());</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss后------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss时，损耗严重</span></span><br><span class="line">        gameRole.fight();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">        System.out.println(<span class="string">&quot;------------恢复之前状态------------&quot;</span>);</span><br><span class="line">        <span class="comment">//恢复之前状态</span></span><br><span class="line">        gameRole.recoverState(roleStateCaretaker.getRoleStateMemento());</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>分析：白箱备忘录模式是破坏封装性的。但是通过程序员自律，同样可以在一定程度上实现模式的大部分用意。</p>
+</blockquote>
+<h3 id="“黑箱”备忘录模式"><a href="#“黑箱”备忘录模式" class="headerlink" title="“黑箱”备忘录模式"></a>“黑箱”备忘录模式</h3><p>备忘录角色对发起人对象提供一个宽接口，而为其他对象提供一个窄接口。在Java语言中，实现双重接口的办法就是将<strong>备忘录类</strong>设计成<strong>发起人类</strong>的内部成员类。</p>
+<p>将 <code>RoleStateMemento</code> 设为 <code>GameRole</code> 的内部类，从而将 <code>RoleStateMemento</code> 对象封装在 <code>GameRole</code> 里面；在外面提供一个标识接口 <code>Memento</code> 给 <code>RoleStateCaretaker</code> 及其他对象使用。这样 <code>GameRole</code> 类看到的是 <code>RoleStateMemento</code> 所有的接口，而<code>RoleStateCaretaker</code>  及其他对象看到的仅仅是标识接口 <code>Memento</code> 所暴露出来的接口，从而维护了封装型。类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E9%BB%91%E7%AE%B1%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<p>窄接口<code>Memento</code>，这是一个标识接口，因此没有定义出任何的方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义发起人类 <code>GameRole</code>，并在内部定义备忘录内部类 <code>RoleStateMemento</code>（该内部类设置为私有的）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">/游戏角色类</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GameRole</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit; <span class="comment">//生命力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk; <span class="comment">//攻击力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def; <span class="comment">//防御力</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//战斗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//保存角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">saveState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoleStateMemento(vit, atk, def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//回复角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recoverState</span><span class="params">(Memento memento)</span> </span>&#123;</span><br><span class="line">        RoleStateMemento roleStateMemento = (RoleStateMemento) memento;</span><br><span class="line">        <span class="keyword">this</span>.vit = roleStateMemento.getVit();</span><br><span class="line">        <span class="keyword">this</span>.atk = roleStateMemento.getAtk();</span><br><span class="line">        <span class="keyword">this</span>.def = roleStateMemento.getDef();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stateDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;角色生命力：&quot;</span> + vit);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色攻击力：&quot;</span> + atk);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色防御力：&quot;</span> + def);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateMemento</span> <span class="keyword">implements</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> vit;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> atk;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> def;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">RoleStateMemento</span><span class="params">(<span class="keyword">int</span> vit, <span class="keyword">int</span> atk, <span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.vit = vit;</span><br><span class="line">            <span class="keyword">this</span>.atk = atk;</span><br><span class="line">            <span class="keyword">this</span>.def = def;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> vit;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.vit = vit;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> atk;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.atk = atk;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> def;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.def = def;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>负责人角色类 <code>RoleStateCaretaker</code> 能够得到的备忘录对象是以 <code>Memento</code> 为接口的，由于这个接口仅仅是一个标识接口，因此负责人角色不可能改变这个备忘录对象的内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//角色状态管理者类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateCaretaker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Memento memento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">getMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> memento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMemento</span><span class="params">(Memento memento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.memento = memento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端测试类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss前------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss前</span></span><br><span class="line">        GameRole gameRole = <span class="keyword">new</span> GameRole();</span><br><span class="line">        gameRole.initState();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//保存进度</span></span><br><span class="line">        RoleStateCaretaker roleStateCaretaker = <span class="keyword">new</span> RoleStateCaretaker();</span><br><span class="line">        roleStateCaretaker.setMemento(gameRole.saveState());</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss后------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss时，损耗严重</span></span><br><span class="line">        gameRole.fight();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">        System.out.println(<span class="string">&quot;------------恢复之前状态------------&quot;</span>);</span><br><span class="line">        <span class="comment">//恢复之前状态</span></span><br><span class="line">        gameRole.recoverState(roleStateCaretaker.getMemento());</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
+<ul>
+<li>提供了一种可以恢复状态的机制。当用户需要时能够比较方便地将数据恢复到某个历史的状态。</li>
+<li>实现了内部状态的封装。除了创建它的发起人之外，其他对象都不能够访问这些状态信息。</li>
+<li>简化了发起人类。发起人不需要管理和保存其内部状态的各个备份，所有状态信息都保存在备忘录中，并由管理者进行管理，这符合单一职责原则。</li>
+</ul>
+<p><strong>2，缺点：</strong></p>
+<ul>
+<li>资源消耗大。如果要保存的内部状态信息过多或者特别频繁，将会占用比较大的内存资源。</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li><p>需要保存与恢复数据的场景，如玩游戏时的中间结果的存档功能。</p>
+</li>
+<li><p>需要提供一个可回滚操作的场景，如 Word、记事本、Photoshop，idea等软件在编辑时按 Ctrl+Z 组合键，还有数据库中事务操作。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>行为型模式</category>
+      </categories>
+      <tags>
+        <tag>行为型模式</tag>
+        <tag>设计模式</tag>
+        <tag>备忘录模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>外观模式</title>
     <url>/2021/09/20/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>有些人可能炒过股票，但其实大部分人都不太懂，这种没有足够了解证券知识的情况下做股票是很容易亏钱的，刚开始炒股肯定都会想，如果有个懂行的帮帮手就好，其实基金就是个好帮手，支付宝里就有许多的基金，它将投资者分散的资金集中起来，交由专业的经理人进行管理，投资于股票、债券、外汇等领域，而基金投资的收益归持有者所有，管理机构收取一定比例的托管管理费用。</p>
@@ -1301,85 +1380,6 @@
       </categories>
       <tags>
         <tag>Flink</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>备忘录模式</title>
-    <url>/2021/11/23/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，很多软件都提供了撤销（Undo）操作，如 Word、记事本、Photoshop、IDEA等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有在 浏览器 中的后退键、数据库事务管理中的回滚操作、玩游戏时的中间结果存档功能、数据库与操作系统的备份操作、棋类游戏中的悔棋功能等都属于这类。</p>
-<p><strong>定义：</strong></p>
-<p>又叫快照模式，在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，以便以后当需要时能将该对象恢复到原先保存的状态。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>备忘录模式的主要角色如下：</p>
-<ul>
-<li>发起人（Originator）角色：记录当前时刻的内部状态信息，提供创建备忘录和恢复备忘录数据的功能，实现其他业务功能，它可以访问备忘录里的所有信息。</li>
-<li>备忘录（Memento）角色：负责存储发起人的内部状态，在需要的时候提供这些内部状态给发起人。</li>
-<li>管理者（Caretaker）角色：对备忘录进行管理，提供保存与获取备忘录的功能，但其不能对备忘录的内容进行访问与修改。</li>
-</ul>
-<blockquote>
-<p>备忘录有两个等效的接口：</p>
-<ul>
-<li><strong>窄接口</strong>：管理者(Caretaker)对象（和其他发起人对象之外的任何对象）看到的是备忘录的窄接口(narror Interface)，这个窄接口只允许他把备忘录对象传给其他的对象。</li>
-<li><strong>宽接口</strong>：与管理者看到的窄接口相反，发起人对象可以看到一个宽接口(wide Interface)，这个宽接口允许它读取所有的数据，以便根据这些数据恢复这个发起人对象的内部状态。</li>
-</ul>
-</blockquote>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>【例】游戏挑战BOSS</p>
-<p>游戏中的某个场景，一游戏角色有生命力、攻击力、防御力等数据，在打Boss前和后一定会不一样的，我们允许玩家如果感觉与Boss决斗的效果不理想可以让游戏恢复到决斗之前的状态。</p>
-<p>要实现上述案例，有两种方式：</p>
-<ul>
-<li>“白箱”备忘录模式</li>
-<li>“黑箱”备忘录模式</li>
-</ul>
-<h3 id="“白箱”备忘录模式"><a href="#“白箱”备忘录模式" class="headerlink" title="“白箱”备忘录模式"></a>“白箱”备忘录模式</h3><p>备忘录角色对任何对象都提供一个接口，即宽接口，备忘录角色的内部所存储的状态就对所有对象公开。类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%99%BD%E7%AE%B1%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//游戏角色类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GameRole</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit; <span class="comment">//生命力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk; <span class="comment">//攻击力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def; <span class="comment">//防御力</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//战斗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//保存角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RoleStateMemento <span class="title">saveState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoleStateMemento(vit, atk, def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//回复角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recoverState</span><span class="params">(RoleStateMemento roleStateMemento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = roleStateMemento.getVit();</span><br><span class="line">        <span class="keyword">this</span>.atk = roleStateMemento.getAtk();</span><br><span class="line">        <span class="keyword">this</span>.def = roleStateMemento.getDef();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stateDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;角色生命力：&quot;</span> + vit);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色攻击力：&quot;</span> + atk);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色防御力：&quot;</span> + def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//游戏状态存储类(备忘录类)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateMemento</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RoleStateMemento</span><span class="params">(<span class="keyword">int</span> vit, <span class="keyword">int</span> atk, <span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//角色状态管理者类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateCaretaker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> RoleStateMemento roleStateMemento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RoleStateMemento <span class="title">getRoleStateMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> roleStateMemento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRoleStateMemento</span><span class="params">(RoleStateMemento roleStateMemento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.roleStateMemento = roleStateMemento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss前------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss前</span></span><br><span class="line">        GameRole gameRole = <span class="keyword">new</span> GameRole();</span><br><span class="line">        gameRole.initState();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//保存进度</span></span><br><span class="line">        RoleStateCaretaker roleStateCaretaker = <span class="keyword">new</span> RoleStateCaretaker();</span><br><span class="line">        roleStateCaretaker.setRoleStateMemento(gameRole.saveState());</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss后------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss时，损耗严重</span></span><br><span class="line">        gameRole.fight();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">        System.out.println(<span class="string">&quot;------------恢复之前状态------------&quot;</span>);</span><br><span class="line">        <span class="comment">//恢复之前状态</span></span><br><span class="line">        gameRole.recoverState(roleStateCaretaker.getRoleStateMemento());</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>分析：白箱备忘录模式是破坏封装性的。但是通过程序员自律，同样可以在一定程度上实现模式的大部分用意。</p>
-</blockquote>
-<h3 id="“黑箱”备忘录模式"><a href="#“黑箱”备忘录模式" class="headerlink" title="“黑箱”备忘录模式"></a>“黑箱”备忘录模式</h3><p>备忘录角色对发起人对象提供一个宽接口，而为其他对象提供一个窄接口。在Java语言中，实现双重接口的办法就是将<strong>备忘录类</strong>设计成<strong>发起人类</strong>的内部成员类。</p>
-<p>将 <code>RoleStateMemento</code> 设为 <code>GameRole</code> 的内部类，从而将 <code>RoleStateMemento</code> 对象封装在 <code>GameRole</code> 里面；在外面提供一个标识接口 <code>Memento</code> 给 <code>RoleStateCaretaker</code> 及其他对象使用。这样 <code>GameRole</code> 类看到的是 <code>RoleStateMemento</code> 所有的接口，而<code>RoleStateCaretaker</code>  及其他对象看到的仅仅是标识接口 <code>Memento</code> 所暴露出来的接口，从而维护了封装型。类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E9%BB%91%E7%AE%B1%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<p>窄接口<code>Memento</code>，这是一个标识接口，因此没有定义出任何的方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义发起人类 <code>GameRole</code>，并在内部定义备忘录内部类 <code>RoleStateMemento</code>（该内部类设置为私有的）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">/游戏角色类</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GameRole</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> vit; <span class="comment">//生命力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> atk; <span class="comment">//攻击力</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> def; <span class="comment">//防御力</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">100</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//战斗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.atk = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.def = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//保存角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">saveState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RoleStateMemento(vit, atk, def);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//回复角色状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recoverState</span><span class="params">(Memento memento)</span> </span>&#123;</span><br><span class="line">        RoleStateMemento roleStateMemento = (RoleStateMemento) memento;</span><br><span class="line">        <span class="keyword">this</span>.vit = roleStateMemento.getVit();</span><br><span class="line">        <span class="keyword">this</span>.atk = roleStateMemento.getAtk();</span><br><span class="line">        <span class="keyword">this</span>.def = roleStateMemento.getDef();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stateDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;角色生命力：&quot;</span> + vit);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色攻击力：&quot;</span> + atk);</span><br><span class="line">        System.out.println(<span class="string">&quot;角色防御力：&quot;</span> + def);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.vit = vit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.atk = atk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.def = def;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateMemento</span> <span class="keyword">implements</span> <span class="title">Memento</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> vit;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> atk;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> def;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">RoleStateMemento</span><span class="params">(<span class="keyword">int</span> vit, <span class="keyword">int</span> atk, <span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.vit = vit;</span><br><span class="line">            <span class="keyword">this</span>.atk = atk;</span><br><span class="line">            <span class="keyword">this</span>.def = def;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getVit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> vit;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVit</span><span class="params">(<span class="keyword">int</span> vit)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.vit = vit;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAtk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> atk;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAtk</span><span class="params">(<span class="keyword">int</span> atk)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.atk = atk;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDef</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> def;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDef</span><span class="params">(<span class="keyword">int</span> def)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.def = def;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>负责人角色类 <code>RoleStateCaretaker</code> 能够得到的备忘录对象是以 <code>Memento</code> 为接口的，由于这个接口仅仅是一个标识接口，因此负责人角色不可能改变这个备忘录对象的内容</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//角色状态管理者类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleStateCaretaker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Memento memento;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Memento <span class="title">getMemento</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> memento;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMemento</span><span class="params">(Memento memento)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.memento = memento;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>客户端测试类</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss前------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss前</span></span><br><span class="line">        GameRole gameRole = <span class="keyword">new</span> GameRole();</span><br><span class="line">        gameRole.initState();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//保存进度</span></span><br><span class="line">        RoleStateCaretaker roleStateCaretaker = <span class="keyword">new</span> RoleStateCaretaker();</span><br><span class="line">        roleStateCaretaker.setMemento(gameRole.saveState());</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;------------大战Boss后------------&quot;</span>);</span><br><span class="line">        <span class="comment">//大战Boss时，损耗严重</span></span><br><span class="line">        gameRole.fight();</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">        System.out.println(<span class="string">&quot;------------恢复之前状态------------&quot;</span>);</span><br><span class="line">        <span class="comment">//恢复之前状态</span></span><br><span class="line">        gameRole.recoverState(roleStateCaretaker.getMemento());</span><br><span class="line">        gameRole.stateDisplay();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
-<ul>
-<li>提供了一种可以恢复状态的机制。当用户需要时能够比较方便地将数据恢复到某个历史的状态。</li>
-<li>实现了内部状态的封装。除了创建它的发起人之外，其他对象都不能够访问这些状态信息。</li>
-<li>简化了发起人类。发起人不需要管理和保存其内部状态的各个备份，所有状态信息都保存在备忘录中，并由管理者进行管理，这符合单一职责原则。</li>
-</ul>
-<p><strong>2，缺点：</strong></p>
-<ul>
-<li>资源消耗大。如果要保存的内部状态信息过多或者特别频繁，将会占用比较大的内存资源。</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li><p>需要保存与恢复数据的场景，如玩游戏时的中间结果的存档功能。</p>
-</li>
-<li><p>需要提供一个可回滚操作的场景，如 Word、记事本、Photoshop，idea等软件在编辑时按 Ctrl+Z 组合键，还有数据库中事务操作。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>行为型模式</category>
-      </categories>
-      <tags>
-        <tag>行为型模式</tag>
-        <tag>设计模式</tag>
-        <tag>备忘录模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1650,51 +1650,6 @@
       </tags>
   </entry>
   <entry>
-    <title>第一篇博客</title>
-    <url>/2021/08/08/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hello,world!</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p> 相信大部分从事编程开发的朋友们，都是从<code>Hello,World</code>开始的，这是我的第一篇博客，我也想从再次从这里开始。</p>
-</blockquote>
-<h2 id="为什么写博客？"><a href="#为什么写博客？" class="headerlink" title="为什么写博客？"></a>为什么写博客？</h2><ul>
-<li><strong>内卷</strong></li>
-</ul>
-<blockquote>
-<p>如今互联网行业越来越卷，不卷不行呀，所以才有了这个博客网站。</p>
-</blockquote>
-<ul>
-<li><strong>好记性不如烂笔头</strong></li>
-</ul>
-<blockquote>
-<p>计算机行业的知识点太多，想要用大脑记住几乎不可能，俗话说的好，<strong>好记性不如烂笔头</strong>，更何况我也不是好记性，所以就更有写博客的必要了</p>
-</blockquote>
-<ul>
-<li><strong>在一个地方不能跌倒两次</strong></li>
-</ul>
-<blockquote>
-<p>记录一下自己在工作中或者工作之外遇到的一些问题，以后再次遇到相容的问题能有快速解决。</p>
-</blockquote>
-<ul>
-<li><strong>分享内容，帮助他人</strong></li>
-</ul>
-<blockquote>
-<p>把自己踩过的坑，走过的弯路用文字的形式表达出来，帮助他人避免入坑。</p>
-</blockquote>
-<ul>
-<li><strong>提升自己</strong></li>
-</ul>
-<blockquote>
-<p>学过的东西，记录下来更加加深自己的理解，提升自己的能力。</p>
-</blockquote>
-<p>有一句话想送给大家，也包括我：<strong>生活不止眼前的苟且，还有诗和远方。</strong></p>
-<p>累了就休息一下，身体是革命的本钱。加油！</p>
-]]></content>
-      <tags>
-        <tag>第一篇博客</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>策略模式</title>
     <url>/2021/11/10/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>先看下面的图片，我们去旅游选择出行模式有很多种，可以骑自行车、可以坐汽车、可以坐火车、可以坐飞机。</p>
@@ -1766,6 +1721,51 @@
         <tag>行为型模式</tag>
         <tag>设计模式</tag>
         <tag>策略模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一篇博客</title>
+    <url>/2021/08/08/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hello,world!</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 相信大部分从事编程开发的朋友们，都是从<code>Hello,World</code>开始的，这是我的第一篇博客，我也想从再次从这里开始。</p>
+</blockquote>
+<h2 id="为什么写博客？"><a href="#为什么写博客？" class="headerlink" title="为什么写博客？"></a>为什么写博客？</h2><ul>
+<li><strong>内卷</strong></li>
+</ul>
+<blockquote>
+<p>如今互联网行业越来越卷，不卷不行呀，所以才有了这个博客网站。</p>
+</blockquote>
+<ul>
+<li><strong>好记性不如烂笔头</strong></li>
+</ul>
+<blockquote>
+<p>计算机行业的知识点太多，想要用大脑记住几乎不可能，俗话说的好，<strong>好记性不如烂笔头</strong>，更何况我也不是好记性，所以就更有写博客的必要了</p>
+</blockquote>
+<ul>
+<li><strong>在一个地方不能跌倒两次</strong></li>
+</ul>
+<blockquote>
+<p>记录一下自己在工作中或者工作之外遇到的一些问题，以后再次遇到相容的问题能有快速解决。</p>
+</blockquote>
+<ul>
+<li><strong>分享内容，帮助他人</strong></li>
+</ul>
+<blockquote>
+<p>把自己踩过的坑，走过的弯路用文字的形式表达出来，帮助他人避免入坑。</p>
+</blockquote>
+<ul>
+<li><strong>提升自己</strong></li>
+</ul>
+<blockquote>
+<p>学过的东西，记录下来更加加深自己的理解，提升自己的能力。</p>
+</blockquote>
+<p>有一句话想送给大家，也包括我：<strong>生活不止眼前的苟且，还有诗和远方。</strong></p>
+<p>累了就休息一下，身体是革命的本钱。加油！</p>
+]]></content>
+      <tags>
+        <tag>第一篇博客</tag>
       </tags>
   </entry>
   <entry>
@@ -5897,13 +5897,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#x5f;&#x62;&#x69;&#110;&#x67;&#x40;&#x66;&#111;&#120;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#97;&#111;&#x5f;&#x62;&#x69;&#110;&#x67;&#x40;&#x66;&#111;&#120;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#95;&#x62;&#105;&#x6e;&#103;&#x40;&#x66;&#x6f;&#x78;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#97;&#x6f;&#95;&#x62;&#105;&#x6e;&#103;&#x40;&#x66;&#x6f;&#x78;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#102;&#111;&#x78;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#97;&#111;&#x5f;&#x62;&#105;&#x6e;&#103;&#64;&#102;&#111;&#x78;&#109;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#x61;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#x66;&#x6f;&#120;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x61;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#x66;&#x6f;&#120;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#111;&#110;&#x67;&#119;&#x65;&#105;&#x2e;&#104;&#x75;&#x40;&#116;&#x75;&#121;&#x61;&#46;&#x63;&#111;&#109;">&#122;&#111;&#110;&#x67;&#119;&#x65;&#105;&#x2e;&#104;&#x75;&#x40;&#116;&#x75;&#121;&#x61;&#46;&#x63;&#111;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#111;&#110;&#x67;&#x77;&#x65;&#x69;&#46;&#104;&#117;&#x40;&#x74;&#x75;&#121;&#97;&#46;&#99;&#x6f;&#x6d;">&#x7a;&#111;&#110;&#x67;&#x77;&#x65;&#x69;&#46;&#104;&#117;&#x40;&#x74;&#x75;&#121;&#97;&#46;&#99;&#x6f;&#x6d;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -5911,7 +5911,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#x6c;&#119;&#50;&#x36;&#x33;&#56;&#x38;&#56;&#64;&#x61;&#108;&#105;&#x62;&#x61;&#98;&#x61;&#x2d;&#105;&#x6e;&#x63;&#x2e;&#99;&#111;&#109;">&#x6c;&#119;&#50;&#x36;&#x33;&#56;&#x38;&#56;&#64;&#x61;&#108;&#105;&#x62;&#x61;&#98;&#x61;&#x2d;&#105;&#x6e;&#x63;&#x2e;&#99;&#111;&#109;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#x6c;&#119;&#x32;&#x36;&#x33;&#x38;&#x38;&#x38;&#64;&#97;&#x6c;&#x69;&#x62;&#x61;&#x62;&#x61;&#x2d;&#105;&#x6e;&#99;&#x2e;&#99;&#111;&#x6d;">&#x6c;&#119;&#x32;&#x36;&#x33;&#x38;&#x38;&#x38;&#64;&#97;&#x6c;&#x69;&#x62;&#x61;&#x62;&#x61;&#x2d;&#105;&#x6e;&#99;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -5919,7 +5919,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#106;&#x6f;&#115;&#104;&#117;&#x61;&#46;&#x6c;&#x69;&#102;&#102;&#x40;&#x61;&#x6c;&#x69;&#98;&#97;&#x62;&#97;&#45;&#x69;&#110;&#99;&#46;&#x63;&#111;&#x6d;">&#106;&#x6f;&#115;&#104;&#117;&#x61;&#46;&#x6c;&#x69;&#102;&#102;&#x40;&#x61;&#x6c;&#x69;&#98;&#97;&#x62;&#97;&#45;&#x69;&#110;&#99;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#106;&#111;&#x73;&#x68;&#117;&#x61;&#46;&#108;&#105;&#x66;&#102;&#x40;&#x61;&#108;&#105;&#98;&#97;&#x62;&#97;&#45;&#x69;&#x6e;&#x63;&#46;&#x63;&#111;&#109;">&#106;&#111;&#x73;&#x68;&#117;&#x61;&#46;&#108;&#105;&#x66;&#102;&#x40;&#x61;&#108;&#105;&#98;&#97;&#x62;&#97;&#45;&#x69;&#x6e;&#x63;&#46;&#x63;&#111;&#109;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -5947,7 +5947,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#x66;&#x69;&#103;&#104;&#116;&#x69;&#110;&#103;&#x63;&#x72;&#x61;&#112;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x66;&#x69;&#103;&#104;&#116;&#x69;&#110;&#103;&#x63;&#x72;&#x61;&#112;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#102;&#x69;&#103;&#104;&#116;&#x69;&#x6e;&#103;&#99;&#x72;&#x61;&#112;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#102;&#x69;&#103;&#104;&#116;&#x69;&#x6e;&#103;&#99;&#x72;&#x61;&#112;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
