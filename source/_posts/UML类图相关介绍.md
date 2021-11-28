@@ -5,7 +5,7 @@ tags:
 - UML图
 categories:
 - [设计模式,相关内容介绍]
-description: 设计模式的准备工作，该篇文章介绍了UML图的各种表示方式
+description: 
 sticky:
 cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 ---

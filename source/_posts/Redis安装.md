@@ -6,7 +6,7 @@ tags:
 - 安装
 categories:
 - Redis
-description: Redis在linux环境下安装
+description:
 sticky:
 cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_miro_qvwm.png
 ---
