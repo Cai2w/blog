@@ -1261,6 +1261,71 @@
       </tags>
   </entry>
   <entry>
+    <title>图片转码？缩略图生成？这个工具带你飞！！</title>
+    <url>/2021/11/09/%E5%9B%BE%E7%89%87%E8%BD%AC%E7%A0%81%EF%BC%9F%E7%BC%A9%E7%95%A5%E5%9B%BE%E7%94%9F%E6%88%90%EF%BC%9F%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%B8%A6%E4%BD%A0%E9%A3%9E%EF%BC%81%EF%BC%81/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
+<p>看完本文你将会会收获：使用java优雅的处理图片；包括：主流图片格式转码、图片压缩（缩略图生成）等。</p>
+</blockquote>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
+<p>本次博客使用的Thumbnailator包，实际上是封装好的类和方法，基于Java的Image I/O API、Java 2D API等API接口实现。所以，因为基于<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/imageio/">Java Image I/O API</a>，所以支持的图片格式有限，但是已经满足绝大多数情况。</p>
+</blockquote>
+<p>一般支持的格式如下：</p>
+<ul>
+<li><p>Read：<code>JPEG 2000</code>, <code>JPG</code>, <code>tiff</code>, <code>bmp</code>, <code>PCX</code>, <code>gif</code>, <code>WBMP</code>, <code>PNG</code>, <code>RAW</code>, <code>JPEG</code>, <code>PNM</code>, <code>tif</code>, <code>TIFF</code>, <code>wbmp</code>, <code>jpeg</code>, <code>jbig2</code>, <code>jpg</code>, <code>JPEG2000</code>, <code>BMP</code>, <code>pcx</code>, <code>GIF</code>, <code>png</code>, <code>raw</code>, <code>JBIG2</code>, <code>pnm</code>, <code>TIF</code>, <code>jpeg2000</code>, <code>jpeg 2000</code></p>
+</li>
+<li><p>Write：<code>JPEG 2000</code>, <code>JPG, tiff</code>, <code>bmp</code>, <code>PCX</code>, <code>gif</code>, <code>WBMP</code>, <code>PNG</code>, <code>RAW</code>, <code>JPEG</code>, <code>PNM</code>, <code>tif</code>, <code>TIFF</code>, <code>wbmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>JPEG2000</code>, <code>BMP</code>, <code>pcx</code>, <code>GIF</code>, <code>png</code>, <code>raw</code>, <code>pnm</code>, <code>TIF</code>, <code>jpeg2000</code>, <code>jpeg 2000</code></p>
+</li>
+</ul>
+<p>所以，像Apple的HEIC格式，是不支持使用Thumbnailator进行处理的。</p>
+<h2 id="如何安装"><a href="#如何安装" class="headerlink" title="如何安装"></a>如何安装</h2><p>首先添加lib包，如果你是Maven工程，或者使用Maven管理的项目，添加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.coobird<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thumbnailator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.4.14<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最新版本<code>Thumbnailator</code>地址：<a href="https://mvnrepository.com/artifact/net.coobird/thumbnailator">Maven地址</a></p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p><code>Thumbnailator</code>的使用十分简单，原本你需要使用Java的<code>Image I/O API</code>、<code>BufferedImages</code>和<code>Graphics2D</code>来处理图片，<code>Thumbnailator</code>直接封装上述操作。</p>
+<h3 id="图片转码"><a href="#图片转码" class="headerlink" title="图片转码"></a>图片转码</h3><p>简单的使用演示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;path/source.webp&quot;</span>))</span><br><span class="line">    .size(<span class="number">640</span>, <span class="number">480</span>)</span><br><span class="line">    .outputFormat(<span class="string">&quot;jpg&quot;</span>)</span><br><span class="line">    .toFiles(<span class="keyword">new</span> File(<span class="string">&quot;path/purpose.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原图片地址：<code>sourcePath</code></li>
+<li>输出图片大小：<code>640*480</code></li>
+<li>输出图片格式：<code>jpg</code></li>
+<li>IO流输出地址(输出图片)：<code>purposePath</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(originalImage)</span><br><span class="line">		.scale(scale)</span><br><span class="line">        .outputFormat(<span class="string">&quot;jpg&quot;</span>)</span><br><span class="line">        .outputQuality(compression)</span><br><span class="line">        .toFile(thumbnailImage);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>scale</code>是图片尺寸等比缩放，为float类型。</li>
+<li><code>outputFormat</code>是输出图片的类型</li>
+<li><code>outputQuality</code>是输出图片的质量，即：清晰度/分辨率。</li>
+</ul>
+<blockquote>
+<p>以上两种均可以进行格式转换，其中of方法也可使用输入流传入，最后也可使用<code>toOutputStream</code>输出</p>
+<p><strong>注意：默认不支持转为<code>webp</code>，支持<code>webp</code>转为其他格式，如果需要使用<code>webp</code>，需要使用<a href="https://github.com/nintha/webp-imageio-core">webp-imageio-core</a></strong></p>
+</blockquote>
+<h3 id="使用原图片生成缩略图"><a href="#使用原图片生成缩略图" class="headerlink" title="使用原图片生成缩略图"></a>使用原图片生成缩略图</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;original.jpg&quot;</span>))</span><br><span class="line">        .size(<span class="number">160</span>, <span class="number">160</span>)</span><br><span class="line">        .toFile(<span class="keyword">new</span> File(<span class="string">&quot;thumbnail.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>其中，原图片文件，可以使用字符串<code>String</code>来代替地址：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="string">&quot;original.jpg&quot;</span>)</span><br><span class="line">        .size(<span class="number">160</span>, <span class="number">160</span>)</span><br><span class="line">        .toFile(<span class="string">&quot;thumbnail.jpg&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>通常，缩略图输出体积已经很小，但是还是可以使用<code>.outputQualit</code>来降低图片质量(分辨率)。</p>
+<h3 id="旋转图片"><a href="#旋转图片" class="headerlink" title="旋转图片"></a>旋转图片</h3><p>很简单；添加<code>.rotate</code>即可。如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;original.jpg&quot;</span>))</span><br><span class="line">        .rotate(<span class="number">90</span>)</span><br><span class="line">        .toFile(<span class="keyword">new</span> File(<span class="string">&quot;image-with-watermark.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加水印"><a href="#添加水印" class="headerlink" title="添加水印"></a>添加水印</h3><p>添加水印也十分简单，添加<code>.watermark</code>即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(new File(&quot;original.jpg&quot;))</span><br><span class="line">        .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(&quot;watermark.png&quot;)), 0.5f)</span><br><span class="line">        .toFile(new File(&quot;image-with-watermark.jpg&quot;));</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaUtils</category>
+      </categories>
+      <tags>
+        <tag>JavaUtils</tag>
+        <tag>图片转码</tag>
+        <tag>缩略图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>备忘录模式</title>
     <url>/2021/11/23/%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>备忘录模式提供了一种状态恢复的实现机制，使得用户可以方便地回到一个特定的历史步骤，当新的状态无效或者存在问题时，可以使用暂时存储起来的备忘录将状态复原，很多软件都提供了撤销（Undo）操作，如 Word、记事本、Photoshop、IDEA等软件在编辑时按 Ctrl+Z 组合键时能撤销当前操作，使文档恢复到之前的状态；还有在 浏览器 中的后退键、数据库事务管理中的回滚操作、玩游戏时的中间结果存档功能、数据库与操作系统的备份操作、棋类游戏中的悔棋功能等都属于这类。</p>
@@ -1337,71 +1402,6 @@
         <tag>行为型模式</tag>
         <tag>设计模式</tag>
         <tag>备忘录模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>图片转码？缩略图生成？这个工具带你飞！！</title>
-    <url>/2021/11/09/%E5%9B%BE%E7%89%87%E8%BD%AC%E7%A0%81%EF%BC%9F%E7%BC%A9%E7%95%A5%E5%9B%BE%E7%94%9F%E6%88%90%EF%BC%9F%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%B8%A6%E4%BD%A0%E9%A3%9E%EF%BC%81%EF%BC%81/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
-<p>看完本文你将会会收获：使用java优雅的处理图片；包括：主流图片格式转码、图片压缩（缩略图生成）等。</p>
-</blockquote>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
-<p>本次博客使用的Thumbnailator包，实际上是封装好的类和方法，基于Java的Image I/O API、Java 2D API等API接口实现。所以，因为基于<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/imageio/">Java Image I/O API</a>，所以支持的图片格式有限，但是已经满足绝大多数情况。</p>
-</blockquote>
-<p>一般支持的格式如下：</p>
-<ul>
-<li><p>Read：<code>JPEG 2000</code>, <code>JPG</code>, <code>tiff</code>, <code>bmp</code>, <code>PCX</code>, <code>gif</code>, <code>WBMP</code>, <code>PNG</code>, <code>RAW</code>, <code>JPEG</code>, <code>PNM</code>, <code>tif</code>, <code>TIFF</code>, <code>wbmp</code>, <code>jpeg</code>, <code>jbig2</code>, <code>jpg</code>, <code>JPEG2000</code>, <code>BMP</code>, <code>pcx</code>, <code>GIF</code>, <code>png</code>, <code>raw</code>, <code>JBIG2</code>, <code>pnm</code>, <code>TIF</code>, <code>jpeg2000</code>, <code>jpeg 2000</code></p>
-</li>
-<li><p>Write：<code>JPEG 2000</code>, <code>JPG, tiff</code>, <code>bmp</code>, <code>PCX</code>, <code>gif</code>, <code>WBMP</code>, <code>PNG</code>, <code>RAW</code>, <code>JPEG</code>, <code>PNM</code>, <code>tif</code>, <code>TIFF</code>, <code>wbmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>JPEG2000</code>, <code>BMP</code>, <code>pcx</code>, <code>GIF</code>, <code>png</code>, <code>raw</code>, <code>pnm</code>, <code>TIF</code>, <code>jpeg2000</code>, <code>jpeg 2000</code></p>
-</li>
-</ul>
-<p>所以，像Apple的HEIC格式，是不支持使用Thumbnailator进行处理的。</p>
-<h2 id="如何安装"><a href="#如何安装" class="headerlink" title="如何安装"></a>如何安装</h2><p>首先添加lib包，如果你是Maven工程，或者使用Maven管理的项目，添加依赖：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.coobird<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>thumbnailator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.4.14<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>最新版本<code>Thumbnailator</code>地址：<a href="https://mvnrepository.com/artifact/net.coobird/thumbnailator">Maven地址</a></p>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p><code>Thumbnailator</code>的使用十分简单，原本你需要使用Java的<code>Image I/O API</code>、<code>BufferedImages</code>和<code>Graphics2D</code>来处理图片，<code>Thumbnailator</code>直接封装上述操作。</p>
-<h3 id="图片转码"><a href="#图片转码" class="headerlink" title="图片转码"></a>图片转码</h3><p>简单的使用演示：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;path/source.webp&quot;</span>))</span><br><span class="line">    .size(<span class="number">640</span>, <span class="number">480</span>)</span><br><span class="line">    .outputFormat(<span class="string">&quot;jpg&quot;</span>)</span><br><span class="line">    .toFiles(<span class="keyword">new</span> File(<span class="string">&quot;path/purpose.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>原图片地址：<code>sourcePath</code></li>
-<li>输出图片大小：<code>640*480</code></li>
-<li>输出图片格式：<code>jpg</code></li>
-<li>IO流输出地址(输出图片)：<code>purposePath</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(originalImage)</span><br><span class="line">		.scale(scale)</span><br><span class="line">        .outputFormat(<span class="string">&quot;jpg&quot;</span>)</span><br><span class="line">        .outputQuality(compression)</span><br><span class="line">        .toFile(thumbnailImage);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>scale</code>是图片尺寸等比缩放，为float类型。</li>
-<li><code>outputFormat</code>是输出图片的类型</li>
-<li><code>outputQuality</code>是输出图片的质量，即：清晰度/分辨率。</li>
-</ul>
-<blockquote>
-<p>以上两种均可以进行格式转换，其中of方法也可使用输入流传入，最后也可使用<code>toOutputStream</code>输出</p>
-<p><strong>注意：默认不支持转为<code>webp</code>，支持<code>webp</code>转为其他格式，如果需要使用<code>webp</code>，需要使用<a href="https://github.com/nintha/webp-imageio-core">webp-imageio-core</a></strong></p>
-</blockquote>
-<h3 id="使用原图片生成缩略图"><a href="#使用原图片生成缩略图" class="headerlink" title="使用原图片生成缩略图"></a>使用原图片生成缩略图</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;original.jpg&quot;</span>))</span><br><span class="line">        .size(<span class="number">160</span>, <span class="number">160</span>)</span><br><span class="line">        .toFile(<span class="keyword">new</span> File(<span class="string">&quot;thumbnail.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<p>其中，原图片文件，可以使用字符串<code>String</code>来代替地址：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="string">&quot;original.jpg&quot;</span>)</span><br><span class="line">        .size(<span class="number">160</span>, <span class="number">160</span>)</span><br><span class="line">        .toFile(<span class="string">&quot;thumbnail.jpg&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>通常，缩略图输出体积已经很小，但是还是可以使用<code>.outputQualit</code>来降低图片质量(分辨率)。</p>
-<h3 id="旋转图片"><a href="#旋转图片" class="headerlink" title="旋转图片"></a>旋转图片</h3><p>很简单；添加<code>.rotate</code>即可。如：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(<span class="keyword">new</span> File(<span class="string">&quot;original.jpg&quot;</span>))</span><br><span class="line">        .rotate(<span class="number">90</span>)</span><br><span class="line">        .toFile(<span class="keyword">new</span> File(<span class="string">&quot;image-with-watermark.jpg&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<h3 id="添加水印"><a href="#添加水印" class="headerlink" title="添加水印"></a>添加水印</h3><p>添加水印也十分简单，添加<code>.watermark</code>即可：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Thumbnails.of(new File(&quot;original.jpg&quot;))</span><br><span class="line">        .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(&quot;watermark.png&quot;)), 0.5f)</span><br><span class="line">        .toFile(new File(&quot;image-with-watermark.jpg&quot;));</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java</category>
-        <category>JavaUtils</category>
-      </categories>
-      <tags>
-        <tag>JavaUtils</tag>
-        <tag>图片转码</tag>
-        <tag>缩略图</tag>
       </tags>
   </entry>
   <entry>
@@ -6094,13 +6094,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#x6f;&#95;&#98;&#105;&#110;&#103;&#x40;&#x66;&#111;&#x78;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x61;&#x6f;&#95;&#98;&#105;&#110;&#103;&#x40;&#x66;&#111;&#x78;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#111;&#x5f;&#98;&#x69;&#x6e;&#x67;&#x40;&#x66;&#111;&#120;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#97;&#111;&#x5f;&#98;&#x69;&#x6e;&#x67;&#x40;&#x66;&#111;&#120;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#111;&#95;&#x62;&#x69;&#110;&#103;&#64;&#x66;&#111;&#x78;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;">&#x61;&#111;&#95;&#x62;&#x69;&#110;&#103;&#64;&#x66;&#111;&#x78;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#x5f;&#x62;&#x69;&#x6e;&#x67;&#x40;&#102;&#111;&#120;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;">&#97;&#x6f;&#x5f;&#x62;&#x69;&#x6e;&#x67;&#x40;&#102;&#111;&#120;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#122;&#111;&#x6e;&#103;&#119;&#x65;&#x69;&#46;&#104;&#x75;&#x40;&#116;&#117;&#121;&#97;&#46;&#x63;&#111;&#109;">&#122;&#111;&#x6e;&#103;&#119;&#x65;&#x69;&#46;&#104;&#x75;&#x40;&#116;&#117;&#121;&#97;&#46;&#x63;&#111;&#109;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#111;&#110;&#103;&#119;&#x65;&#105;&#x2e;&#104;&#117;&#64;&#x74;&#x75;&#121;&#x61;&#46;&#99;&#111;&#x6d;">&#x7a;&#111;&#110;&#103;&#119;&#x65;&#105;&#x2e;&#104;&#117;&#64;&#x74;&#x75;&#121;&#x61;&#46;&#99;&#111;&#x6d;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -6108,7 +6108,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#108;&#119;&#50;&#x36;&#x33;&#x38;&#x38;&#56;&#64;&#x61;&#108;&#105;&#98;&#97;&#98;&#x61;&#45;&#x69;&#x6e;&#99;&#x2e;&#x63;&#111;&#109;">&#108;&#119;&#50;&#x36;&#x33;&#x38;&#x38;&#56;&#64;&#x61;&#108;&#105;&#98;&#97;&#98;&#x61;&#45;&#x69;&#x6e;&#99;&#x2e;&#x63;&#111;&#109;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#108;&#119;&#50;&#54;&#x33;&#56;&#56;&#x38;&#64;&#97;&#x6c;&#x69;&#x62;&#97;&#x62;&#97;&#45;&#x69;&#110;&#x63;&#x2e;&#99;&#111;&#x6d;">&#108;&#119;&#50;&#54;&#x33;&#56;&#56;&#x38;&#64;&#97;&#x6c;&#x69;&#x62;&#97;&#x62;&#97;&#45;&#x69;&#110;&#x63;&#x2e;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -6116,7 +6116,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#x6a;&#x6f;&#115;&#104;&#x75;&#97;&#46;&#x6c;&#x69;&#x66;&#102;&#x40;&#97;&#108;&#105;&#98;&#x61;&#x62;&#97;&#45;&#105;&#x6e;&#x63;&#46;&#x63;&#111;&#109;">&#x6a;&#x6f;&#115;&#104;&#x75;&#97;&#46;&#x6c;&#x69;&#x66;&#102;&#x40;&#97;&#108;&#105;&#98;&#x61;&#x62;&#97;&#45;&#105;&#x6e;&#x63;&#46;&#x63;&#111;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#x6a;&#111;&#115;&#x68;&#117;&#x61;&#46;&#x6c;&#105;&#102;&#x66;&#x40;&#x61;&#108;&#105;&#x62;&#x61;&#x62;&#x61;&#45;&#x69;&#110;&#x63;&#46;&#99;&#111;&#x6d;">&#x6a;&#111;&#115;&#x68;&#117;&#x61;&#46;&#x6c;&#105;&#102;&#x66;&#x40;&#x61;&#108;&#105;&#x62;&#x61;&#x62;&#x61;&#45;&#x69;&#110;&#x63;&#46;&#99;&#111;&#x6d;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -6144,7 +6144,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#x66;&#x69;&#x67;&#104;&#x74;&#105;&#x6e;&#103;&#x63;&#114;&#97;&#112;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#x66;&#x69;&#x67;&#104;&#x74;&#105;&#x6e;&#103;&#x63;&#114;&#97;&#112;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#x66;&#x69;&#x67;&#104;&#116;&#105;&#x6e;&#103;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#x66;&#x69;&#x67;&#104;&#116;&#105;&#x6e;&#103;&#x63;&#114;&#97;&#x70;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
