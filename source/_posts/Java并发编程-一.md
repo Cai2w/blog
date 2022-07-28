@@ -150,6 +150,28 @@ Future提供了三种功能： 　　
 
 [FutureTask是Future和Runable的实现，弥补 runnable 创建线程没有返回值的缺陷](https://gitee.com/link?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FRX5rVuGr6Ab0SmKigmZEag)
 
+### 查看进程线程的方法
+
+#### Windows
+
+- 任务管理器可以查看进程和线程数，也可以用来杀死进程 
+- `tasklist` 查看进程 
+- `taskkill` 杀死进程 
+
+#### Linux 
+
+- `ps -fe` 查看所有进程 
+- `ps -fT -p <PID>` 查看某个进程（PID）的所有线程 
+- `kill`杀死进程 
+- `top` 按大写 H 切换是否显示线程 
+- `top -H -p <PID>` 查看某个进程（PID）的所有线程 
+
+#### Java 
+
+- `jps` 命令查看所有 Java 进程 
+- `jstack <PID>` 查看某个 Java 进程（PID）的所有线程状态 
+- `jconsole` 来查看某个 Java 进程中线程的运行情况（图形界面）
+
 ### 线程运行原理
 
 #### 虚拟机栈与栈帧
@@ -188,11 +210,60 @@ Future提供了三种功能： 　　
 | getPriority()    |        | 获取线程优先级                                               |                                                              |
 | setPriority(int) |        | 修改线程优先级                                               | java中规定线程优先级是1~10 的整数，较大的优先级能提高该线程被 CPU 调度的机率 |
 | getState()       |        | 获取线程状态                                                 | Java 中线程状态是用 6 个 enum 表示，分别为：NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED |
-| isInterrupted()  |        | 判断是否被打断                                               | 不会清除打断标记                                             |
+| isInterrupted()  |        | 判断是否被打断                                               | 不会清除`打断标记`                                           |
 | isAlive()        |        | 线程是否存活（还没有运行完毕）                               |                                                              |
-| interrupt()      |        | 打断线程                                                     | 如果被打断线程正在 sleep，wait，join 会导致被打断的线程抛出 InterruptedException，并清除 打断标记 ；如果打断的正在运行的线程，则会设置 打断标记，park 的线程被打断，也会设置 打断标记 |
-| interrupted()    | static | 判断当前线程是否被打断                                       | 会清除打断标记                                               |
+| interrupt()      |        | 打断线程                                                     | 如果被打断线程正在 sleep，wait，join 会导致被打断的线程抛出 InterruptedException，并清除 `打断标记` ；如果打断的正在运行的线程，则会设置 `打断标记`，park 的线程被打断，也会设置 `打断标记` |
+| interrupted()    | static | 判断当前线程是否被打断                                       | 会清除`打断标记`                                             |
 | currentThread()  | static | 获取当前正在执行的线程                                       |                                                              |
 | sleep(long n)    | static | 让当前执行的线程休眠n毫秒，休眠时让出 cpu 的时间片给其它线程 |                                                              |
 | yield()          | static | 提示线程调度器让出当前线程对CPU的使用                        | 主要是为了测试和调试                                         |
 
+### Start&Run
+
+#### 调用 run
+
+```java
+public static void main(String[] args) {
+    Thread t1 = new Thread("t1") {
+        @Override
+        public void run() {
+            log.debug(Thread.currentThread().getName());
+            FileReader.read(Constants.MP4_FULL_PATH);
+        }
+    };
+    
+    t1.run();
+    log.debug("do other things ...");
+}
+```
+
+输出
+
+```plain
+19:39:14 [main] c.TestStart - main
+19:39:14 [main] c.FileReader - read [1.mp4] start ...
+19:39:18 [main] c.FileReader - read [1.mp4] end ... cost: 4227 ms
+19:39:18 [main] c.TestStart - do other things ...
+```
+
+程序仍在 main 线程运行， `FileReader.read()` 方法调用还是**同步**的.
+
+#### 调用 start 
+
+将上述代码的 `t1.run();` 改为 `t1.start();`
+
+输出
+
+```plain
+19:41:30 [main] c.TestStart - do other things ...
+19:41:30 [t1] c.TestStart - t1
+19:41:30 [t1] c.FileReader - read [1.mp4] start ...
+19:41:35 [t1] c.FileReader - read [1.mp4] end ... cost: 4542 ms
+```
+
+程序在 t1 线程运行， `FileReader.read()` 方法调用是**异步**的
+
+#### 小结 
+
+- 直接调用 run 是在主线程中执行了 run，没有启动新的线程 
+- 使用 start 是启动新的线程，通过新的线程间接执行 run 中的代码
