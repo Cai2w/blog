@@ -1,129 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker基础篇-Docker安装</title>
-    <url>/2022/07/29/Docker%E5%9F%BA%E7%A1%80%E7%AF%87-Docker%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><strong>看完本文📖</strong></p>
-<ul>
-<li>了解docker的基本组成</li>
-<li>顺利安装docker</li>
-<li>配置阿里云镜像加速</li>
-</ul>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着互联网的发展，越来越多的开发者和企业拥抱云原生，而Docker则是云原生中比较重要的一环，本文主要介绍Docker的安装。</p>
-<h2 id="Docker的基本组成"><a href="#Docker的基本组成" class="headerlink" title="Docker的基本组成"></a>Docker的基本组成</h2><ul>
-<li>**镜像(image)**：Docker 镜像（Image）就是一个只读的模板。镜像可以用来创建 Docker 容器，一个镜像可以创建很多容器。它也相当于是一个root文件系统。比如官方镜像 centos:7 就包含了完整的一套 centos:7 最小系统的 root 文件系统。相当于容器的“源代码”，docker镜像文件类似于Java的类模板，而docker容器实例类似于java中new出来的实例对象。  </li>
-<li>**容器(container)**：<ol>
-<li>从面向对象角度Docker 利用容器（Container）独立运行的一个或一组应用，应用程序或服务运行在容器里面，容器就类似于一个虚拟化的运行环境，容器是用镜像创建的运行实例。就像是Java中的类和实例对象一样，镜像是静态的定义，容器是镜像运行时的实体。容器为镜像提供了一个标准的和隔离的运行环境，它可以被启动、开始、停止、删除。每个容器都是相互隔离的、保证安全的平台 </li>
-<li>从镜像容器角度可以把容器看做是一个简易版的 Linux 环境（包括root用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。</li>
-</ol>
-</li>
-<li>**仓库(repository)**： 仓库（Repository）是集中存放镜像文件的场所。 类似于Maven仓库，存放各种jar包的地方；github仓库，存放各种git项目的地方；Docker公司提供的官方registry被称为Docker Hub，存放各种镜像模板的地方。 仓库分为公开仓库（Public）和私有仓库（Private）两种形式。最大的公开仓库是 Docker Hub(<a href="https://hub.docker.com/)%EF%BC%8C%E5%AD%98%E6%94%BE%E4%BA%86%E6%95%B0%E9%87%8F%E5%BA%9E%E5%A4%A7%E7%9A%84%E9%95%9C%E5%83%8F%E4%BE%9B%E7%94%A8%E6%88%B7%E4%B8%8B%E8%BD%BD%E3%80%82%E5%9B%BD%E5%86%85%E7%9A%84%E5%85%AC%E5%BC%80%E4%BB%93%E5%BA%93%E5%8C%85%E6%8B%AC%E9%98%BF%E9%87%8C%E4%BA%91">https://hub.docker.com/)，存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云</a> 、网易云等</li>
-</ul>
-<blockquote>
-<p><strong>小总结：</strong></p>
-<p>需要正确的理解仓库/镜像/容器这几个概念:</p>
-<ul>
-<li>Docker 本身是一个容器运行载体或称之为管理引擎。我们把应用程序和配置依赖打包好形成一个可交付的运行环境，这个打包好的运行环境就是image镜像文件。只有通过这个镜像文件才能生成Docker容器实例(类似Java中new出来一个对象)。 </li>
-<li>image文件可以看作是容器的模板。Docker 根据 image 文件生成容器的实例。同一个 image 文件，可以生成多个同时运行的容器实例。</li>
-<li> 镜像文件：image 文件生成的容器实例，本身也是一个文件，称为镜像文件。</li>
-<li>容器实例：一个容器运行一种服务，当我们需要的时候，就可以通过docker客户端创建一个对应的运行实例</li>
-<li>容器仓库：就是放一堆镜像的地方，我们可以把镜像发布到仓库中，需要的时候再从仓库中拉下来就可以了。</li>
-</ul>
-</blockquote>
-<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="CentOS7安装Docker"><a href="#CentOS7安装Docker" class="headerlink" title="CentOS7安装Docker"></a>CentOS7安装Docker</h3><p><strong>官网地址：</strong><a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
-<p><strong>安装步骤：</strong></p>
-<ul>
-<li><p>确定你是CentOS7及以上版本：<code>cat /etc/redhat-release</code></p>
-</li>
-<li><p>卸载旧版本（如果之前安装过Docker）： <a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a> </p>
-</li>
-<li><p>yum安装gcc相关</p>
-<ol>
-<li>保证CentOS7能上外网</li>
-</ol>
-<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20220729022533542.png" alt="image-20220729022533542" style="zoom: 80%;" />
+    <title>ElasticSearch7.X安装及集群搭建+Kibana安装连接</title>
+    <url>/2021/11/14/ElasticSearch7-X%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Kibana%E5%AE%89%E8%A3%85%E8%BF%9E%E6%8E%A5/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="下载ES安装包"><a href="#下载ES安装包" class="headerlink" title="下载ES安装包"></a>下载ES安装包</h2><p>ElasticSearch下载地址：<a href="https://www.elastic.co/downloads/past-releases#elasticsearch">点我</a></p>
+<p>我这里是下载的linux已经编译好的包，直接配置启动就行了，因为它自带了JDK等环境。</p>
+<p>如果你想要使用你自己配置好的 Java 版本，需要设置 <code>JAVA_HOME</code> 环境变量 —— <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html">参考</a></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114143304.png"></p>
+<p>下载好之后，我们进行<code>tar</code>包解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建es文件夹</span></span><br><span class="line">mkdir /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 进入创建的文件夹</span></span><br><span class="line"><span class="built_in">cd</span> /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf elasticsearch-7.15.1-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li><code>yum -y install gcc</code></li>
-<li><code>yum -y install gcc-c++</code></li>
-</ol>
-</li>
-<li><p>安装需要的软件包</p>
-<ol>
-<li><code>yum install -y yum-utils</code></li>
-</ol>
-</li>
-<li><p>设置stable镜像仓库</p>
+<p>解压后的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html#targz-layout">目录组成</a>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── bin # 二进制脚本存放目录，包括 elasticsearch 来指定运行一个 node，包括 elasticsearch-plugin 来安装 plugins</span><br><span class="line">├── config # 包含了 elasticsearch.yml 配置文件</span><br><span class="line">├── data # 节点上分配的每个 index/分片 的数据文件</span><br><span class="line">├── lib</span><br><span class="line">├── LICENSE.txt</span><br><span class="line">├── logs</span><br><span class="line">├── modules</span><br><span class="line">├── NOTICE.txt</span><br><span class="line">├── plugins # 插键文件存放的位置</span><br><span class="line">└── README.textile</span><br></pre></td></tr></table></figure>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><blockquote>
+<p>不能使用 root 用户启动 es，否则会报错：</p>
+<p><code>Caused by: java.lang.RuntimeException: can not run elasticsearch as root</code></p>
+</blockquote>
+<p>我们需要新建一个操作es的用户：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建用户</span></span><br><span class="line"><span class="comment"># 给用户分配组：useradd –g 用户组 用户名</span></span><br><span class="line">useradd -g es es</span><br><span class="line"><span class="comment"># 修改密码</span></span><br><span class="line">passwd es</span><br></pre></td></tr></table></figure>
+
+<p>为了让我们的es用户能更好的操作es应用，我们修改es的文件所有者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 递归修改es文件所有者</span></span><br><span class="line">chown -R es:es elasticsearch-7.15.1</span><br></pre></td></tr></table></figure>
+
+<h2 id="ElasticSearch相关配置"><a href="#ElasticSearch相关配置" class="headerlink" title="ElasticSearch相关配置"></a>ElasticSearch相关配置</h2><h3 id="单节点"><a href="#单节点" class="headerlink" title="单节点"></a>单节点</h3><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p>192.168.200.130</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<p>192.168.200.131</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-131</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<p>192.168.200.132</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-132</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里的配置基本上和单机启动一样，只不过在discovery.seed_hosts中指定了节点列表。然后将每个节点启动即可，然后分别访问各服务的9200端口，查看服务是否正常启动。</p>
+<p>同时，也可以访问任意节点的<a href="http://host:9200/_cluster/health%E6%9F%A5%E7%9C%8B%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%EF%BC%9Agreen%E8%A1%A8%E7%A4%BA%E6%AD%A3%E5%B8%B8%EF%BC%8Cyellow%E8%A1%A8%E7%A4%BA%E8%AD%A6%E5%91%8A%EF%BC%8Cred%E8%A1%A8%E7%A4%BA%E5%BC%82%E5%B8%B8">http://host:9200/_cluster/health查看集群状态：green表示正常，yellow表示警告，red表示异常</a></p>
+<p><strong>注：并不是每个节点都需要配置cluster.initial_master_nodes</strong></p>
+</blockquote>
+<h2 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h2><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/jvm-options.html#jvm-options">JVM 参数设置</a>可以通过 <code>jvm.options</code> 文件（推荐方式）或者 <code>ES_JAVA_OPTS</code> 环境变量来修改。</p>
+<p><code>jvm.options</code> 位于</p>
 <ul>
-<li><p><strong>【大坑】</strong><code>yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</code></p>
-<blockquote>
-<p>官网要求我们设置download.docker.com作为镜像仓库，但是该仓库为国外的仓库，国内访问很慢，可能会出现错误： <strong>报错：1  [Errno 14] curl#35 - TCP connection reset by peer 2  [Errno 12] curl#35 - Timeout</strong></p>
-</blockquote>
-</li>
-<li><p><strong>【推荐】</strong><code>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</code></p>
-<blockquote>
-<p>我们可以将阿里云镜像仓库作为我们docker的镜像仓库</p>
-</blockquote>
-</li>
+<li><code>$ES_HOME/config/jvm.options</code> 当通过 <code>tar</code> or <code>zip</code> 包安装</li>
+<li><code>/etc/elasticsearch/jvm.options</code> 当通过 Debian or RPM packages</li>
 </ul>
-</li>
-<li><p>更新yum软件包索引：<code>yum makecache fast</code></p>
-</li>
-<li><p>安装DOCKER CE：<code>yum -y install docker-ce docker-ce-cli containerd.io</code></p>
-</li>
-<li><p>启动docker：<code>systemctl start docker</code></p>
-</li>
-<li><p>测试：</p>
-<ol>
-<li><code>docker version</code></li>
-<li><code>docker run hello-world</code></li>
-</ol>
-</li>
-<li><p>卸载：</p>
-<ol>
-<li><code>systemctl stop docker</code> </li>
-<li><code>yum remove docker-ce docker-ce-cli containerd.io</code></li>
-<li><code>rm -rf /var/lib/docker</code></li>
-<li><code>rm -rf /var/lib/containerd</code></li>
-</ol>
-</li>
-</ul>
-<h2 id="阿里云镜像加速"><a href="#阿里云镜像加速" class="headerlink" title="阿里云镜像加速"></a>阿里云镜像加速</h2><ul>
-<li>注册一个属于自己的阿里云账户(可复用淘宝账号)</li>
-<li>获得加速器地址连接<ul>
-<li>登陆阿里云开发者平台</li>
-<li>点击控制台</li>
-<li>选择容器镜像服务</li>
-<li>获取加速器地址</li>
-</ul>
-</li>
-<li>粘贴脚本直接执行</li>
-<li>重启服务器<ul>
-<li><code>systemctl daemon-reload</code></li>
-<li><code>systemctl restart docker</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="永远的HelloWorld"><a href="#永远的HelloWorld" class="headerlink" title="永远的HelloWorld"></a>永远的HelloWorld</h2><p>启动Docker后台容器(测试运行 hello-world)：<code>docker run hello-world</code></p>
-<h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><p>为什么Docker会比VM虚拟机快？</p>
-<blockquote>
-<ol>
-<li><p>docker有着比虚拟机更少的抽象层  由于docker不需要Hypervisor(虚拟机)实现硬件资源虚拟化,运行在docker容器上的程序直接使用的都是实际物理机的硬件资源。因此在CPU、内存利用率上docker将会在效率上有明显优势。</p>
-</li>
-<li><p>docker利用的是宿主机的内核,而不需要加载操作系统OS内核  当新建一个容器时,docker不需要和虚拟机一样重新加载一个操作系统内核。进而避免引寻、加载操作系统内核返回等比较费时费资源的过程,当新建一个虚拟机时,虚拟机软件需要加载OS,返回新建过程是分钟级别的。而docker由于直接利用宿主机的操作系统,则省略了返回过程,因此新建一个docker容器只需要几秒钟。  </p>
-</li>
-</ol>
-</blockquote>
-<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote>
-<p>我是菜菜🥬，一个人菜瘾大的互联网从业者🎉</p>
-<p>用功不求太猛，但求有恒🎈</p>
-</blockquote>
+<p>官网也介绍了如何<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html">设置堆大小</a>。</p>
+<p>默认情况，ES 告诉 JVM 使用一个最小和最大都为 1GB 的堆。但是到了生产环境，这个配置就比较重要了，确保 ES 有足够堆空间可用。</p>
+<p>ES 使用 <code>Xms(minimum heap size)</code> 和 <code>Xmx(maxmimum heap size)</code> 设置堆大小。你应该将这两个值设为同样的大小。</p>
+<p><strong><code>Xms</code> 和 <code>Xmx</code> 不能大于你物理机内存的 50%。</strong></p>
+<p>设置的示例：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-Xms2g </span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#启动es</span></span><br><span class="line">./bin/elasticsearch &amp;</span><br><span class="line"><span class="comment">#测试es启动是否成功</span></span><br><span class="line">curl -get localhost:9200</span><br></pre></td></tr></table></figure>
+
+<h2 id="ES-FAQ"><a href="#ES-FAQ" class="headerlink" title="ES-FAQ"></a>ES-FAQ</h2><h3 id="Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144"><a href="#Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144" class="headerlink" title="Q1：[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]"></a>Q1：<code>[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;vm.max_map_count=262144&quot; &gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536"><a href="#Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536" class="headerlink" title="Q2：max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]"></a>Q2：<code>max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/security/limits.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入以下内容</span></span><br><span class="line">* soft nofile 300000</span><br><span class="line">* hard nofile 300000</span><br><span class="line">* soft nproc 102400</span><br><span class="line">* soft memlock unlimited</span><br><span class="line">* hard memlock unlimited</span><br></pre></td></tr></table></figure>
+
+<p>修改了limits.conf，不需要重启，重新登录即生效。</p>
+<p>查看当前用户的软限制</p>
+<p>命令：ulimit -n  等价于 ulimit -S -n</p>
+<p>查看当前用户的硬限制</p>
+<p>命令：ulimit -H -n</p>
+<h3 id="Q3：master-not-discovered-exception"><a href="#Q3：master-not-discovered-exception" class="headerlink" title="Q3：master_not_discovered_exception"></a>Q3：<code>master_not_discovered_exception</code></h3><p>主节点指定的名字要保证存在，别指定了不存在的节点名</p>
+<h2 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h2><p>我们使用浏览器连接es可能无法连接上，这时候看一看是不是防火墙端口是否放行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看防火墙状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"><span class="comment">#查询端口是否开放</span></span><br><span class="line">firewall-cmd --query-port=9200/tcp</span><br><span class="line">firewall-cmd --query-port=9300/tcp</span><br><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=9200/tcp</span><br><span class="line">firewall-cmd --permanent --add-port=9300/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<h2 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h2><p>ElasticSearch应用时，我们常常会使用到中文，这样ElasticSearch原来的分词器就不够用了，需要安装一个中文分词器，用的多的就是IK分词器，下载地址（下载.zip包）：<a href="https://github.com/medcl/elasticsearch-analysis-ik/releases">https://github.com/medcl/elasticsearch-analysis-ik/releases</a></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114163251.png"></p>
+<p>下载好之后，在ElasticSearch主目录下的plugins目录新建一个目录，然后将下载好的ik分词器压缩包放进去，再使用unzip解压:　</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在ElasticSearch主目录下的plugins目录新建一个目录：analysis-ik</span></span><br><span class="line">mkdir plugins/analysis-ik</span><br><span class="line"><span class="comment"># 将下载好的ik分词器压缩包放进去</span></span><br><span class="line">mv elasticsearch-analysis-ik-7.15.1.zip plugins/analysis-ik/</span><br><span class="line"><span class="comment"># 进入新建的analysis-ik目录进行解压</span></span><br><span class="line"><span class="built_in">cd</span> plugins/analysis-ik</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">unzip elasticsearch-analysis-ik-7.15.1.zip</span><br></pre></td></tr></table></figure>
+
+<p>做完之后重启ElasticSearch就可以了</p>
+<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h2><p>Kibana下载地址：<a href="https://www.elastic.co/downloads/past-releases#kibana">https://www.elastic.co/downloads/past-releases#kibana</a></p>
+<p>同样的，下载编译好的包（7.15.1）</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152259.png"></p>
+<p>然后解压，然后修改config/kibana.yml，添加ElasticSearch的节点配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 服务端口，默认5601</span></span><br><span class="line"><span class="attr">server.port:</span> <span class="number">5601</span></span><br><span class="line"><span class="comment"># 启动地址，默认localhost，如果不修改，那么远程无法访问</span></span><br><span class="line"><span class="attr">server.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># elasticsearch集群地址，旧版本是elasticsearch.url</span></span><br><span class="line"><span class="attr">elasticsearch.hosts:</span> [<span class="string">&quot;http://192.168.200.130:9200&quot;</span>,<span class="string">&quot;http://192.168.200.131:9200&quot;</span>,<span class="string">&quot;http://192.168.200.132:9200&quot;</span>]</span><br><span class="line"><span class="comment"># 如果ES有设置账号密码，则添加下面的账号密码设置</span></span><br><span class="line"><span class="comment">#elasticsearch.username: username</span></span><br><span class="line"><span class="comment">#elasticsearch.password: passwor</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就可以启动了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改文件所有者</span></span><br><span class="line">chown -R es:es kibana-7.15.1-linux-x86_64</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">kibana-7.12.0-linux-x86_64/bin/kibana</span><br></pre></td></tr></table></figure>
+
+<p>防火墙放行端口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=5601/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+<p>启动之后，访问<a href="http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。">http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。</a></p>
+<p>不过我们开发常用的就是它的Dev-Tools了，用来发送Restfull的请求来访问操作ElasticSearch：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152522.png"></p>
+<p>进入dev-tools后就可以自行操作了：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152543.png"></p>
 ]]></content>
       <categories>
-        <category>Docker</category>
+        <category>ElasticSearch</category>
       </categories>
       <tags>
-        <tag>Docker</tag>
+        <tag>ElasticSearch</tag>
+        <tag>Kibana</tag>
       </tags>
   </entry>
   <entry>
@@ -313,102 +286,129 @@
       </tags>
   </entry>
   <entry>
-    <title>ElasticSearch7.X安装及集群搭建+Kibana安装连接</title>
-    <url>/2021/11/14/ElasticSearch7-X%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-Kibana%E5%AE%89%E8%A3%85%E8%BF%9E%E6%8E%A5/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="下载ES安装包"><a href="#下载ES安装包" class="headerlink" title="下载ES安装包"></a>下载ES安装包</h2><p>ElasticSearch下载地址：<a href="https://www.elastic.co/downloads/past-releases#elasticsearch">点我</a></p>
-<p>我这里是下载的linux已经编译好的包，直接配置启动就行了，因为它自带了JDK等环境。</p>
-<p>如果你想要使用你自己配置好的 Java 版本，需要设置 <code>JAVA_HOME</code> 环境变量 —— <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html">参考</a></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114143304.png"></p>
-<p>下载好之后，我们进行<code>tar</code>包解压</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建es文件夹</span></span><br><span class="line">mkdir /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 进入创建的文件夹</span></span><br><span class="line"><span class="built_in">cd</span> /mydata/elasticsearch</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -zxvf elasticsearch-7.15.1-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
-
-<p>解压后的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html#targz-layout">目录组成</a>：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── bin # 二进制脚本存放目录，包括 elasticsearch 来指定运行一个 node，包括 elasticsearch-plugin 来安装 plugins</span><br><span class="line">├── config # 包含了 elasticsearch.yml 配置文件</span><br><span class="line">├── data # 节点上分配的每个 index/分片 的数据文件</span><br><span class="line">├── lib</span><br><span class="line">├── LICENSE.txt</span><br><span class="line">├── logs</span><br><span class="line">├── modules</span><br><span class="line">├── NOTICE.txt</span><br><span class="line">├── plugins # 插键文件存放的位置</span><br><span class="line">└── README.textile</span><br></pre></td></tr></table></figure>
-
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><blockquote>
-<p>不能使用 root 用户启动 es，否则会报错：</p>
-<p><code>Caused by: java.lang.RuntimeException: can not run elasticsearch as root</code></p>
-</blockquote>
-<p>我们需要新建一个操作es的用户：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建用户</span></span><br><span class="line"><span class="comment"># 给用户分配组：useradd –g 用户组 用户名</span></span><br><span class="line">useradd -g es es</span><br><span class="line"><span class="comment"># 修改密码</span></span><br><span class="line">passwd es</span><br></pre></td></tr></table></figure>
-
-<p>为了让我们的es用户能更好的操作es应用，我们修改es的文件所有者</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 递归修改es文件所有者</span></span><br><span class="line">chown -R es:es elasticsearch-7.15.1</span><br></pre></td></tr></table></figure>
-
-<h2 id="ElasticSearch相关配置"><a href="#ElasticSearch相关配置" class="headerlink" title="ElasticSearch相关配置"></a>ElasticSearch相关配置</h2><h3 id="单节点"><a href="#单节点" class="headerlink" title="单节点"></a>单节点</h3><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><p>192.168.200.130</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-130</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
-
-<p>192.168.200.131</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-131</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
-
-<p>192.168.200.132</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">config/elasticsearch.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">my-es</span></span><br><span class="line"><span class="comment"># 启动地址，如果不配置，只能本地访问</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">node-132</span></span><br><span class="line"><span class="comment"># 数据存储地址</span></span><br><span class="line"><span class="attr">path.data:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/data</span></span><br><span class="line"><span class="comment"># 日志存储地址</span></span><br><span class="line"><span class="attr">path.logs:</span> <span class="string">/mydata/elasticsearch/elasticsearch-7.15.1/logs</span></span><br><span class="line"><span class="comment"># 节点列表</span></span><br><span class="line"><span class="attr">discovery.seed_hosts:</span> [<span class="string">&quot;192.168.200.130&quot;</span>,<span class="string">&quot;192.168.200.131&quot;</span>,<span class="string">&quot;192.168.200.132&quot;</span>]</span><br><span class="line"><span class="comment"># 初始化时master节点的选举列表</span></span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-130&quot;</span>]</span><br><span class="line"><span class="comment"># 对外提供服务的端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment"># 内部服务端口</span></span><br><span class="line"><span class="attr">transport.port:</span> <span class="number">9300</span>    </span><br><span class="line"><span class="comment"># 跨域支持</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="comment"># 跨域访问允许的域名地址（正则）</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>这里的配置基本上和单机启动一样，只不过在discovery.seed_hosts中指定了节点列表。然后将每个节点启动即可，然后分别访问各服务的9200端口，查看服务是否正常启动。</p>
-<p>同时，也可以访问任意节点的<a href="http://host:9200/_cluster/health%E6%9F%A5%E7%9C%8B%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%EF%BC%9Agreen%E8%A1%A8%E7%A4%BA%E6%AD%A3%E5%B8%B8%EF%BC%8Cyellow%E8%A1%A8%E7%A4%BA%E8%AD%A6%E5%91%8A%EF%BC%8Cred%E8%A1%A8%E7%A4%BA%E5%BC%82%E5%B8%B8">http://host:9200/_cluster/health查看集群状态：green表示正常，yellow表示警告，red表示异常</a></p>
-<p><strong>注：并不是每个节点都需要配置cluster.initial_master_nodes</strong></p>
-</blockquote>
-<h2 id="JVM-配置"><a href="#JVM-配置" class="headerlink" title="JVM 配置"></a>JVM 配置</h2><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/jvm-options.html#jvm-options">JVM 参数设置</a>可以通过 <code>jvm.options</code> 文件（推荐方式）或者 <code>ES_JAVA_OPTS</code> 环境变量来修改。</p>
-<p><code>jvm.options</code> 位于</p>
+    <title>Docker基础篇-Docker安装</title>
+    <url>/2022/07/29/Docker%E5%9F%BA%E7%A1%80%E7%AF%87-Docker%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><strong>看完本文📖</strong></p>
 <ul>
-<li><code>$ES_HOME/config/jvm.options</code> 当通过 <code>tar</code> or <code>zip</code> 包安装</li>
-<li><code>/etc/elasticsearch/jvm.options</code> 当通过 Debian or RPM packages</li>
+<li>了解docker的基本组成</li>
+<li>顺利安装docker</li>
+<li>配置阿里云镜像加速</li>
 </ul>
-<p>官网也介绍了如何<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html">设置堆大小</a>。</p>
-<p>默认情况，ES 告诉 JVM 使用一个最小和最大都为 1GB 的堆。但是到了生产环境，这个配置就比较重要了，确保 ES 有足够堆空间可用。</p>
-<p>ES 使用 <code>Xms(minimum heap size)</code> 和 <code>Xmx(maxmimum heap size)</code> 设置堆大小。你应该将这两个值设为同样的大小。</p>
-<p><strong><code>Xms</code> 和 <code>Xmx</code> 不能大于你物理机内存的 50%。</strong></p>
-<p>设置的示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-Xms2g </span><br><span class="line">-Xmx2g</span><br></pre></td></tr></table></figure>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着互联网的发展，越来越多的开发者和企业拥抱云原生，而Docker则是云原生中比较重要的一环，本文主要介绍Docker的安装。</p>
+<h2 id="Docker的基本组成"><a href="#Docker的基本组成" class="headerlink" title="Docker的基本组成"></a>Docker的基本组成</h2><ul>
+<li>**镜像(image)**：Docker 镜像（Image）就是一个只读的模板。镜像可以用来创建 Docker 容器，一个镜像可以创建很多容器。它也相当于是一个root文件系统。比如官方镜像 centos:7 就包含了完整的一套 centos:7 最小系统的 root 文件系统。相当于容器的“源代码”，docker镜像文件类似于Java的类模板，而docker容器实例类似于java中new出来的实例对象。  </li>
+<li>**容器(container)**：<ol>
+<li>从面向对象角度Docker 利用容器（Container）独立运行的一个或一组应用，应用程序或服务运行在容器里面，容器就类似于一个虚拟化的运行环境，容器是用镜像创建的运行实例。就像是Java中的类和实例对象一样，镜像是静态的定义，容器是镜像运行时的实体。容器为镜像提供了一个标准的和隔离的运行环境，它可以被启动、开始、停止、删除。每个容器都是相互隔离的、保证安全的平台 </li>
+<li>从镜像容器角度可以把容器看做是一个简易版的 Linux 环境（包括root用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。</li>
+</ol>
+</li>
+<li>**仓库(repository)**： 仓库（Repository）是集中存放镜像文件的场所。 类似于Maven仓库，存放各种jar包的地方；github仓库，存放各种git项目的地方；Docker公司提供的官方registry被称为Docker Hub，存放各种镜像模板的地方。 仓库分为公开仓库（Public）和私有仓库（Private）两种形式。最大的公开仓库是 Docker Hub(<a href="https://hub.docker.com/)%EF%BC%8C%E5%AD%98%E6%94%BE%E4%BA%86%E6%95%B0%E9%87%8F%E5%BA%9E%E5%A4%A7%E7%9A%84%E9%95%9C%E5%83%8F%E4%BE%9B%E7%94%A8%E6%88%B7%E4%B8%8B%E8%BD%BD%E3%80%82%E5%9B%BD%E5%86%85%E7%9A%84%E5%85%AC%E5%BC%80%E4%BB%93%E5%BA%93%E5%8C%85%E6%8B%AC%E9%98%BF%E9%87%8C%E4%BA%91">https://hub.docker.com/)，存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云</a> 、网易云等</li>
+</ul>
+<blockquote>
+<p><strong>小总结：</strong></p>
+<p>需要正确的理解仓库/镜像/容器这几个概念:</p>
+<ul>
+<li>Docker 本身是一个容器运行载体或称之为管理引擎。我们把应用程序和配置依赖打包好形成一个可交付的运行环境，这个打包好的运行环境就是image镜像文件。只有通过这个镜像文件才能生成Docker容器实例(类似Java中new出来一个对象)。 </li>
+<li>image文件可以看作是容器的模板。Docker 根据 image 文件生成容器的实例。同一个 image 文件，可以生成多个同时运行的容器实例。</li>
+<li> 镜像文件：image 文件生成的容器实例，本身也是一个文件，称为镜像文件。</li>
+<li>容器实例：一个容器运行一种服务，当我们需要的时候，就可以通过docker客户端创建一个对应的运行实例</li>
+<li>容器仓库：就是放一堆镜像的地方，我们可以把镜像发布到仓库中，需要的时候再从仓库中拉下来就可以了。</li>
+</ul>
+</blockquote>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="CentOS7安装Docker"><a href="#CentOS7安装Docker" class="headerlink" title="CentOS7安装Docker"></a>CentOS7安装Docker</h3><p><strong>官网地址：</strong> <a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
+<p><strong>安装步骤：</strong></p>
+<ul>
+<li><p>确定你是CentOS7及以上版本：<code>cat /etc/redhat-release</code></p>
+</li>
+<li><p>卸载旧版本（如果之前安装过Docker）： <a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a> </p>
+</li>
+<li><p>yum安装gcc相关</p>
+<ol>
+<li>保证CentOS7能上外网</li>
+</ol>
+<img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20220729022533542.png" alt="" style="zoom: 80%;" />
 
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#启动es</span></span><br><span class="line">./bin/elasticsearch &amp;</span><br><span class="line"><span class="comment">#测试es启动是否成功</span></span><br><span class="line">curl -get localhost:9200</span><br></pre></td></tr></table></figure>
-
-<h2 id="ES-FAQ"><a href="#ES-FAQ" class="headerlink" title="ES-FAQ"></a>ES-FAQ</h2><h3 id="Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144"><a href="#Q1：-1-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144" class="headerlink" title="Q1：[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]"></a>Q1：<code>[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo &quot;vm.max_map_count=262144&quot; &gt; /etc/sysctl.conf</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
-
-<h3 id="Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536"><a href="#Q2：max-file-descriptors-4096-for-elasticsearch-process-is-too-low-increase-to-at-least-65536" class="headerlink" title="Q2：max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]"></a>Q2：<code>max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</code></h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/security/limits.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 加入以下内容</span></span><br><span class="line">* soft nofile 300000</span><br><span class="line">* hard nofile 300000</span><br><span class="line">* soft nproc 102400</span><br><span class="line">* soft memlock unlimited</span><br><span class="line">* hard memlock unlimited</span><br></pre></td></tr></table></figure>
-
-<p>修改了limits.conf，不需要重启，重新登录即生效。</p>
-<p>查看当前用户的软限制</p>
-<p>命令：ulimit -n  等价于 ulimit -S -n</p>
-<p>查看当前用户的硬限制</p>
-<p>命令：ulimit -H -n</p>
-<h3 id="Q3：master-not-discovered-exception"><a href="#Q3：master-not-discovered-exception" class="headerlink" title="Q3：master_not_discovered_exception"></a>Q3：<code>master_not_discovered_exception</code></h3><p>主节点指定的名字要保证存在，别指定了不存在的节点名</p>
-<h2 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h2><p>我们使用浏览器连接es可能无法连接上，这时候看一看是不是防火墙端口是否放行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看防火墙状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"><span class="comment">#查询端口是否开放</span></span><br><span class="line">firewall-cmd --query-port=9200/tcp</span><br><span class="line">firewall-cmd --query-port=9300/tcp</span><br><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=9200/tcp</span><br><span class="line">firewall-cmd --permanent --add-port=9300/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-
-<h2 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h2><p>ElasticSearch应用时，我们常常会使用到中文，这样ElasticSearch原来的分词器就不够用了，需要安装一个中文分词器，用的多的就是IK分词器，下载地址（下载.zip包）：<a href="https://github.com/medcl/elasticsearch-analysis-ik/releases">https://github.com/medcl/elasticsearch-analysis-ik/releases</a></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114163251.png"></p>
-<p>下载好之后，在ElasticSearch主目录下的plugins目录新建一个目录，然后将下载好的ik分词器压缩包放进去，再使用unzip解压:　</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在ElasticSearch主目录下的plugins目录新建一个目录：analysis-ik</span></span><br><span class="line">mkdir plugins/analysis-ik</span><br><span class="line"><span class="comment"># 将下载好的ik分词器压缩包放进去</span></span><br><span class="line">mv elasticsearch-analysis-ik-7.15.1.zip plugins/analysis-ik/</span><br><span class="line"><span class="comment"># 进入新建的analysis-ik目录进行解压</span></span><br><span class="line"><span class="built_in">cd</span> plugins/analysis-ik</span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">unzip elasticsearch-analysis-ik-7.15.1.zip</span><br></pre></td></tr></table></figure>
-
-<p>做完之后重启ElasticSearch就可以了</p>
-<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h2><p>Kibana下载地址：<a href="https://www.elastic.co/downloads/past-releases#kibana">https://www.elastic.co/downloads/past-releases#kibana</a></p>
-<p>同样的，下载编译好的包（7.15.1）</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152259.png"></p>
-<p>然后解压，然后修改config/kibana.yml，添加ElasticSearch的节点配置</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 服务端口，默认5601</span></span><br><span class="line"><span class="attr">server.port:</span> <span class="number">5601</span></span><br><span class="line"><span class="comment"># 启动地址，默认localhost，如果不修改，那么远程无法访问</span></span><br><span class="line"><span class="attr">server.host:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line"><span class="comment"># elasticsearch集群地址，旧版本是elasticsearch.url</span></span><br><span class="line"><span class="attr">elasticsearch.hosts:</span> [<span class="string">&quot;http://192.168.200.130:9200&quot;</span>,<span class="string">&quot;http://192.168.200.131:9200&quot;</span>,<span class="string">&quot;http://192.168.200.132:9200&quot;</span>]</span><br><span class="line"><span class="comment"># 如果ES有设置账号密码，则添加下面的账号密码设置</span></span><br><span class="line"><span class="comment">#elasticsearch.username: username</span></span><br><span class="line"><span class="comment">#elasticsearch.password: passwor</span></span><br></pre></td></tr></table></figure>
-
-<p>然后就可以启动了：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改文件所有者</span></span><br><span class="line">chown -R es:es kibana-7.15.1-linux-x86_64</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">kibana-7.12.0-linux-x86_64/bin/kibana</span><br></pre></td></tr></table></figure>
-
-<p>防火墙放行端口</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#开放端口</span></span><br><span class="line">firewall-cmd --permanent --add-port=5601/tcp</span><br><span class="line"><span class="comment">#重新载入</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-
-<p>启动之后，访问<a href="http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。">http://ip:5601就能访问到kibina了，kibina内部功能功能很多，像绘制图表仪表盘等等，还有很多模拟数据，可自行了解，就是说kibina主要是通过连接ElasticSearch来查询数据，然后将数据统计汇总呈现出图形化的界面来方面我们进行数据分析的。</a></p>
-<p>不过我们开发常用的就是它的Dev-Tools了，用来发送Restfull的请求来访问操作ElasticSearch：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152522.png"></p>
-<p>进入dev-tools后就可以自行操作了：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152543.png"></p>
+<ol start="2">
+<li><code>yum -y install gcc</code></li>
+<li><code>yum -y install gcc-c++</code></li>
+</ol>
+</li>
+<li><p>安装需要的软件包</p>
+<ol>
+<li><code>yum install -y yum-utils</code></li>
+</ol>
+</li>
+<li><p>设置stable镜像仓库</p>
+<ul>
+<li><p><strong>【大坑】</strong><code>yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</code></p>
+<blockquote>
+<p>官网要求我们设置download.docker.com作为镜像仓库，但是该仓库为国外的仓库，国内访问很慢，可能会出现错误： <strong>报错：1  [Errno 14] curl#35 - TCP connection reset by peer 2  [Errno 12] curl#35 - Timeout</strong></p>
+</blockquote>
+</li>
+<li><p><strong>【推荐】</strong><code>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</code></p>
+<blockquote>
+<p>我们可以将阿里云镜像仓库作为我们docker的镜像仓库</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>更新yum软件包索引：<code>yum makecache fast</code></p>
+</li>
+<li><p>安装DOCKER CE：<code>yum -y install docker-ce docker-ce-cli containerd.io</code></p>
+</li>
+<li><p>启动docker：<code>systemctl start docker</code></p>
+</li>
+<li><p>测试：</p>
+<ol>
+<li><code>docker version</code></li>
+<li><code>docker run hello-world</code></li>
+</ol>
+</li>
+<li><p>卸载：</p>
+<ol>
+<li><code>systemctl stop docker</code> </li>
+<li><code>yum remove docker-ce docker-ce-cli containerd.io</code></li>
+<li><code>rm -rf /var/lib/docker</code></li>
+<li><code>rm -rf /var/lib/containerd</code></li>
+</ol>
+</li>
+</ul>
+<h2 id="阿里云镜像加速"><a href="#阿里云镜像加速" class="headerlink" title="阿里云镜像加速"></a>阿里云镜像加速</h2><ul>
+<li>注册一个属于自己的阿里云账户(可复用淘宝账号)</li>
+<li>获得加速器地址连接<ul>
+<li>登陆阿里云开发者平台</li>
+<li>点击控制台</li>
+<li>选择容器镜像服务</li>
+<li>获取加速器地址</li>
+</ul>
+</li>
+<li>粘贴脚本直接执行</li>
+<li>重启服务器<ul>
+<li><code>systemctl daemon-reload</code></li>
+<li><code>systemctl restart docker</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="永远的HelloWorld"><a href="#永远的HelloWorld" class="headerlink" title="永远的HelloWorld"></a>永远的HelloWorld</h2><p>启动Docker后台容器(测试运行 hello-world)：<code>docker run hello-world</code></p>
+<h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><p>为什么Docker会比VM虚拟机快？</p>
+<blockquote>
+<ol>
+<li><p>docker有着比虚拟机更少的抽象层  由于docker不需要Hypervisor(虚拟机)实现硬件资源虚拟化,运行在docker容器上的程序直接使用的都是实际物理机的硬件资源。因此在CPU、内存利用率上docker将会在效率上有明显优势。</p>
+</li>
+<li><p>docker利用的是宿主机的内核,而不需要加载操作系统OS内核  当新建一个容器时,docker不需要和虚拟机一样重新加载一个操作系统内核。进而避免引寻、加载操作系统内核返回等比较费时费资源的过程,当新建一个虚拟机时,虚拟机软件需要加载OS,返回新建过程是分钟级别的。而docker由于直接利用宿主机的操作系统,则省略了返回过程,因此新建一个docker容器只需要几秒钟。  </p>
+</li>
+</ol>
+</blockquote>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote>
+<p>我是菜菜🥬，一个人菜瘾大的互联网从业者🎉</p>
+<p>用功不求太猛，但求有恒🎈</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>ElasticSearch</category>
+        <category>Docker</category>
       </categories>
       <tags>
-        <tag>ElasticSearch</tag>
-        <tag>Kibana</tag>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -1046,6 +1046,82 @@
       </tags>
   </entry>
   <entry>
+    <title>UML类图介绍</title>
+    <url>/2021/09/07/UML%E7%B1%BB%E5%9B%BE%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
+<p>统一建模语言（Unified Modeling Language，UML）是用来设计软件的可视化建模语言。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。</p>
+<p>UML 从目标系统的不同角度出发，定义了用例图、类图、对象图、状态图、活动图、时序图、协作图、构件图、部署图等 9 种图。</p>
+</blockquote>
+<h2 id="类图概述"><a href="#类图概述" class="headerlink" title="类图概述"></a>类图概述</h2><p>类图(Class diagram)是显示了模型的静态结构，特别是模型中存在的类、类的内部结构以及它们与其他类的关系等。类图不显示暂时性的信息。类图是面向对象建模的主要组成部分。</p>
+<h2 id="类图的作用"><a href="#类图的作用" class="headerlink" title="类图的作用"></a>类图的作用</h2><ul>
+<li>在软件工程中，类图是一种静态的结构图，描述了系统的类的集合，类的属性和类之间的关系，可以简化了人们对系统的理解；</li>
+<li>类图是系统分析和设计阶段的重要产物，是系统编码和测试的重要模型。</li>
+</ul>
+<h2 id="类图表示法"><a href="#类图表示法" class="headerlink" title="类图表示法"></a>类图表示法</h2><h3 id="类的表示方式"><a href="#类的表示方式" class="headerlink" title="类的表示方式"></a>类的表示方式</h3><p>在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name,age和address这3个属性，以及work()方法。 </p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Employee.jpg"></p>
+<p>属性/方法名称前加的加号和减号表示了这个属性/方法的可见性，UML类图中表示可见性的符号有三种：</p>
+<ul>
+<li><p>+：表示public</p>
+</li>
+<li><p>-：表示private</p>
+</li>
+<li><p>#：表示protected</p>
+</li>
+</ul>
+<p>属性的完整表示方式是： <strong>可见性  名称 ：类型 [ = 缺省值]</strong>  </p>
+<p>方法的完整表示方式是： <strong>可见性  名称(参数列表) [ ： 返回类型]</strong></p>
+<blockquote>
+<p>注意：</p>
+<p>​    1，中括号中的内容表示是可选的</p>
+<p>​    2，也有将类型放在变量名前面，返回值类型放在方法名前面</p>
+</blockquote>
+<p><strong>举个&#x1F330;：</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/demo.png"></p>
+<p>上图Demo类定义了三个方法：</p>
+<ul>
+<li>method()方法：修饰符为public，没有参数，没有返回值。</li>
+<li>method1()方法：修饰符为private，没有参数，返回值类型为String。</li>
+<li>method2()方法：修饰符为protected，接收两个参数，第一个参数类型为int，第二个参数类型为String，返回值类型是int。</li>
+</ul>
+<h3 id="类与类之间关系的表示方式"><a href="#类与类之间关系的表示方式" class="headerlink" title="类与类之间关系的表示方式"></a>类与类之间关系的表示方式</h3><h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><p>关联关系是对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系，如老师和学生、师傅和徒弟、丈夫和妻子等。关联关系是类与类之间最常用的一种关系，分为一般关联关系、聚合关系和组合关系。我们先介绍一般关联。</p>
+<p>关联又可以分为单向关联，双向关联，自关联。</p>
+<p><strong>1，单向关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_address.png"></p>
+<p>在UML类图中单向关联用一个带箭头的实线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。</p>
+<p><strong>2，双向关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_product.png"></p>
+<p>从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。</p>
+<p>在UML类图中，双向关联用一个不带箭头的直线表示。上图中在Customer类中维护一个List&lt;Product&gt;，表示一个顾客可以购买多个商品；在Product类中维护一个Customer类型的成员变量表示这个产品被哪个顾客所购买。</p>
+<p><strong>3，自关联</strong></p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/node.png"></p>
+<p>自关联在UML类图中用一个带有箭头且指向自身的线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。</p>
+<h4 id="聚合关系"><a href="#聚合关系" class="headerlink" title="聚合关系"></a>聚合关系</h4><p>聚合关系是关联关系的一种，是强关联关系，是整体和部分之间的关系。</p>
+<p>聚合关系也是通过成员对象来实现的，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。例如，学校与老师的关系，学校包含老师，但如果学校停办了，老师依然存在。</p>
+<p>在 UML 类图中，聚合关系可以用带空心菱形的实线来表示，菱形指向整体。下图所示是大学和教师的关系图：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173422328.png"></p>
+<h4 id="组合关系"><a href="#组合关系" class="headerlink" title="组合关系"></a>组合关系</h4><p>组合表示类之间的整体与部分的关系，但它是一种更强烈的聚合关系。</p>
+<p>在组合关系中，整体对象可以控制部分对象的生命周期，一旦整体对象不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在。例如，头和嘴的关系，没有了头，嘴也就不存在了。</p>
+<p>在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。下图所示是头和嘴的关系图：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173455149.png"></p>
+<h4 id="依赖关系"><a href="#依赖关系" class="headerlink" title="依赖关系"></a>依赖关系</h4><p>依赖关系是一种使用关系，它是对象之间耦合度最弱的一种关联方式，是临时性的关联。在代码中，某个类的方法通过局部变量、方法的参数或者对静态方法的调用来访问另一个类（被依赖类）中的某些方法来完成一些职责。</p>
+<p>在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。下图所示是司机和汽车的关系图，司机驾驶汽车：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173518926.png"></p>
+<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><p>继承关系是对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系。</p>
+<p>在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下图所示：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173539838.png"></p>
+<h4 id="实现关系"><a href="#实现关系" class="headerlink" title="实现关系"></a>实现关系</h4><p>实现关系是接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作。</p>
+<p>在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如图所示。</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173554296.png"></p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>相关内容介绍</category>
+      </categories>
+      <tags>
+        <tag>UML图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis安装</title>
     <url>/2021/11/28/Redis%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="Redis官方网站下载安装包"><a href="#Redis官方网站下载安装包" class="headerlink" title="Redis官方网站下载安装包"></a>Redis官方网站下载安装包</h2><ol>
@@ -1138,82 +1214,6 @@
       <tags>
         <tag>Redis</tag>
         <tag>安装</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>UML类图介绍</title>
-    <url>/2021/09/07/UML%E7%B1%BB%E5%9B%BE%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
-<p>统一建模语言（Unified Modeling Language，UML）是用来设计软件的可视化建模语言。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。</p>
-<p>UML 从目标系统的不同角度出发，定义了用例图、类图、对象图、状态图、活动图、时序图、协作图、构件图、部署图等 9 种图。</p>
-</blockquote>
-<h2 id="类图概述"><a href="#类图概述" class="headerlink" title="类图概述"></a>类图概述</h2><p>类图(Class diagram)是显示了模型的静态结构，特别是模型中存在的类、类的内部结构以及它们与其他类的关系等。类图不显示暂时性的信息。类图是面向对象建模的主要组成部分。</p>
-<h2 id="类图的作用"><a href="#类图的作用" class="headerlink" title="类图的作用"></a>类图的作用</h2><ul>
-<li>在软件工程中，类图是一种静态的结构图，描述了系统的类的集合，类的属性和类之间的关系，可以简化了人们对系统的理解；</li>
-<li>类图是系统分析和设计阶段的重要产物，是系统编码和测试的重要模型。</li>
-</ul>
-<h2 id="类图表示法"><a href="#类图表示法" class="headerlink" title="类图表示法"></a>类图表示法</h2><h3 id="类的表示方式"><a href="#类的表示方式" class="headerlink" title="类的表示方式"></a>类的表示方式</h3><p>在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name,age和address这3个属性，以及work()方法。 </p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Employee.jpg"></p>
-<p>属性/方法名称前加的加号和减号表示了这个属性/方法的可见性，UML类图中表示可见性的符号有三种：</p>
-<ul>
-<li><p>+：表示public</p>
-</li>
-<li><p>-：表示private</p>
-</li>
-<li><p>#：表示protected</p>
-</li>
-</ul>
-<p>属性的完整表示方式是： <strong>可见性  名称 ：类型 [ = 缺省值]</strong>  </p>
-<p>方法的完整表示方式是： <strong>可见性  名称(参数列表) [ ： 返回类型]</strong></p>
-<blockquote>
-<p>注意：</p>
-<p>​    1，中括号中的内容表示是可选的</p>
-<p>​    2，也有将类型放在变量名前面，返回值类型放在方法名前面</p>
-</blockquote>
-<p><strong>举个&#x1F330;：</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/demo.png"></p>
-<p>上图Demo类定义了三个方法：</p>
-<ul>
-<li>method()方法：修饰符为public，没有参数，没有返回值。</li>
-<li>method1()方法：修饰符为private，没有参数，返回值类型为String。</li>
-<li>method2()方法：修饰符为protected，接收两个参数，第一个参数类型为int，第二个参数类型为String，返回值类型是int。</li>
-</ul>
-<h3 id="类与类之间关系的表示方式"><a href="#类与类之间关系的表示方式" class="headerlink" title="类与类之间关系的表示方式"></a>类与类之间关系的表示方式</h3><h4 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h4><p>关联关系是对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系，如老师和学生、师傅和徒弟、丈夫和妻子等。关联关系是类与类之间最常用的一种关系，分为一般关联关系、聚合关系和组合关系。我们先介绍一般关联。</p>
-<p>关联又可以分为单向关联，双向关联，自关联。</p>
-<p><strong>1，单向关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_address.png"></p>
-<p>在UML类图中单向关联用一个带箭头的实线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。</p>
-<p><strong>2，双向关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_product.png"></p>
-<p>从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。</p>
-<p>在UML类图中，双向关联用一个不带箭头的直线表示。上图中在Customer类中维护一个List&lt;Product&gt;，表示一个顾客可以购买多个商品；在Product类中维护一个Customer类型的成员变量表示这个产品被哪个顾客所购买。</p>
-<p><strong>3，自关联</strong></p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/node.png"></p>
-<p>自关联在UML类图中用一个带有箭头且指向自身的线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。</p>
-<h4 id="聚合关系"><a href="#聚合关系" class="headerlink" title="聚合关系"></a>聚合关系</h4><p>聚合关系是关联关系的一种，是强关联关系，是整体和部分之间的关系。</p>
-<p>聚合关系也是通过成员对象来实现的，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。例如，学校与老师的关系，学校包含老师，但如果学校停办了，老师依然存在。</p>
-<p>在 UML 类图中，聚合关系可以用带空心菱形的实线来表示，菱形指向整体。下图所示是大学和教师的关系图：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173422328.png"></p>
-<h4 id="组合关系"><a href="#组合关系" class="headerlink" title="组合关系"></a>组合关系</h4><p>组合表示类之间的整体与部分的关系，但它是一种更强烈的聚合关系。</p>
-<p>在组合关系中，整体对象可以控制部分对象的生命周期，一旦整体对象不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在。例如，头和嘴的关系，没有了头，嘴也就不存在了。</p>
-<p>在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。下图所示是头和嘴的关系图：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173455149.png"></p>
-<h4 id="依赖关系"><a href="#依赖关系" class="headerlink" title="依赖关系"></a>依赖关系</h4><p>依赖关系是一种使用关系，它是对象之间耦合度最弱的一种关联方式，是临时性的关联。在代码中，某个类的方法通过局部变量、方法的参数或者对静态方法的调用来访问另一个类（被依赖类）中的某些方法来完成一些职责。</p>
-<p>在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。下图所示是司机和汽车的关系图，司机驾驶汽车：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173518926.png"></p>
-<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><p>继承关系是对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系。</p>
-<p>在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下图所示：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173539838.png"></p>
-<h4 id="实现关系"><a href="#实现关系" class="headerlink" title="实现关系"></a>实现关系</h4><p>实现关系是接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作。</p>
-<p>在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如图所示。</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173554296.png"></p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>相关内容介绍</category>
-      </categories>
-      <tags>
-        <tag>UML图</tag>
       </tags>
   </entry>
   <entry>
@@ -2074,6 +2074,21 @@
       </tags>
   </entry>
   <entry>
+    <title>微服务技术栈</title>
+    <url>/2022/10/06/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8A%80%E6%9C%AF%E6%A0%88/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote>
+<p>我是菜菜🥬，一个人菜瘾大的互联网从业者🎉</p>
+<p>用功不求太猛，但求有恒🎈</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>微服务</category>
+      </categories>
+      <tags>
+        <tag>微服务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>桥接模式</title>
     <url>/2021/09/20/%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>现在有一个需求，需要创建不同的图形，并且每个图形都有可能会有不同的颜色。我们可以利用继承的方式来设计类的关系：</p>
@@ -2117,6 +2132,61 @@
       </categories>
       <tags>
         <tag>桥接模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>状态模式</title>
+    <url>/2021/11/17/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>【例】通过按钮来控制一个电梯的状态，一个电梯有开门状态，关门状态，停止状态，运行状态。每一种状态改变，都有可能要根据其他状态来更新处理。例如，如果电梯门现在处于运行时状态，就不能进行开门操作，而如果电梯门是停止状态，就可以执行开门操作。</p>
+<p>类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E5%89%8D.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="comment">//电梯的4个状态</span></span><br><span class="line">    <span class="comment">//开门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> OPENING_STATE = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//关门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> CLOSING_STATE = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//运行状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> RUNNING_STATE = <span class="number">3</span>;</span><br><span class="line">    <span class="comment">//停止状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STOPPING_STATE = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置电梯的状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lift</span> <span class="keyword">implements</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行关门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯关门了。。。&quot;</span>);<span class="comment">//只有开门状态可以关闭电梯门，可以对应电梯状态表来看</span></span><br><span class="line">                <span class="keyword">this</span>.setState(CLOSING_STATE);<span class="comment">//关门之后电梯就是关闭状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //已经是关门状态，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //运行时电梯门是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //停止时电梯也是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行开门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//门已经开了，不能再开门了</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门状态，门打开:</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门打开了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 运行时电梯不能开门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门开了。。。&quot;</span>);<span class="comment">//电梯停了，可以开门了</span></span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行运行动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//电梯不能开着门就走</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//门关了，可以运行了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);<span class="comment">//现在是运行状态</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 已经是运行状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行停止动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE: <span class="comment">//开门的电梯已经是是停止的了(正常情况下)</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门时才可以停止</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:<span class="comment">//运行时当然可以停止了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Lift lift = <span class="keyword">new</span> Lift();</span><br><span class="line">        lift.setState(ILift.STOPPING_STATE);<span class="comment">//电梯是停止的</span></span><br><span class="line">        lift.open();<span class="comment">//开门</span></span><br><span class="line">        lift.close();<span class="comment">//关门</span></span><br><span class="line">        lift.run();<span class="comment">//运行</span></span><br><span class="line">        lift.stop();<span class="comment">//停止</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问题分析：</p>
+<ul>
+<li>使用了大量的switch…case这样的判断（if…else也是一样)，使程序的可阅读性变差。</li>
+<li>扩展性很差。如果新加了断电的状态，我们需要修改上面判断逻辑</li>
+</ul>
+<p><strong>定义：</strong></p>
+<p>对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>状态模式包含以下主要角色。</p>
+<ul>
+<li>环境（Context）角色：也称为上下文，它定义了客户程序需要的接口，维护一个当前状态，并将与状态相关的操作委托给当前状态对象来处理。</li>
+<li>抽象状态（State）角色：定义一个接口，用以封装环境对象中的特定状态所对应的行为。</li>
+<li>具体状态（Concrete  State）角色：实现抽象状态所对应的行为。</li>
+</ul>
+<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>对上述电梯的案例使用状态模式进行改进。类图如下：</p>
+<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F.png"></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//抽象状态类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个环境角色，也就是封装状态的变化引起的功能变化</span></span><br><span class="line">    <span class="keyword">protected</span> Context context;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯开门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯关门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯运行动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯停止动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//开启状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OpenningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开启当然可以关闭了，我就想测试一下电梯门开关功能</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门开启...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门不能开着就跑，这里什么也不做</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开门状态已经是停止的了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//运行状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运行的时候开电梯门？你疯了！电梯不会给你开的</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关闭？这是肯定了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这是在运行状态下要实现的方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯正在运行...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//停止状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StoppingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态，开门，那是要的！</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态再跑起来，正常的很</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态是怎么发生的呢？当然是停止方法执行了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯停止了...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClosingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//电梯门关闭，这是关闭状态要实现的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门关闭...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了再打开，逗你玩呢，那这个允许呀</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="keyword">super</span>.context.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了就跑，这是再正常不过了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="keyword">super</span>.context.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关着，我就不按楼层</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//环境角色</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义出所有的电梯状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> OpenningState openningState = <span class="keyword">new</span> OpenningState();<span class="comment">//开门状态，这时候电梯只能关闭</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> ClosingState closeingState = <span class="keyword">new</span> ClosingState();<span class="comment">//关闭状态，这时候电梯可以运行、停止和开门</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> RunningState runningState = <span class="keyword">new</span> RunningState();<span class="comment">//运行状态，这时候电梯只能停止</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> StoppingState stoppingState = <span class="keyword">new</span> StoppingState();<span class="comment">//停止状态，这时候电梯可以开门、运行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个当前电梯状态</span></span><br><span class="line">    <span class="keyword">private</span> LiftState liftState;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiftState <span class="title">getLiftState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.liftState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLiftState</span><span class="params">(LiftState liftState)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//当前环境改变</span></span><br><span class="line">        <span class="keyword">this</span>.liftState = liftState;</span><br><span class="line">        <span class="comment">//把当前的环境通知到各个实现类中</span></span><br><span class="line">        <span class="keyword">this</span>.liftState.setContext(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Context context = <span class="keyword">new</span> Context();</span><br><span class="line">        context.setLiftState(<span class="keyword">new</span> ClosingState());</span><br><span class="line"></span><br><span class="line">        context.open();</span><br><span class="line">        context.close();</span><br><span class="line">        context.run();</span><br><span class="line">        context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
+<ul>
+<li>将所有与某个状态有关的行为放到一个类中，并且可以方便地增加新的状态，只需要改变对象状态即可改变对象的行为。</li>
+<li>允许状态转换逻辑与状态对象合成一体，而不是某一个巨大的条件语句块。</li>
+</ul>
+<p><strong>2，缺点：</strong></p>
+<ul>
+<li>状态模式的使用必然会增加系统类和对象的个数。 </li>
+<li>状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱。</li>
+<li>状态模式对”开闭原则”的支持并不太好。</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>当一个对象的行为取决于它的状态，并且它必须在运行时根据状态改变它的行为时，就可以考虑使用状态模式。</li>
+<li>一个操作中含有庞大的分支结构，并且这些分支决定于对象的状态时。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+        <category>行为型模式</category>
+      </categories>
+      <tags>
+        <tag>行为型模式</tag>
+        <tag>设计模式</tag>
+        <tag>状态模式</tag>
       </tags>
   </entry>
   <entry>
@@ -2210,61 +2280,6 @@
         <tag>行为型模式</tag>
         <tag>设计模式</tag>
         <tag>模板方法模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>状态模式</title>
-    <url>/2021/11/17/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>【例】通过按钮来控制一个电梯的状态，一个电梯有开门状态，关门状态，停止状态，运行状态。每一种状态改变，都有可能要根据其他状态来更新处理。例如，如果电梯门现在处于运行时状态，就不能进行开门操作，而如果电梯门是停止状态，就可以执行开门操作。</p>
-<p>类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E5%89%8D.png"></p>
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="comment">//电梯的4个状态</span></span><br><span class="line">    <span class="comment">//开门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> OPENING_STATE = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//关门状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> CLOSING_STATE = <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//运行状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> RUNNING_STATE = <span class="number">3</span>;</span><br><span class="line">    <span class="comment">//停止状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> STOPPING_STATE = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置电梯的状态</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lift</span> <span class="keyword">implements</span> <span class="title">ILift</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行关门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯关门了。。。&quot;</span>);<span class="comment">//只有开门状态可以关闭电梯门，可以对应电梯状态表来看</span></span><br><span class="line">                <span class="keyword">this</span>.setState(CLOSING_STATE);<span class="comment">//关门之后电梯就是关闭状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //已经是关门状态，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //运行时电梯门是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing //停止时电梯也是关着的，不能关门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行开门动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//门已经开了，不能再开门了</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门状态，门打开:</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门打开了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 运行时电梯不能开门</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯门开了。。。&quot;</span>);<span class="comment">//电梯停了，可以开门了</span></span><br><span class="line">                <span class="keyword">this</span>.setState(OPENING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行运行动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE:<span class="comment">//电梯不能开着门就走</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//门关了，可以运行了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);<span class="comment">//现在是运行状态</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:</span><br><span class="line">                <span class="comment">//do nothing 已经是运行状态了</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                System.out.println(<span class="string">&quot;电梯开始运行了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(RUNNING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行停止动作</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">            <span class="keyword">case</span> OPENING_STATE: <span class="comment">//开门的电梯已经是是停止的了(正常情况下)</span></span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CLOSING_STATE:<span class="comment">//关门时才可以停止</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RUNNING_STATE:<span class="comment">//运行时当然可以停止了</span></span><br><span class="line">                System.out.println(<span class="string">&quot;电梯停止了。。。&quot;</span>);</span><br><span class="line">                <span class="keyword">this</span>.setState(STOPPING_STATE);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> STOPPING_STATE:</span><br><span class="line">                <span class="comment">//do nothing</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Lift lift = <span class="keyword">new</span> Lift();</span><br><span class="line">        lift.setState(ILift.STOPPING_STATE);<span class="comment">//电梯是停止的</span></span><br><span class="line">        lift.open();<span class="comment">//开门</span></span><br><span class="line">        lift.close();<span class="comment">//关门</span></span><br><span class="line">        lift.run();<span class="comment">//运行</span></span><br><span class="line">        lift.stop();<span class="comment">//停止</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>问题分析：</p>
-<ul>
-<li>使用了大量的switch…case这样的判断（if…else也是一样)，使程序的可阅读性变差。</li>
-<li>扩展性很差。如果新加了断电的状态，我们需要修改上面判断逻辑</li>
-</ul>
-<p><strong>定义：</strong></p>
-<p>对有状态的对象，把复杂的“判断逻辑”提取到不同的状态对象中，允许状态对象在其内部状态发生改变时改变其行为。</p>
-<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>状态模式包含以下主要角色。</p>
-<ul>
-<li>环境（Context）角色：也称为上下文，它定义了客户程序需要的接口，维护一个当前状态，并将与状态相关的操作委托给当前状态对象来处理。</li>
-<li>抽象状态（State）角色：定义一个接口，用以封装环境对象中的特定状态所对应的行为。</li>
-<li>具体状态（Concrete  State）角色：实现抽象状态所对应的行为。</li>
-</ul>
-<h2 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h2><p>对上述电梯的案例使用状态模式进行改进。类图如下：</p>
-<p><img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F.png"></p>
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//抽象状态类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个环境角色，也就是封装状态的变化引起的功能变化</span></span><br><span class="line">    <span class="keyword">protected</span> Context context;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContext</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯开门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯关门动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯运行动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯停止动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//开启状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OpenningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开启当然可以关闭了，我就想测试一下电梯门开关功能</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门开启...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门不能开着就跑，这里什么也不做</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开门状态已经是停止的了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//运行状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunningState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运行的时候开电梯门？你疯了！电梯不会给你开的</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关闭？这是肯定了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这是在运行状态下要实现的方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯正在运行...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//停止状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StoppingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态，开门，那是要的！</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;<span class="comment">//虽然可以关门，但这个动作不归我执行</span></span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.closeingState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态再跑起来，正常的很</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态修改</span></span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="comment">//动作委托为CloseState来执行，也就是委托给了ClosingState子类执行这个动作</span></span><br><span class="line">        <span class="keyword">super</span>.context.getLiftState().run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止状态是怎么发生的呢？当然是停止方法执行了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯停止了...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭状态</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClosingState</span> <span class="keyword">extends</span> <span class="title">LiftState</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//电梯门关闭，这是关闭状态要实现的动作</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;电梯门关闭...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了再打开，逗你玩呢，那这个允许呀</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.openningState);</span><br><span class="line">        <span class="keyword">super</span>.context.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关了就跑，这是再正常不过了</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.runningState);</span><br><span class="line">        <span class="keyword">super</span>.context.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//电梯门关着，我就不按楼层</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.context.setLiftState(Context.stoppingState);</span><br><span class="line">        <span class="keyword">super</span>.context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//环境角色</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义出所有的电梯状态</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> OpenningState openningState = <span class="keyword">new</span> OpenningState();<span class="comment">//开门状态，这时候电梯只能关闭</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> ClosingState closeingState = <span class="keyword">new</span> ClosingState();<span class="comment">//关闭状态，这时候电梯可以运行、停止和开门</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> RunningState runningState = <span class="keyword">new</span> RunningState();<span class="comment">//运行状态，这时候电梯只能停止</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> StoppingState stoppingState = <span class="keyword">new</span> StoppingState();<span class="comment">//停止状态，这时候电梯可以开门、运行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个当前电梯状态</span></span><br><span class="line">    <span class="keyword">private</span> LiftState liftState;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LiftState <span class="title">getLiftState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.liftState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLiftState</span><span class="params">(LiftState liftState)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//当前环境改变</span></span><br><span class="line">        <span class="keyword">this</span>.liftState = liftState;</span><br><span class="line">        <span class="comment">//把当前的环境通知到各个实现类中</span></span><br><span class="line">        <span class="keyword">this</span>.liftState.setContext(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.open();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.liftState.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Context context = <span class="keyword">new</span> Context();</span><br><span class="line">        context.setLiftState(<span class="keyword">new</span> ClosingState());</span><br><span class="line"></span><br><span class="line">        context.open();</span><br><span class="line">        context.close();</span><br><span class="line">        context.run();</span><br><span class="line">        context.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>1，优点：</strong></p>
-<ul>
-<li>将所有与某个状态有关的行为放到一个类中，并且可以方便地增加新的状态，只需要改变对象状态即可改变对象的行为。</li>
-<li>允许状态转换逻辑与状态对象合成一体，而不是某一个巨大的条件语句块。</li>
-</ul>
-<p><strong>2，缺点：</strong></p>
-<ul>
-<li>状态模式的使用必然会增加系统类和对象的个数。 </li>
-<li>状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱。</li>
-<li>状态模式对”开闭原则”的支持并不太好。</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
-<li>当一个对象的行为取决于它的状态，并且它必须在运行时根据状态改变它的行为时，就可以考虑使用状态模式。</li>
-<li>一个操作中含有庞大的分支结构，并且这些分支决定于对象的状态时。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-        <category>行为型模式</category>
-      </categories>
-      <tags>
-        <tag>行为型模式</tag>
-        <tag>设计模式</tag>
-        <tag>状态模式</tag>
       </tags>
   </entry>
   <entry>
@@ -5445,12 +5460,12 @@
         <category>项目实战</category>
       </categories>
       <tags>
+        <tag>微服务</tag>
         <tag>谷粒商城</tag>
         <tag>springboot</tag>
         <tag>springcloud</tag>
         <tag>前后端分离</tag>
         <tag>分布式</tag>
-        <tag>微服务</tag>
       </tags>
   </entry>
   <entry>
@@ -6515,13 +6530,13 @@
 
 <p>腾讯云 <a href="https://partners.cloud.tencent.com/invitation/1000144091425ee1dbcbc6093/100016776501"><strong>【点击购买】</strong></a></p>
 <h1 id="岗位内推"><a href="#岗位内推" class="headerlink" title="岗位内推"></a>岗位内推</h1><p>找所有职位比较出色的朋友，觉得合适的给我简历我可以内推，阿里、美团、蘑菇街、拼多多、字节跳动、腾讯等都可以.</p>
-<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#x61;&#x6f;&#x5f;&#x62;&#x69;&#110;&#103;&#64;&#102;&#111;&#120;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x61;&#x6f;&#x5f;&#x62;&#x69;&#110;&#103;&#64;&#102;&#111;&#120;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></p>
-<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#111;&#95;&#x62;&#x69;&#x6e;&#x67;&#64;&#102;&#x6f;&#120;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#97;&#111;&#95;&#x62;&#x69;&#x6e;&#x67;&#64;&#102;&#x6f;&#120;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a></p>
+<p>阿里巴巴/腾讯/字节/快手其他岗位 : <a href="mailto:&#97;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#102;&#x6f;&#x78;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#97;&#111;&#95;&#98;&#105;&#110;&#x67;&#64;&#102;&#x6f;&#x78;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<h2 id="社招近期机会"><a href="#社招近期机会" class="headerlink" title="社招近期机会"></a>社招近期机会</h2><h3 id="阿里校招学长内推"><a href="#阿里校招学长内推" class="headerlink" title="阿里校招学长内推"></a>阿里校招学长内推</h3><p><a href="mailto:&#97;&#x6f;&#x5f;&#x62;&#x69;&#110;&#103;&#x40;&#x66;&#111;&#120;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#97;&#x6f;&#x5f;&#x62;&#x69;&#110;&#103;&#x40;&#x66;&#111;&#120;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;</a></p>
 <h3 id="涂鸦智慧商业"><a href="#涂鸦智慧商业" class="headerlink" title="涂鸦智慧商业:"></a>涂鸦智慧商业:</h3><p>前端小伙伴欢迎尝试 ～</p>
 <h4 id="关于部门："><a href="#关于部门：" class="headerlink" title="关于部门："></a>关于部门：</h4><p>我们大部门这边主要负责 SaaS 业务平台前端的开发，包括中后台，跨端以及工程化等方向。如果对其它团队感兴趣，也可以帮推。</p>
 <h4 id="进来可以做的事情："><a href="#进来可以做的事情：" class="headerlink" title="进来可以做的事情："></a>进来可以做的事情：</h4><p>大部门这边有好些方向，比方说你擅长或者视频、WebRTC 相关技术，那可以来我们安防。或者你有其它喜欢的方向，也可以聊聊看。 有很多事来了可以一起做，比方说最近我们部门在做 React to Web Components 相关的技术、业务场景落地。</p>
 <h4 id="关于技术栈："><a href="#关于技术栈：" class="headerlink" title="关于技术栈："></a>关于技术栈：</h4><p>大部门这边主要是以 React 为主，如果你是 Vue 经验的，同样欢迎来聊聊。只是框架层面不同，这个不是重点。</p>
-<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#x6f;&#110;&#103;&#119;&#101;&#105;&#x2e;&#104;&#x75;&#64;&#116;&#x75;&#121;&#x61;&#x2e;&#99;&#x6f;&#x6d;">&#x7a;&#x6f;&#110;&#103;&#119;&#101;&#105;&#x2e;&#104;&#x75;&#64;&#116;&#x75;&#121;&#x61;&#x2e;&#99;&#x6f;&#x6d;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
+<h4 id="关于面试："><a href="#关于面试：" class="headerlink" title="关于面试："></a>关于面试：</h4><p>之前遇到过 Vue 经验的小伙伴问我，说会不会问很多 React 的问题。放心，不会的。像比如社招的话，还是会更加注重项目经验的。然后就是，简历到我这里，不会直接就推进系统，会先跟你沟通一下哈，觉得 ok 我们再走流程。最后，流程会全程跟进，可加微信直接找我查进度。<br>邮箱: <a href="mailto:&#x7a;&#x6f;&#110;&#x67;&#x77;&#101;&#x69;&#46;&#x68;&#117;&#64;&#116;&#x75;&#x79;&#97;&#46;&#99;&#111;&#x6d;">&#x7a;&#x6f;&#110;&#x67;&#x77;&#101;&#x69;&#46;&#x68;&#117;&#64;&#116;&#x75;&#x79;&#97;&#46;&#99;&#111;&#x6d;</a> 微信联系: 15586548537 (昵称是接水怪，不要加错了哦~)</p>
 <h3 id="支付宝网商银行"><a href="#支付宝网商银行" class="headerlink" title="支付宝网商银行:"></a>支付宝网商银行:</h3><p>Java工作两年及以上的同学欢迎尝试～</p>
 <h4 id="关于部门：-1"><a href="#关于部门：-1" class="headerlink" title="关于部门："></a>关于部门：</h4><p>网商银行不做过多介绍了，网上很多相关资料，跟腾讯微众对标，每年绩效都很好。</p>
 <p>我这边是信贷决策部门，绝对的核心，部门直招，如果对蚂蚁其他团队感兴趣也可以帮推，但没有本部门那么方便跟进。</p>
@@ -6529,7 +6544,7 @@
 <p>可以保证的是一定不是单纯搬砖，本部门在整个网商都是底层核心系统，无论是流量还是数据量都是极大的技术挑战。</p>
 <h4 id="关于职级："><a href="#关于职级：" class="headerlink" title="关于职级："></a>关于职级：</h4><p>p6-p8都有hc，真实hc不刷kpi，目前网商银行业务扩张，目标人数*2，所以放出了很多hc，是进蚂蚁的好机会。</p>
 <h4 id="关于面试：-1"><a href="#关于面试：-1" class="headerlink" title="关于面试："></a>关于面试：</h4><p>很多同学可能很担心投了没有面好会对以后有影响，或者投了之后面下来发现不合适，这里说明一下，我们不会马上把你简历录系统，会先进行评估并且跟你电话沟通，双方都觉得合适才会开始面试，不会一来就传简历，而且面试时间和进度我可以随时帮跟进，不存在放鸽子这种情况。</p>
-<p>邮箱: <a href="mailto:&#108;&#x77;&#50;&#54;&#51;&#56;&#x38;&#56;&#64;&#97;&#x6c;&#105;&#x62;&#x61;&#x62;&#x61;&#45;&#x69;&#x6e;&#x63;&#x2e;&#99;&#x6f;&#109;">&#108;&#x77;&#50;&#54;&#51;&#56;&#x38;&#56;&#64;&#97;&#x6c;&#105;&#x62;&#x61;&#x62;&#x61;&#45;&#x69;&#x6e;&#x63;&#x2e;&#99;&#x6f;&#109;</a>  微信联系: lwwei2222</p>
+<p>邮箱: <a href="mailto:&#x6c;&#x77;&#50;&#x36;&#x33;&#56;&#x38;&#x38;&#64;&#x61;&#108;&#105;&#x62;&#97;&#x62;&#x61;&#x2d;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#x6d;">&#x6c;&#x77;&#50;&#x36;&#x33;&#56;&#x38;&#x38;&#64;&#x61;&#108;&#105;&#x62;&#97;&#x62;&#x61;&#x2d;&#x69;&#x6e;&#99;&#46;&#99;&#111;&#x6d;</a>  微信联系: lwwei2222</p>
 <h3 id="天猫国际"><a href="#天猫国际" class="headerlink" title="天猫国际:"></a>天猫国际:</h3><p>天猫国际是中国消费升级的第一跨境平台，是阿里经济体5年2000亿美金进口承诺的担纲。</p>
 <p>2019年天猫国际技术部和考拉合并成立了阿里巴巴大进口技术部，是阿里巴巴国际化战略的核心技术部门。</p>
 <p>我们致力于进口业务的技术突破和创新，助力中国的消费者实现“买遍全球”的需求。希望你加入我们，同我们一道引领电子商务、电子支付、供应链等全球化方向，建立一个让全球消费者喜爱，让全球商家受益的国际化技术体系。</p>
@@ -6537,7 +6552,7 @@
 <p>2.你将致力于应用人工智能的最新技术，提高自动化和智能化程度，大幅提升业务效率</p>
 <p>3.你将有机会深入到最前沿的大数据电商系统的设计和研发。近期成立的新BU，发展前景广阔，提供你足够施展才能的舞台。</p>
 <p>现招聘 java研发实习生、前端实习生、算法、数据分析和测试实习生。</p>
-<p>有意请发简历到 <a href="mailto:&#x6a;&#111;&#x73;&#104;&#x75;&#x61;&#46;&#108;&#x69;&#x66;&#x66;&#x40;&#x61;&#x6c;&#105;&#x62;&#97;&#x62;&#97;&#x2d;&#105;&#110;&#x63;&#46;&#99;&#x6f;&#109;">&#x6a;&#111;&#x73;&#104;&#x75;&#x61;&#46;&#108;&#x69;&#x66;&#x66;&#x40;&#x61;&#x6c;&#105;&#x62;&#97;&#x62;&#97;&#x2d;&#105;&#110;&#x63;&#46;&#99;&#x6f;&#109;</a></p>
+<p>有意请发简历到 <a href="mailto:&#106;&#x6f;&#x73;&#104;&#x75;&#x61;&#x2e;&#x6c;&#x69;&#x66;&#x66;&#64;&#97;&#x6c;&#x69;&#x62;&#97;&#x62;&#x61;&#45;&#105;&#110;&#x63;&#x2e;&#99;&#111;&#x6d;">&#106;&#x6f;&#x73;&#104;&#x75;&#x61;&#x2e;&#x6c;&#x69;&#x66;&#x66;&#64;&#97;&#x6c;&#x69;&#x62;&#97;&#x62;&#x61;&#45;&#105;&#110;&#x63;&#x2e;&#99;&#111;&#x6d;</a></p>
 <p>要求：2020年11-2021年10本科及以上毕业生，理工科相关专业优先，有论文发表或者程序设计大赛、acm等算法比赛获奖的优先。</p>
 <h3 id="阿里国际化电商基础链路团队"><a href="#阿里国际化电商基础链路团队" class="headerlink" title="阿里国际化电商基础链路团队:"></a>阿里国际化电商基础链路团队:</h3><ul>
 <li><p>Vision：AE基础链路的Vision是打造全球化、灵动性的基础链路团队，构建一个完整的电商基础领域闭环。在这里你可以领略到完整的国际化电商体系的进化和发展，在整个电商基础领域的生命周期里可以任意选择发挥你的所长。只要你敢想，我们就敢一起干；</p>
@@ -6565,7 +6580,7 @@
 <li><p>英语流利为加分项</p>
 </li>
 </ul>
-<p>有意请发简历到 <a href="mailto:&#102;&#105;&#103;&#x68;&#116;&#x69;&#x6e;&#x67;&#x63;&#114;&#x61;&#x70;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#102;&#105;&#103;&#x68;&#116;&#x69;&#x6e;&#x67;&#x63;&#114;&#x61;&#x70;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+<p>有意请发简历到 <a href="mailto:&#102;&#105;&#x67;&#x68;&#116;&#105;&#x6e;&#x67;&#99;&#114;&#97;&#x70;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#102;&#105;&#x67;&#x68;&#116;&#105;&#x6e;&#x67;&#99;&#114;&#97;&#x70;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></p>
 <h1 id="鸣谢列表"><a href="#鸣谢列表" class="headerlink" title="鸣谢列表"></a>鸣谢列表</h1><p>以下排名不分先后!</p>
 <a href="https://github.com/simpleTo">
     <img src= "https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif" data-lazy-src="https://avatars3.githubusercontent.com/u/24934495?s=400&v=4" width="45px">
