@@ -64,7 +64,7 @@ ignore: null
 theme: butterfly
 deploy:
   type: git
-  repo: git@github.com:Cai2w/Cai2w.github.io.git
+  repo: git@github.com:Cai2w/blog.git
   branch: master
 
 search:
