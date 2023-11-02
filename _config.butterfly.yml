@@ -85,30 +85,30 @@ katex:
 # --------------------------------------
 
 # Favicon（網站圖標）
-favicon: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/%E9%9D%92%E8%8F%9C.png
+favicon: http://img.cai2.wang/%E9%9D%92%E8%8F%9C.png
 
 # Avatar (頭像)
 avatar:
-  img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/avatar.jpg
+  img: http://img.cai2.wang/avatar.jpg
   effect: false
 
 # Disable all banner image
 disable_top_img: true
 
 # The banner image of home page
-# https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/hexo.jpg
+# http://img.cai2.wang/hexo.jpg
 index_img: false
 
 # If the banner of page not setting, it will show the top_img
 default_top_img: false
 
 # The banner image of archive page
-# https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/archive.jpg
+# http://img.cai2.wang/archive.jpg
 archive_img: false
 
 # If the banner of tag page not setting, it will show the top_img
 # note: tag page, not tags page (子標籤頁面的 top_img)
-# https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/tag.jpg
+# http://img.cai2.wang/tag.jpg
 tag_img: false
 # The banner image of tag page
 # format:
@@ -117,7 +117,7 @@ tag_per_img: false
 
 # If the banner of category page not setting, it will show the top_img
 # note: category page, not categories page (子分類頁面的 top_img)
-# https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/categorie.jpg
+# http://img.cai2.wang/categorie.jpg
 category_img: false
 
 # The banner image of category page
@@ -135,102 +135,101 @@ cover:
   position: both
   # When cover is not set, the default cover is displayed (當沒有設置cover時，默認的封面顯示)
   default_cover:
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_3d_modeling_h60h.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_add_color_19gv.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Chat_bot_re_e2gj.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_circuit_board_4c4d.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_circuit_sdmr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_cloud_files_wmo8.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_cloud_hosting_aodd.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_code_inspection_bdl7.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Code_thinking_re_gka2.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_content_team_3epn.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_data_input_fxv2.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_data_processing_yrrv.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Decide_re_ixfw.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Design_notes_re_eklr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Dev_focus_re_6iwt.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_dev_productivity_umsq.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_developer_activity_bv83.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_digital_currency_qpak.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Domain_names_re_0uun.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_fashion_blogging_w9ol.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_feeling_proud_qne1.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Firmware_jw6u.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_fitting_piece_iilo.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_fixing_bugs_w7gi.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Freelancer_re_irh4.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_good_team_m7uu.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_hacker_mind_6y85.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_heatmap_uyye.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_In_progress_re_m1l6.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_interaction_design_odgc.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Internet_on_the_go_re_vben.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_just_browsing_m0vg.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Mind_map_re_nlb6.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_miro_qvwm.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Mobile_app_re_catg.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_mobile_browsers_lib5.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_mobile_development_8gyo.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_mobile_interface_wakp.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_New_notifications_re_xpcv.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_next_tasks_iubr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_noted_pc9f.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_online_art_bgb4.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Online_articles_re_yrkj.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_online_banking_7jy4.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_online_connection_6778.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Online_everywhere_re_n3lr%20(1).png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Online_everywhere_re_n3lr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Online_popularity_re_nm0s.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_online_test_gba7.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_online_wishes_dlmr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_pair_programming_njlp.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_programmer_imem.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_programming_2svr.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Progress_data_re_rv4p.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Progress_indicator_re_4o4n.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Progress_overview_re_tvcl.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_progressive_app_m9ms.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Public_discussion_re_w9up.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_remotely_2j6y.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_researching_22gp.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Secure_server_re_8wsq.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_server_cluster_jwwq.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_server_down_s4lk.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Server_push_re_303w.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Shared_workspace_re_3gsu.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Site_content_re_4ctl.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Social_bio_re_0t9u.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_social_girl_562b.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_social_interaction_cy9i.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_software_engineer_lvl5.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_speed_test_wxl0.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_start_building_vqhd.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_swipe_options_2e4v.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Timeline_re_aw6g.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_two_factor_authentication_namy.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Usability_testing_re_uu1g.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_version_control_re_mg66.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_voice_interface_eckp.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_web_browsing_p77h.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_web_development_w2vv.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_web_devices_ad58.png
-     - https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_work_together_h63l.png
+     - http://img.cai2.wang/undraw_3d_modeling_h60h.png
+     - http://img.cai2.wang/undraw_add_color_19gv.png
+     - http://img.cai2.wang/undraw_Add_tasks_re_s5yj.png
+     - http://img.cai2.wang/undraw_Chat_bot_re_e2gj.png
+     - http://img.cai2.wang/undraw_circuit_board_4c4d.png
+     - http://img.cai2.wang/undraw_circuit_sdmr.png
+     - http://img.cai2.wang/undraw_cloud_files_wmo8.png
+     - http://img.cai2.wang/undraw_cloud_hosting_aodd.png
+     - http://img.cai2.wang/undraw_code_inspection_bdl7.png
+     - http://img.cai2.wang/undraw_Code_thinking_re_gka2.png
+     - http://img.cai2.wang/undraw_Coding_re_iv62.png
+     - http://img.cai2.wang/undraw_content_team_3epn.png
+     - http://img.cai2.wang/undraw_data_input_fxv2.png
+     - http://img.cai2.wang/undraw_data_processing_yrrv.png
+     - http://img.cai2.wang/undraw_Decide_re_ixfw.png
+     - http://img.cai2.wang/undraw_Design_notes_re_eklr.png
+     - http://img.cai2.wang/undraw_Dev_focus_re_6iwt.png
+     - http://img.cai2.wang/undraw_dev_productivity_umsq.png
+     - http://img.cai2.wang/undraw_developer_activity_bv83.png
+     - http://img.cai2.wang/undraw_digital_currency_qpak.png
+     - http://img.cai2.wang/undraw_Domain_names_re_0uun.png
+     - http://img.cai2.wang/undraw_fashion_blogging_w9ol.png
+     - http://img.cai2.wang/undraw_feeling_proud_qne1.png
+     - http://img.cai2.wang/undraw_Firmware_jw6u.png
+     - http://img.cai2.wang/undraw_fitting_piece_iilo.png
+     - http://img.cai2.wang/undraw_fixing_bugs_w7gi.png
+     - http://img.cai2.wang/undraw_Freelancer_re_irh4.png
+     - http://img.cai2.wang/undraw_good_team_m7uu.png
+     - http://img.cai2.wang/undraw_hacker_mind_6y85.png
+     - http://img.cai2.wang/undraw_heatmap_uyye.png
+     - http://img.cai2.wang/undraw_In_progress_re_m1l6.png
+     - http://img.cai2.wang/undraw_interaction_design_odgc.png
+     - http://img.cai2.wang/undraw_Internet_on_the_go_re_vben.png
+     - http://img.cai2.wang/undraw_just_browsing_m0vg.png
+     - http://img.cai2.wang/undraw_Mind_map_re_nlb6.png
+     - http://img.cai2.wang/undraw_miro_qvwm.png
+     - http://img.cai2.wang/undraw_Mobile_app_re_catg.png
+     - http://img.cai2.wang/undraw_mobile_browsers_lib5.png
+     - http://img.cai2.wang/undraw_mobile_development_8gyo.png
+     - http://img.cai2.wang/undraw_mobile_interface_wakp.png
+     - http://img.cai2.wang/undraw_New_notifications_re_xpcv.png
+     - http://img.cai2.wang/undraw_next_tasks_iubr.png
+     - http://img.cai2.wang/undraw_noted_pc9f.png
+     - http://img.cai2.wang/undraw_online_art_bgb4.png
+     - http://img.cai2.wang/undraw_Online_articles_re_yrkj.png
+     - http://img.cai2.wang/undraw_online_banking_7jy4.png
+     - http://img.cai2.wang/undraw_online_connection_6778.png
+     - http://img.cai2.wang/undraw_Online_everywhere_re_n3lr.png
+     - http://img.cai2.wang/undraw_Online_popularity_re_nm0s.png
+     - http://img.cai2.wang/undraw_online_test_gba7.png
+     - http://img.cai2.wang/undraw_online_wishes_dlmr.png
+     - http://img.cai2.wang/undraw_pair_programming_njlp.png
+     - http://img.cai2.wang/undraw_programmer_imem.png
+     - http://img.cai2.wang/undraw_programming_2svr.png
+     - http://img.cai2.wang/undraw_Progress_data_re_rv4p.png
+     - http://img.cai2.wang/undraw_Progress_indicator_re_4o4n.png
+     - http://img.cai2.wang/undraw_Progress_overview_re_tvcl.png
+     - http://img.cai2.wang/undraw_progressive_app_m9ms.png
+     - http://img.cai2.wang/undraw_Public_discussion_re_w9up.png
+     - http://img.cai2.wang/undraw_remotely_2j6y.png
+     - http://img.cai2.wang/undraw_researching_22gp.png
+     - http://img.cai2.wang/undraw_Secure_server_re_8wsq.png
+     - http://img.cai2.wang/undraw_server_cluster_jwwq.png
+     - http://img.cai2.wang/undraw_server_down_s4lk.png
+     - http://img.cai2.wang/undraw_Server_push_re_303w.png
+     - http://img.cai2.wang/undraw_Shared_workspace_re_3gsu.png
+     - http://img.cai2.wang/undraw_Site_content_re_4ctl.png
+     - http://img.cai2.wang/undraw_Social_bio_re_0t9u.png
+     - http://img.cai2.wang/undraw_social_girl_562b.png
+     - http://img.cai2.wang/undraw_social_interaction_cy9i.png
+     - http://img.cai2.wang/undraw_software_engineer_lvl5.png
+     - http://img.cai2.wang/undraw_speed_test_wxl0.png
+     - http://img.cai2.wang/undraw_start_building_vqhd.png
+     - http://img.cai2.wang/undraw_swipe_options_2e4v.png
+     - http://img.cai2.wang/undraw_Timeline_re_aw6g.png
+     - http://img.cai2.wang/undraw_two_factor_authentication_namy.png
+     - http://img.cai2.wang/undraw_Usability_testing_re_uu1g.png
+     - http://img.cai2.wang/undraw_version_control_re_mg66.png
+     - http://img.cai2.wang/undraw_voice_interface_eckp.png
+     - http://img.cai2.wang/undraw_web_browsing_p77h.png
+     - http://img.cai2.wang/undraw_web_development_w2vv.png
+     - http://img.cai2.wang/undraw_web_devices_ad58.png
+     - http://img.cai2.wang/undraw_work_together_h63l.png
 
 # Replace Broken Images (替換無法顯示的圖片)
-# https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/friend_404.gif
+# http://img.cai2.wang/friend_404.gif
 error_img:
-  flink: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/friend_404.gif
-  post_page: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/404.jpg
+  flink: http://img.cai2.wang/friend_404.gif
+  post_page: http://img.cai2.wang/404.jpg
 
 # A simple 404 page
 error_404:
   enable: true
   subtitle: "页面没有找到"
-  background: https://i.loli.net/2020/05/19/aKOcLiyPl2JQdFD.png
+  background: http://img.cai2.wang/aKOcLiyPl2JQdFD.png
 
 post_meta:
   page: # Home Page
@@ -281,10 +280,10 @@ post_copyright:
 reward:
   enable: true
   QR_code:
-     - img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/wechat.jpg
+     - img: http://img.cai2.wang/wechat.jpg
        link:
        text: 微信
-     - img: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/alipay.jpg
+     - img: http://img.cai2.wang/alipay.jpg
        link:
        text: 支付宝
 
@@ -502,7 +501,7 @@ footer:
   owner:
     enable: true
     since: 2021
-  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/icp.png"><span>备案号：豫ICP备2021022101号</span></a>
+  custom_text: <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="http://img.cai2.wang/icp.png"><span>备案号：豫ICP备2021022101号</span></a>
   copyright: true # Copyright of theme and framework
 
 # Analysis
@@ -737,7 +736,7 @@ aside:
       enable: false
       icon: fab fa-github
       text: Fork Me
-      link: https://github.com/Cai2w/Cai2w.github.io
+      link: https://github.com/Cai2w/blog
   card_announcement:
     enable: false
     content: 王菜菜的个人博客
@@ -905,7 +904,7 @@ pangu:
 lazyload:
   enable: true
   field: post # site/post
-  placeholder: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/loading.gif
+  placeholder: http://img.cai2.wang/loading.gif
   blur: false
 
 # PWA
@@ -944,85 +943,85 @@ inject:
 CDN:
   # main
   main_css: /css/index.css
-  jquery: https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js
+  jquery: http://img.cai2.wang/jquery.min.js
   main: /js/main.js
   utils: /js/utils.js
 
   # pjax
-  pjax: https://cdn.jsdelivr.net/npm/pjax/pjax.min.js
+  pjax: http://img.cai2.wang/pjax.min.js
 
   # comments
-  gitalk: https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js
-  gitalk_css: https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css
-  valine: https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js
-  disqusjs: https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqus.js
-  disqusjs_css: https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqusjs.css
-  utterances: https://utteranc.es/client.js
-  twikoo: https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js
-  waline: https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js
+  gitalk: http://img.cai2.wang/gitalk.min.js
+  gitalk_css: http://img.cai2.wang/gitalk.min.css
+  valine: http://img.cai2.wang/Valine.min.js
+  disqusjs: http://img.cai2.wang/disqus.js
+  disqusjs_css: http://img.cai2.wang/disqusjs.css
+  utterances: http://img.cai2.wang/client.js
+  twikoo: http://img.cai2.wang/twikoo.all.min.js
+  waline: http://img.cai2.wang/Waline.min.js
 
   # share
-  addtoany: https://static.addtoany.com/menu/page.js
-  sharejs: https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js
-  sharejs_css: https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css
+  addtoany: http://img.cai2.wang/page.js
+  sharejs: http://img.cai2.wang/social-share.min.js
+  sharejs_css: http://img.cai2.wang/share.min.css
 
   # search
   local_search: /js/search/local-search.js
   algolia_js: /js/search/algolia.js
-  algolia_search: https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js
-  algolia_search_css: https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css
+  algolia_search: http://img.cai2.wang/instantsearch.min.js
+  algolia_search_css: http://img.cai2.wang/instantsearch.min.css
 
   # math
-  mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  katex: https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css
-  katex_copytex: https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js
-  katex_copytex_css: https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css
-  mermaid: https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
+  mathjax: http://img.cai2.wang/tex-mml-chtml.js
+  katex: http://img.cai2.wang/katex.min.css
+  katex_copytex: http://img.cai2.wang/copy-tex.min.js
+  katex_copytex_css: http://img.cai2.wang/copy-tex.css
+  mermaid: http://img.cai2.wang/mermaid.min.js
 
   # count
-  busuanzi: //busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+  busuanzi: http://img.cai2.wang/busuanzi.pure.mini.js
 
   # background effect
-  canvas_ribbon: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js
-  canvas_fluttering_ribbon: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js
-  canvas_nest: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js
+  canvas_ribbon: http://img.cai2.wang/canvas-ribbon.min.js
+  canvas_fluttering_ribbon: http://img.cai2.wang/canvas-fluttering-ribbon.min.js
+  canvas_nest: http://img.cai2.wang/canvas-nest.min.js
 
-  lazyload: https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js
-  instantpage: https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js
-  typed: https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js
-  pangu: https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js
+  lazyload: http://img.cai2.wang/lazyload.iife.min.js
+  instantpage: http://img.cai2.wang/instantpage.min.js
+  typed: http://img.cai2.wang/typed.min.js
+  pangu: http://img.cai2.wang/pangu.min.js
 
   # photo
-  fancybox_css: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css
-  fancybox: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js
-  medium_zoom: https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js
+  fancybox_css: http://img.cai2.wang/jquery.fancybox.min.css
+  fancybox: http://img.cai2.wang/jquery.fancybox.min.js
+  medium_zoom: http://img.cai2.wang/medium-zoom.min.js
 
   # snackbar
-  snackbar_css: https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css
-  snackbar: https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js
+  snackbar_css: http://img.cai2.wang/snackbar.min.css
+  snackbar: http://img.cai2.wang/snackbar.min.js
 
   # effect
-  activate_power_mode: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js
-  fireworks: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js
-  click_heart: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js
-  ClickShowText: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js
+  activate_power_mode: http://img.cai2.wang/activate-power-mode.min.js
+  fireworks: http://img.cai2.wang/fireworks.min.js
+  click_heart: http://img.cai2.wang/click-heart.min.js
+  ClickShowText: http://img.cai2.wang/click-show-text.min.js
 
   # fontawesome
-  fontawesome: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css
+  fontawesome: http://img.cai2.wang/all.min.css
 
   # Conversion between Traditional and Simplified Chinese
   translate: /js/tw_cn.js
 
   # justifiedGallery
-  justifiedGallery_js: https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js
-  justifiedGallery_css: https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css
+  justifiedGallery_js: http://img.cai2.wang/jquery.justifiedGallery.min.js
+  justifiedGallery_css: http://img.cai2.wang/justifiedGallery.min.css
 
   # aplayer
-  aplayer_css: https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css
-  aplayer_js: https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js
-  meting_js: https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js
+  aplayer_css: http://img.cai2.wang/APlayer.min.css
+  aplayer_js: http://img.cai2.wang/APlayer.min.js
+  meting_js: http://img.cai2.wang/Meting.min.js
 
   # Prism.js
-  prismjs_js: https://cdn.jsdelivr.net/npm/prismjs/prism.min.js
-  prismjs_lineNumber_js: https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js
-  prismjs_autoloader: https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js
+  prismjs_js: http://img.cai2.wang/prism.min.js
+  prismjs_lineNumber_js: http://img.cai2.wang/prism-line-numbers.min.js
+  prismjs_autoloader: http://img.cai2.wang/prism-autoloader.min.js

@@ -2,8 +2,8 @@
   class_desc: 那些人，那些事
   link_list:
     - name: Caicai
-      link: https://blog.cai2.wang/
-      avatar: https://blog.cai2.wang/img/avatar.jpg
+      link: http://blog.cai2.wang/
+      avatar: http://img.cai2.wang/avatar.jpg
       descr: 你现在的你努力，是为了以后有更多的选择
 
     - name: Ned
