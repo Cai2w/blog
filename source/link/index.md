@@ -2,7 +2,7 @@
 title: 友情链接
 date: 2021-08-07 23:39:19
 type: "link"
-top_img: http://img.cai2.wang/link.jpg
+top_img: https://img.cai2.wang/link.jpg
 ---
 
 ## 申请友链格式

@@ -7,7 +7,7 @@ categories:
 - Java
 description:
 sticky: 1
-cover: http://img.cai2.wang/undraw_interaction_design_odgc.png
+cover: https://img.cai2.wang/undraw_interaction_design_odgc.png
 ---
 
 ## 编程基础

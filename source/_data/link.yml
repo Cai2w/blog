@@ -3,7 +3,7 @@
   link_list:
     - name: Caicai
       link: http://blog.cai2.wang/
-      avatar: http://img.cai2.wang/avatar.jpg
+      avatar: https://img.cai2.wang/avatar.jpg
       descr: 你现在的你努力，是为了以后有更多的选择
 
     - name: Ned

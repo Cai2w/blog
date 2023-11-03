@@ -7,7 +7,7 @@ categories:
 - Docker
 description: Docker安装
 sticky:
-cover: http://img.cai2.wang/undraw_mobile_development_8gyo.png
+cover: https://img.cai2.wang/undraw_mobile_development_8gyo.png
 ---
 
 **看完本文📖**
@@ -54,7 +54,7 @@ cover: http://img.cai2.wang/undraw_mobile_development_8gyo.png
 
   1. 保证CentOS7能上外网
 
-  <img src="http://img.cai2.wang/image-20220729022533542.png" alt="" style="zoom: 80%;" />
+  <img src="https://img.cai2.wang/image-20220729022533542.png" alt="" style="zoom: 80%;" />
 
   2. `yum -y install gcc`
   3. `yum -y install gcc-c++`

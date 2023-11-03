@@ -7,7 +7,7 @@ categories:
 - Docker
 description:
 sticky:
-cover: http://img.cai2.wang/undraw_mobile_interface_wakp.png
+cover: https://img.cai2.wang/undraw_mobile_interface_wakp.png
 ---
 
 **看完本文📖**
