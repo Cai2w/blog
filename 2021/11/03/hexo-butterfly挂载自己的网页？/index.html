@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>hexo-butterfly挂载自己的网页？ | Caicai</title><meta name="keywords" content="hexo"><meta name="author" content="Caicai"><meta name="copyright" content="Caicai"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如果你想把自己写的静态网页也放到博客中，那这篇文章或许能帮助你  步骤：  前往你的 Hexo 博客的根目录  输入hexo new page tags  你会找到source&#x2F;tags&#x2F;index.md这个文件  删除这个文件，只保留文件夹  将写好的网页内容放到该文件夹中  在_config.butterfly.xml的menu中加上你创建的文件夹名，以及喜欢的图标  在_config.xm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo-butterfly挂载自己的网页？">
+<meta property="og:url" content="http://blog.cai2.wang/2021/11/03/hexo-butterfly%E6%8C%82%E8%BD%BD%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E9%A1%B5%EF%BC%9F/index.html">
+<meta property="og:site_name" content="Caicai">
+<meta property="og:description" content="如果你想把自己写的静态网页也放到博客中，那这篇文章或许能帮助你  步骤：  前往你的 Hexo 博客的根目录  输入hexo new page tags  你会找到source&#x2F;tags&#x2F;index.md这个文件  删除这个文件，只保留文件夹  将写好的网页内容放到该文件夹中  在_config.butterfly.xml的menu中加上你创建的文件夹名，以及喜欢的图标  在_config.xm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.cai2.wang/undraw_Code_thinking_re_gka2.png">
+<meta property="article:published_time" content="2021-11-03T09:08:05.000Z">
+<meta property="article:modified_time" content="2023-11-03T15:39:25.879Z">
+<meta property="article:author" content="Caicai">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.cai2.wang/undraw_Code_thinking_re_gka2.png"><link rel="shortcut icon" href="https://img.cai2.wang/%E9%9D%92%E8%8F%9C.png"><link rel="canonical" href="http://blog.cai2.wang/2021/11/03/hexo-butterfly%E6%8C%82%E8%BD%BD%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E9%A1%B5%EF%BC%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://img.cai2.wang/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://img.cai2.wang/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://img.cai2.wang/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://img.cai2.wang/jquery.justifiedGallery.min.js',
+      css: 'https://img.cai2.wang/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://img.cai2.wang/jquery.fancybox.min.js',
+      css: 'https://img.cai2.wang/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'hexo-butterfly挂载自己的网页？',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-11-03 23:39:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><link rel="stylesheet" href="/css/iconfont.css"><link rel="stylesheet" href="/css/index.min.css"><link rel="stylesheet" href="/css/bg.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://img.cai2.wang/avatar.jpg" onerror="onerror=null;src='https://img.cai2.wang/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">60</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> 视频</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-seedling"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Caicai</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 娱乐</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> 视频</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-seedling"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">hexo-butterfly挂载自己的网页？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-03T09:08:05.000Z" title="发表于 2021-11-03 17:08:05">2021-11-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-03T15:39:25.879Z" title="更新于 2023-11-03 23:39:25">2023-11-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B0%8F%E7%9F%A5%E8%AF%86/">小知识</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">121</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div><article class="post-content" id="article-container"><blockquote>
+<p>如果你想把自己写的静态网页也放到博客中，那这篇文章或许能帮助你</p>
+</blockquote>
+<p>步骤：</p>
+<ol>
+<li><p>前往你的 Hexo 博客的根目录</p>
+</li>
+<li><p>输入<code>hexo new page tags</code></p>
+</li>
+<li><p>你会找到<code>source/tags/index.md</code>这个文件</p>
+</li>
+<li><p>删除这个文件，只保留文件夹</p>
+</li>
+<li><p>将写好的网页内容放到该文件夹中</p>
+</li>
+<li><p>在<code>_config.butterfly.xml</code>的<code>menu</code>中加上你创建的文件夹名，以及喜欢的图标</p>
+</li>
+<li><p>在<code>_config.xml</code>的<code>skip_render</code>选项中添加 <code>- “tags/**”</code></p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Caicai</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://blog.cai2.wang/2021/11/03/hexo-butterfly%E6%8C%82%E8%BD%BD%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BD%91%E9%A1%B5%EF%BC%9F/">http://blog.cai2.wang/2021/11/03/hexo-butterfly挂载自己的网页？/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://blog.cai2.wang" target="_blank">Caicai</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/hexo/">hexo</a></div><div class="post_share"><div class="social-share" data-image="https://img.cai2.wang/undraw_Code_thinking_re_gka2.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://img.cai2.wang/share.min.css" media="print" onload="this.media='all'"><script src="https://img.cai2.wang/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://img.cai2.wang/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="https://img.cai2.wang/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://img.cai2.wang/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="https://img.cai2.wang/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/09/%E5%9B%BE%E7%89%87%E8%BD%AC%E7%A0%81%EF%BC%9F%E7%BC%A9%E7%95%A5%E5%9B%BE%E7%94%9F%E6%88%90%EF%BC%9F%E8%BF%99%E4%B8%AA%E5%B7%A5%E5%85%B7%E5%B8%A6%E4%BD%A0%E9%A3%9E%EF%BC%81%EF%BC%81/"><img class="prev-cover" src="https://img.cai2.wang/undraw_fashion_blogging_w9ol.png" onerror="onerror=null;src='https://img.cai2.wang/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">图片转码？缩略图生成？这个工具带你飞！！</div></div></a></div><div class="next-post pull-right"><a href="/2021/10/07/%E9%9D%A2%E8%AF%95/"><img class="next-cover" src="https://img.cai2.wang/undraw_mobile_interface_wakp.png" onerror="onerror=null;src='https://img.cai2.wang/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">面试</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://img.cai2.wang/avatar.jpg" onerror="this.onerror=null;this.src='https://img.cai2.wang/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Caicai</div><div class="author-info__description">没有人能让你输，除非你不想赢</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">60</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Cai2w" target="_blank" title="Github"><i class="iconfont icon-github card_icon"></i></a><a class="social-icon" href="https://gitee.com/Cai2w" target="_blank" title="Gitee"><i class="iconfont icon-gitee card_icon"></i></a><a class="social-icon" href="https://juejin.cn/user/765678299915271/posts" target="_blank" title="掘金"><i class="iconfont icon-juejin-logo card_icon"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/%E5%B9%B6%E5%8F%91%E5%8C%85/" title="并发包"><img src="https://img.cai2.wang/undraw_Online_articles_re_yrkj.png" onerror="this.onerror=null;this.src='https://img.cai2.wang/404.jpg'" alt="并发包"/></a><div class="content"><a class="title" href="/2023/01/31/%E5%B9%B6%E5%8F%91%E5%8C%85/" title="并发包">并发包</a><time datetime="2023-01-30T16:15:16.000Z" title="发表于 2023-01-31 00:15:16">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/%E5%90%8C%E6%AD%A5%E5%99%A8/" title="同步器"><img src="https://img.cai2.wang/undraw_Online_articles_re_yrkj.png" onerror="this.onerror=null;this.src='https://img.cai2.wang/404.jpg'" alt="同步器"/></a><div class="content"><a class="title" href="/2023/01/31/%E5%90%8C%E6%AD%A5%E5%99%A8/" title="同步器">同步器</a><time datetime="2023-01-30T16:14:41.000Z" title="发表于 2023-01-31 00:14:41">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池"><img src="https://img.cai2.wang/undraw_Timeline_re_aw6g.png" onerror="this.onerror=null;this.src='https://img.cai2.wang/404.jpg'" alt="线程池"/></a><div class="content"><a class="title" href="/2023/01/31/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池">线程池</a><time datetime="2023-01-30T16:13:55.000Z" title="发表于 2023-01-31 00:13:55">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/%E6%97%A0%E9%94%81/" title="无锁"><img src="https://img.cai2.wang/undraw_developer_activity_bv83.png" onerror="this.onerror=null;this.src='https://img.cai2.wang/404.jpg'" alt="无锁"/></a><div class="content"><a class="title" href="/2023/01/31/%E6%97%A0%E9%94%81/" title="无锁">无锁</a><time datetime="2023-01-30T16:13:19.000Z" title="发表于 2023-01-31 00:13:19">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/01/31/%E5%86%85%E5%AD%98/" title="内存"><img src="https://img.cai2.wang/undraw_Internet_on_the_go_re_vben.png" onerror="this.onerror=null;this.src='https://img.cai2.wang/404.jpg'" alt="内存"/></a><div class="content"><a class="title" href="/2023/01/31/%E5%86%85%E5%AD%98/" title="内存">内存</a><time datetime="2023-01-30T16:12:48.000Z" title="发表于 2023-01-31 00:12:48">2023-01-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By Caicai</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/recordQuery"><img class="icp-icon" src="https://img.cai2.wang/icp.png"><span>备案号：豫ICP备2021022101号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://img.cai2.wang/instantpage.min.js" type="module"></script><script src="https://img.cai2.wang/lazyload.iife.min.js"></script><script src="https://img.cai2.wang/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://img.cai2.wang/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    getScript('https://img.cai2.wang/mermaid.min.js').then(() => {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      true && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '7eUKozcWkkLW5P8R2dqoj5qV-gzGzoHsz',
+      appKey: 'wVDMFNui8WIyesKsN5QMjB4J',
+      placeholder: '记得留下你的昵称和邮箱,可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://img.cai2.wang/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://img.cai2.wang/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="https://img.cai2.wang/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html>
