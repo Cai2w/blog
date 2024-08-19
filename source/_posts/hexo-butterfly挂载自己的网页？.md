@@ -7,7 +7,7 @@ categories:
 - 小知识
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Code_thinking_re_gka2.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Code_thinking_re_gka2.png
 ---
 
 > 如果你想把自己写的静态网页也放到博客中，那这篇文章或许能帮助你

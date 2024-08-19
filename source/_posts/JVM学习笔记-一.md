@@ -8,7 +8,7 @@ categories:
 - [Java,JVM]
 description: 该篇文章包含内存结构的相关知识，其中包含程序计数器、虚拟机栈、本地方法栈、堆、方法区、直接内存
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_developer_activity_bv83.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_developer_activity_bv83.png
 ---
 
 ## 引言
@@ -30,7 +30,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_developer_activity_bv83.
 
 JVM、JRE、JDK 的关系如下图所示
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003172846.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003172846.png)
 
 ### 学习JVM有什么用？
 
@@ -40,13 +40,13 @@ JVM、JRE、JDK 的关系如下图所示
 
 ### 常见的JVM
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003004321.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003004321.png)
 
 我们主要学习的是 HotSpot 版本的虚拟机。
 
 ### 学习路线
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211110234226.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211110234226.png)
 
 ClassLoader：Java 代码编译成二进制后，会经过类加载器，这样才能加载到 JVM 中运行。
 Method Area：类是放在方法区中。
@@ -58,7 +58,7 @@ Heap：类的实例对象。
 
 ### 程序计数器
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083245.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003083245.png)
 
 #### 定义
 
@@ -72,7 +72,7 @@ Program Counter Register 程序计数器（寄存器）
 
 #### 作用
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003005633.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003005633.png)
 
 - 解释器会解释指令为机器码交给 cpu 执行，**程序计数器会记录下一条jvm指令的执行地址**，这样下一次解释器会从程序计数器拿到指令地址，获取对应指令然后进行解释执行。
 
@@ -80,7 +80,7 @@ Program Counter Register 程序计数器（寄存器）
 
 ### 虚拟机栈
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003083648.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003083648.png)
 
 #### 定义
 
@@ -128,7 +128,7 @@ Java Virtual Machine Stacks （Java 虚拟机栈）
 
 ### 本地方法栈
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091103.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003091103.png)
 
 > jvm调用一些本地方法时需要给这些本地方法提供的一个内存空间。一些带有 native 关键字的方法就是需要 JAVA 去调用本地的C或者C++方法，因为 JAVA 有时候没法直接和操作系统底层交互，所以需要用到本地方法栈，服务于带 native 关键字的方法。
 
@@ -137,7 +137,7 @@ Java Virtual Machine Stacks （Java 虚拟机栈）
 > - 程序计数器、虚拟机栈、本地方法栈都是线程私有的
 > - 堆、方法区时线程共享的区
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003091601.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003091601.png)
 
 #### 定义
 
@@ -167,7 +167,7 @@ java.lang.OutofMemoryError ：java heap space. 堆内存溢出
 
 ### 方法区
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003100533.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003100533.png)
 
 #### 定义
 
@@ -181,9 +181,9 @@ Java 虚拟机有一个在所有 Java 虚拟机线程之间共享的方法区域
 
 #### 组成
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113021.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003113021.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003113034.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003113034.png)
 
 #### 方法区内存溢出
 
@@ -217,11 +217,11 @@ public class Test {
 
 然后使用 `javap -v Test.class` 命令反编译查看结果。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121254.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003121254.png)
 
 每条指令都会对应常量池表中一个地址，常量池表中的地址可能对应着一个类名、方法名、参数类型等信息。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003121312.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003121312.png)
 
 **常量池**：
 就是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量信息
@@ -368,13 +368,13 @@ public class Code_05_StringTableTest {
 
 文件读写流程：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170018.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003170018.png)
 
 因为 java 不能直接操作文件管理，需要切换到内核态，使用本地方法进行操作，然后读取磁盘文件，会在系统内存中创建一个缓冲区，将数据读到系统缓冲区， 然后在将系统缓冲区数据，复制到 java 堆内存中。缺点是数据存储了两份，在系统内存中有一份，java 堆中有一份，造成了不必要的复制。
 
 **使用了 DirectBuffer 文件读取流程**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003170052.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003170052.png)
 
 直接内存是操作系统和 Java 代码都可以访问的一块区域，无需将代码从系统内存复制到 Java 堆内存，从而提高了效率。
 

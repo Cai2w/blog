@@ -7,7 +7,7 @@ categories:
 - Docker
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_mobile_interface_wakp.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_mobile_interface_wakp.png
 ---
 
 **看完本文📖**

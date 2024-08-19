@@ -5,7 +5,7 @@ tags:
 - 主从复制
 categories:
 - Java
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Selected_options_re_vtjd.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Selected_options_re_vtjd.png
 ---
 
 ## 准备工作
@@ -14,7 +14,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Selected_options_re_vtjd
 
 - 通过VMware,复制三台虚拟机：master、slave1、slave2
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-08_22-12-53.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/Snipaste_2021-08-08_22-12-53.jpg)
 
 - 修改IP地址
 
@@ -79,7 +79,7 @@ tar -xvf mysql-5.7.26-1.el7.x86_64.rpm-bundle.tar
 4. I/O线程接收到 binlog 内容后，将内容写入到本地的 relay-log(中继日志)。
 5. SQL线程读取I/O线程写入的relay-log，并且根据 relay-log 的内容对从数据库做对应的操作。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1628240013898-b1562474-5ed0-4bac-8608-28339eede028.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/1628240013898-b1562474-5ed0-4bac-8608-28339eede028.png)
 
 > 知道了主从复制的原理，我们也可以很清楚的知道，读写分离的写操作是必须要在master节点上进行，因为salve节点实现数据统一根据的是master节点的binlog，我们如果在slave节点进行写操作，在master节点进行读操作，二者数据是不会统一的，主从复制也就失去的意义。
 >
@@ -130,11 +130,11 @@ GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'slave2'@'192.168.200.13';
 
 不出意外的话，这里mysql会报错：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-11_22-33-46.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/Snipaste_2021-08-11_22-33-46.jpg)
 
 **原因是因为密码设置的过于简单会报错,MySQL有密码设置的规范，具体是与validate_password_policy的值有关,下图表明该值规则**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20190226144810183.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20190226144810183.png)
 
 我们可以看一下mysql的初始密码规则
 
@@ -142,7 +142,7 @@ GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'slave2'@'192.168.200.13';
 SHOW VARIABLES LIKE 'validate_password%';
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-11_22-41-28.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/Snipaste_2021-08-11_22-41-28.jpg)
 
 修改密码的验证策略：
 
@@ -207,7 +207,7 @@ show master status;
 
 - 主数据库状态显示如下：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210811224928.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210811224928.png)
 
 - 连接从数据库的mysql的客户端
 
@@ -418,7 +418,7 @@ show slave status \G;
 systemctl status firewalld
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210811231537.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210811231537.png)
 
 果然，防火墙开着的，由于我防火墙没有放行3306端口（虽然别的端口也没放行）。
 
@@ -431,7 +431,7 @@ systemctl stop firewalld
 systemctl status firewalld
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210811231829.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210811231829.png)
 
 防火墙关闭成功。
 
@@ -513,19 +513,19 @@ Master_SSL_Verify_Server_Cert: No
 
 - 在主实例中创建一个数据库`mall`；
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210811232259.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210811232259.png)
 
 - 在从实例中查看数据库，发现也有一个`mall`数据库，可以判断主从复制已经搭建成功。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210811232335.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210811232335.png)
 
 至此，我们完成了mysql的主从复制。
 
 再多嘴一句，配置好主从复制，我们如果使用windows上的连接工具（博主使用的是navicat）连接我们虚拟机的数据库时，可能会出现下面这些情况（要会举一反三）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235600.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235600.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Snipaste_2021-08-12_00-17-49.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/Snipaste_2021-08-12_00-17-49.jpg)
 
 注意观察：**这里提示的时192.168.200.1连接出问题，而我连接的mysql地址是192.168.200.11（master）**，应该是权限不足，root权限只能在本地访问，我们可以修改root权限，也可以新建一个用户用来远程访问：
 
@@ -540,7 +540,7 @@ grant all privileges on *.* to 用户名@”%” identified by “123456” ;
 
 再次连接：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235823.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/QQ%E5%9B%BE%E7%89%8720210811235823.png)
 
 成功。
 

@@ -8,7 +8,7 @@ categories:
 - [Java,JVM]
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_digital_currency_qpak.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_digital_currency_qpak.png
 ---
 
 ## 垃圾回收
@@ -20,7 +20,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_digital_currency_qpak.pn
 当一个对象被引用时，就当引用对象的值加1，当一个变量不在引用该对象时，计数就减1，当值为 0 时，就表示该对象不被引用，可以被垃圾收集器回收。
 这个引用计数法听起来不错，但是有一个弊端，如下图所示，循环引用时，两个对象的计数都为1，导致两个对象都无法被释放。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003202713.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003202713.png)
 
 #### 可达性分析算法
 
@@ -55,11 +55,11 @@ Eclipse Memory Analyzer 工具进行分析。
 第一步：
 使用 jps 命令，查看程序的进程
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003204508.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003204508.png)
 
 第二步：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003204528.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003204528.png)
 
 使用 `jmap -dump:format=b,live,file=1.bin 16104` 命令转储文件
 dump：转储文件
@@ -68,13 +68,13 @@ file：文件名
 16104：进程的id
 第三步：打开 Eclipse Memory Analyzer 对 1.bin 文件进行分析。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003204559.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003204559.png)
 
 分析的 gc root，找到了 ArrayList 对象，然后将 list 置为null，再次转储，那么 list 对象就会被回收。
 
 #### 四种引用
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003211634.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003211634.png)
 
 1. 强引用
    只有所有 GC Roots 对象都不通过【强引用】引用该对象，该对象才能被垃圾回收
@@ -135,12 +135,12 @@ public class Code_08_SoftReferenceTest {
 method1 方法解析：
 首先会设置一个堆内存的大小为 20m，然后运行 mehtod1 方法，会抛异常，堆内存不足，因为 mehtod1 中的 list 都是强引用。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003211809.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003211809.png)
 
 method2 方法解析：
 在 list 集合中存放了 软引用对象，当内存不足时，会触发 full gc，将软引用的对象回收。细节如图：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003211831.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003211831.png)
 
 上面的代码中，当软引用引用的对象被回收了，但是软引用还存在，所以，一般软引用需要搭配一个引用队列一起使用。
 修改 method2 如下：
@@ -174,7 +174,7 @@ method2 方法解析：
     }
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003211906.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003211906.png)
 
 **弱引用演示**
 
@@ -238,7 +238,7 @@ public class Code_09_WeakReferenceTest {
 - 速度较快
 - 会产生内存碎片
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003213713.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003213713.png)
 
 #### 标记整理
 
@@ -247,7 +247,7 @@ Mark Compact
 - 速度慢
 - 没有内存碎片
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003213743.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003213743.png)
 
 #### 复制
 
@@ -256,11 +256,11 @@ Copy
 - 不会有内存碎片
 - 需要占用两倍内存空间
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003213816.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003213816.png)
 
 ### 分代垃圾回收
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003224837.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003224837.png)
 
 - 新创建的对象首先分配在 eden 区
 - 新生代空间不足时，触发 minor gc ，eden 区 和 from 区存活的对象使用 - copy 复制到 to 中，存活的对象年龄加一，然后交换 from to
@@ -295,7 +295,7 @@ Copy
 - 单线程
 - 堆内存较少，适合个人电脑
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003234950.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003234950.png)
 
 ```java
 -XX:+UseSerialGC=serial + serialOld
@@ -322,7 +322,7 @@ Serial Old 是 Serial 收集器的老年代版本
 - 堆内存较大，多核 cpu
 - 让单位时间内，STW 的时间最短 0.2 0.2 = 0.4
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003235117.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003235117.png)
 
 ```java
 -XX:+UseParallelGC ~ -XX:+UsePrallerOldGC
@@ -359,7 +359,7 @@ Parallel Scavenge 收集器使用两个参数控制吞吐量：
 - 堆内存较大，多核 cpu
 - 尽可能让 STW 的单次时间最短 0.1 0.1 0.1 0.1 0.1 = 0.5
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211003235241.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211003235241.png)
 
 ```java
 -XX:+UseConcMarkSweepGC ~ -XX:+UseParNewGC ~ SerialOld
@@ -400,7 +400,7 @@ JDK8 并不是默认开启的，所需要参数开启
 
 **G1 垃圾回收阶段**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004145426.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004145426.png)
 
 Young Collection：对新生代垃圾收集
 Young Collection + Concurrent Mark：如果老年代内存到达一定的阈值了，新生代垃圾收集同时会执行一些并发的标记。
@@ -412,13 +412,13 @@ Mixed Collection：会对新生代 + 老年代 + 幸存区等进行混合收集�
 E：eden，S：幸存区，O：老年代
 新生代收集会产生 STW ！
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210210122339138.gif)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210210122339138.gif)
 
 **Young Collection + CM**
 在 Young GC 时会进行 GC Root 的初始化标记
 老年代占用堆空间比例达到阈值时，进行并发标记（不会STW），由下面的 JVM 参数决定 -XX:InitiatingHeapOccupancyPercent=percent （默认45%）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004145737.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004145737.png)
 
 **Mixed Collection**
 会对 E S O 进行**全面的回收**
@@ -430,7 +430,7 @@ E：eden，S：幸存区，O：老年代
 问：为什么有的老年代被拷贝了，有的没拷贝？
 因为指定了最大停顿时间，如果对所有老年代都进行回收，耗时可能过高。为了保证时间不超过设定的停顿时间，会回收最有价值的老年代（回收后，能够得到更多内存）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004145826.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004145826.png)
 
 **Full GC**
 G1 在老年代内存不足时（老年代所占内存超过阈值）
@@ -441,7 +441,7 @@ G1 在老年代内存不足时（老年代所占内存超过阈值）
 
 - 新生代回收的跨代引用（老年代引用新生代）问题
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004145905.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004145905.png)
 
 - 卡表 与 Remembered Set
   - Remembered Set 存在于E中，用于保存新生代对象对应的脏卡
@@ -449,7 +449,7 @@ G1 在老年代内存不足时（老年代所占内存超过阈值）
 - 在引用变更时通过 post-write barried + dirty card queue
 - concurrent refinement threads 更新 Remembered Set
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004145945.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004145945.png)
 
 **Remark**
 
@@ -460,7 +460,7 @@ G1 在老年代内存不足时（老年代所占内存超过阈值）
 - 灰色：正在处理中的
 - 白色：还未处理的
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004150017.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004150017.png)
 
 但是在并发标记过程中，有可能 A 被处理了以后未引用 C ，但该处理过程还未结束，在处理过程结束之前 A 引用了 C ，这时就会用到 remark 。
 过程如下
@@ -468,9 +468,9 @@ G1 在老年代内存不足时（老年代所占内存超过阈值）
 - 之前 C 未被引用，这时 A 引用了 C ，就会给 C 加一个写屏障，写屏障的指令会被执行，将 C 放入一个队列当中，并将 C 变为 处理中状态
 - 在并发标记阶段结束以后，重新标记阶段会 STW ，然后将放在该队列中的对象重新处理，发现有强引用引用它，就会处理它，由灰色变成黑色。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004150045.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004150045.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004150055.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004150055.png)
 
 **JDK 8u20 字符串去重**
 过程
@@ -502,7 +502,7 @@ G1 在老年代内存不足时（老年代所占内存超过阈值）
 - 回收时被优先考虑
 - G1会跟踪老年代所有incoming引用，如果老年代incoming引用为0的巨型对象就可以在新生代垃圾回收时处理掉
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211004150226.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211004150226.png)
 
 **JDK 9 并发标记起始时间的调整**
 

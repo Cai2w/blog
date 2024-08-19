@@ -8,7 +8,7 @@ categories:
 - ElasticSearch
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_fitting_piece_iilo.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_fitting_piece_iilo.png
 ---
 
 ## 下载ES安装包
@@ -19,7 +19,7 @@ ElasticSearch下载地址：[点我](https://www.elastic.co/downloads/past-relea
 
 如果你想要使用你自己配置好的 Java 版本，需要设置 `JAVA_HOME` 环境变量 —— [参考](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114143304.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211114143304.png)
 
 下载好之后，我们进行`tar`包解压
 
@@ -286,7 +286,7 @@ firewall-cmd --reload
 
 ElasticSearch应用时，我们常常会使用到中文，这样ElasticSearch原来的分词器就不够用了，需要安装一个中文分词器，用的多的就是IK分词器，下载地址（下载.zip包）：https://github.com/medcl/elasticsearch-analysis-ik/releases
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114163251.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211114163251.png)
 
 下载好之后，在ElasticSearch主目录下的plugins目录新建一个目录，然后将下载好的ik分词器压缩包放进去，再使用unzip解压:　
 
@@ -309,7 +309,7 @@ Kibana下载地址：https://www.elastic.co/downloads/past-releases#kibana
 
 同样的，下载编译好的包（7.15.1）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152259.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211114152259.png)
 
 然后解压，然后修改config/kibana.yml，添加ElasticSearch的节点配置
 
@@ -347,9 +347,9 @@ firewall-cmd --reload
 
 不过我们开发常用的就是它的Dev-Tools了，用来发送Restfull的请求来访问操作ElasticSearch：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152522.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211114152522.png)
 
 进入dev-tools后就可以自行操作了：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211114152543.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211114152543.png)
 

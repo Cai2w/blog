@@ -7,7 +7,7 @@ categories:
 - Linux
 description: 
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 ---
 
 ## Vi / Vim快捷键
@@ -255,7 +255,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/121.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/121.jpg)
 
 #### less 指令
 
@@ -264,7 +264,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/less.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/less.jpg)
 
 #### echo 指令
 
@@ -379,7 +379,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815115849.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815115849.png)
 
 > 案例 1: 按文件名：根据名称查找**/home** 目录下的 **hello.txt** 文件
 >
@@ -416,7 +416,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815120451.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815120451.png)
 
 > 案例 1: 请在 **hello.txt** 文件中，查找   **"yes"**所在行，并且显示行号
 >
@@ -471,7 +471,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815130556.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815130556.png)
 
 > 案例 1: 压缩多个文件，将 **/home/pig.txt** 和 **/home/cat.txt** 压缩成**pc.tar.gz** 
 >
@@ -564,7 +564,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 示意图：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815141316.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815141316.png)
 
 ### crond 任务调度
 
@@ -573,7 +573,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **常用选项**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815141149.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815141149.png)
 
 > 设置任务调度文件：/etc/crontab
 >
@@ -587,15 +587,15 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 5个占位符的说明
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815141502.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815141502.png)
 
 - **特殊符号的说明**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815141536.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815141536.png)
 
 - **特殊时间执行案例**：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815141712.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815141712.png)
 
 - **应用案例：**
 
@@ -638,7 +638,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 5. 画一个示意图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815142510.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815142510.png)
 
 - **at命令格式**
   - `at [选项] [时间]`
@@ -646,7 +646,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Coding_re_iv62.png
 
 - **at命令选项**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815142740.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815142740.png)
 
 - **at 时间定义**
 
@@ -668,19 +668,19 @@ at 指定时间的方法：
 
 > 案例 1：2 天后的下午 5 点执行 /bin/ls /home
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815144150.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815144150.png)
 
 > 案例 2：`atq` 命令来查看系统中没有执行的工作任务
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815144222.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815144222.png)
 
 > 案例 3：明天 17 点钟，输出时间到指定文件内 比如 /root/date100.log
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815144454.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815144454.png)
 
 > 案例 4：2 分钟后，输出时间到指定文件内 比如 /root/date200.log
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210815144654.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210815144654.png)
 
 > 案例 5：删除已经设置的任务 , atrm 编号
 >
@@ -696,7 +696,7 @@ at 指定时间的方法：
 - Linux 采用了一种叫“载入”的处理方法，它的整个文件系统中包含了一整套的文件和目录，且将一个分区和一个目录联系起来。这时要载入的一个分区将使它的存储空间在一个目录下获得
 - 示意图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817175124.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817175124.png)
 
 #### 硬盘说明
 
@@ -704,7 +704,7 @@ at 指定时间的方法：
 - 对于 IDE 硬盘，驱动器标识符为“hdx\~”,其中“hd”表明分区所在设备的类型，这里是指 IDE 硬盘了。“x”为盘号（a 为基本盘，b 为基本从属盘，c 为辅助主盘，d 为辅助从属盘）,“\~”代表分区，前四个分区用数字 1 到 4 表示，它们是主分区或扩展分区，从 5 开始就是逻辑分区。例，hda3 表示为第一个 IDE 硬盘上的第三个主分区或扩展分区,hdb2 表示为第二个 IDE 硬盘上的第二个主分区或扩展分区
 - 对于 SCSI 硬盘则标识为“sdx~”，SCSI 硬盘是用“sd”来表示分区所在设备的类型的，其余则和 IDE 硬盘的表示方法一样
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817175928.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817175928.png)
 
 #### 查看所有设备挂在情况
 
@@ -712,9 +712,9 @@ at 指定时间的方法：
   - `lsblk`
   - `lsblk -f`
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817175928.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817175928.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817180149.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817180149.png)
 
 > 其中`sdax`为分区情况，`MOUNTPOINT`为挂载目录
 
@@ -736,7 +736,7 @@ at 指定时间的方法：
 
 > 在【虚拟机】菜单中，选择【设置】，然后设备列表里添加硬盘，然后一路【下一步】，中间只有选择磁盘大小的地方需要修改，至到完成。然后重启系统（才能识别）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817180815.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817180815.png)
 
 #### 虚拟机增加硬盘步骤2
 
@@ -752,7 +752,7 @@ at 指定时间的方法：
 
 > 说明：开始分区后输入 `n`，新增分区，然后选择 `p` ，分区类型为主分区。两次回车默认剩余全部空间。最后输入 `w` 写入分区并退出，若不保存退出输入 `q`
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817181503.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817181503.png)
 
 #### 虚拟机增加硬盘步骤3
 
@@ -781,7 +781,7 @@ at 指定时间的方法：
 
 - 命令：`vim /etc/fstab`
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817183202.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817183202.png)
 
 添加完成之后，执行`mount –a`即刻生效
 
@@ -794,7 +794,7 @@ at 指定时间的方法：
 - 基本语法：`df -h`
 - 应用实例
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817183914.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817183914.png)
 
 #### 查询指定目录的磁盘占用情况
 
@@ -809,7 +809,7 @@ at 指定时间的方法：
 
 - 应用实例：查询 /opt 目录的磁盘占用情况，深度为
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817184603.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817184603.png)
 
 ### 磁盘情况-工作实用指令
 
@@ -831,13 +831,13 @@ at 指定时间的方法：
 
 - 以树状显示目录结构 tree 目录 ， 注意，如果没有 tree ,则使用 **yum install tree** 安装
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210817185319.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210817185319.png)
 
 ## 网络配置
 
 ### 原理图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115925.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820115925.png)
 
 ### 查看网络IP和网关
 
@@ -845,19 +845,19 @@ at 指定时间的方法：
 
 VMware：编辑—>虚拟网络编辑器
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115355.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820115355.png)
 
 #### 查看网关
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115453.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820115453.png)
 
 ### 查看 windows 环境的中 VMnet8 网络配置 (ipconfig 指令)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115631.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820115631.png)
 
 ### 查看 linux 的网络配置 ifconfig
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820115853.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820115853.png)
 
 ### ping 测试主机之间网络连通性
 
@@ -877,7 +877,7 @@ ping [www.baidu.com](http://www.baidu.com/)
 
 说明：登陆后，通过界面的来设置自动获取ip，特点：linux 启动后会自动获取 IP,缺点是每次自动获取的 ip 地址可能不一样
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820141935.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820141935.png)
 
 #### 第二种方法（指定ip）
 
@@ -964,7 +964,7 @@ ipconfig /flushdns	#手动清理 dns 缓存
 
 
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820151852.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820151852.png)
 
 ## 进程管理
 
@@ -975,7 +975,7 @@ ipconfig /flushdns	#手动清理 dns 缓存
 3. 一般系统的服务都是以后台进程的方式存在，而且都会常驻在系统中。直到关机才才结束
 4. 示意图：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820154056.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820154056.png)
 
 ### 显示系统执行的进程
 
@@ -988,7 +988,7 @@ ipconfig /flushdns	#手动清理 dns 缓存
   - `-u`：以用户的格式显示进程信息
   - `-x`：显示后台进程运行的参数
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820155939.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820155939.png)
 
 #### ps详解
 
@@ -1019,7 +1019,7 @@ ipconfig /flushdns	#手动清理 dns 缓存
 ps -ef|grep sshd
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820161044.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820161044.png)
 
 - UID：用户ID
 - PID：进程ID
@@ -1095,7 +1095,7 @@ kill -9 bash对应的进程号
 pstree -p
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165429.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820165429.png)
 
 > 案例 2：请你树状的形式进程的用户
 
@@ -1103,7 +1103,7 @@ pstree -p
 pstree -u
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165403.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820165403.png)
 
 ### 服务（service）管理
 
@@ -1116,11 +1116,11 @@ pstree -u
 * `service 服务名 [start | stop | restart | reload | status]`
 * 在 CentOS7.0 后 (我的是7.6)，很多服务不再使用 service ,而是 systemctl (后面专门讲)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165803.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820165803.png)
 
 * service 指令管理的服务在 `/etc/init.d` 查看
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820165938.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820165938.png)
 
 #### service管理指令案例
 
@@ -1143,7 +1143,7 @@ service network start
 setup
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820170311.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820170311.png)
 
 **\*表示开机自启动**
 
@@ -1165,7 +1165,7 @@ ls -l /etc/init.d
 
 * 开机流程说明：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820170658.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820170658.png)
 
 #### CentOS7 后运行级别说明
 
@@ -1175,7 +1175,7 @@ ls -l /etc/init.d
 cat /etc/inittab
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820171023.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820171023.png)
 
 #### chkconfig 指令
 
@@ -1249,7 +1249,7 @@ telnet 192.168.200.130 111
 
 在真正的生产环境，往往需要将防火墙打开，但问题来了，如果我们把防火墙打开，那么外部请求数据包就不能跟服务器监听端口通讯。这时，需要打开指定的端口。比如 80、22、8080 等
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820174627.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820174627.png)
 
 #### firewall 指令
 
@@ -1289,15 +1289,15 @@ top 与 ps 命令很相似。它们都用来显示正在执行的进程。Top �
 top [选项]
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175417.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820175417.png)
 
 #### 选项说明
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175100.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820175100.png)
 
 #### 交互操作说明
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820175643.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820175643.png)
 
 #### 应用实例
 
@@ -1335,9 +1335,9 @@ top [选项]
 netstat -anp | grep sshd
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820180252.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820180252.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210820180328.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210820180328.png)
 
 #### 检测主机连接命令 ping
 
@@ -1474,7 +1474,7 @@ Yum 是一个 Shell 前端软件包管理器。基于 RPM 包管理，能够从�
 
 Shell 是一个命令行解释器，它为用户提供了一个向 Linux 内核发送请求以便运行程序的界面系统级程序，用户可以用 Shell 来启动、挂起、停止甚至是编写一些程序。看一个示意图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210825143047.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210825143047.png)
 
 ### Shell脚本的执行方式
 
@@ -1585,7 +1585,7 @@ echo "java_home=$JAVA_HOME"
 >
 > `source /etc/profile`
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210825161632.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210825161632.png)
 
 shell 脚本的多行注释
 
@@ -1618,7 +1618,7 @@ echo "$@"
 echo "参数的个数= $#"
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210825163425.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210825163425.png)
 
 ### 预定义变量
 
@@ -1649,7 +1649,7 @@ echo "最后一个后台方式运行的进程 id=$!"
 echo "执行的结果是=$?"
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210825164523.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210825164523.png)
 
 ### 运算符
 
@@ -1686,7 +1686,7 @@ SUM=$[$1+$2]
 echo "sum=$SUM"
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829102237.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829102237.png)
 
 ### 条件判断
 
@@ -1771,7 +1771,7 @@ then
 fi
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829094606.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829094606.png)
 
 ### 流程控制
 
@@ -1813,7 +1813,7 @@ then
 fi 
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829095709.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829095709.png)
 
 #### case 语句
 
@@ -1852,7 +1852,7 @@ echo "other..."
 esac
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829100404.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829100404.png)
 
 #### for 循环
 
@@ -1885,7 +1885,7 @@ do
 done 
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829123116.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829123116.png)
 
 - 基本语法2
 
@@ -1915,7 +1915,7 @@ echo "总和SUM=$SUM"
 
 >**注意：SUM=0，赋值符号两边不能有空格**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829124028.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829124028.png)
 
 
 
@@ -1950,7 +1950,7 @@ done
 echo "执行结果=$SUM"
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210829190756.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210829190756.png)
 
 ### read 读取控制台输入
 
@@ -2050,7 +2050,7 @@ read -p "请输入一个数 n2=" n2
 getSum $n1 $n2
 ```
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210830213706.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210830213706.png)
 
 ### Shell 编程综合案例
 
@@ -2115,7 +2115,7 @@ cround -e
 
 - `/var/log/` 目录就是系统日志文件的保存位置，看张图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905170020.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210905170020.png)
 
 - 系统常用的日志
 
@@ -2141,7 +2141,7 @@ cround -e
 
 CentOS7.6 日志服务是 rsyslogd ， CentOS6.x 日志服务是 syslogd 。rsyslogd 功能更强大。rsyslogd 的使用、日志文件的格式，和 syslogd 服务兼容的。原理示意图
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905175412.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210905175412.png)
 
 - 查询Linux中的rsyslogd 服务是否启动
 
@@ -2273,7 +2273,7 @@ dateext
 3. **推荐使用第二种方法**，因为系统中需要轮替的日志非常多，如果全都直接写 入/etc/logrotate.conf 配置文件，那么这个文件的可管理性就会非常差，不利于此文件的维护
 4. 在/etc/logrotate.d/ 配置轮替文件一览
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905181745.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210905181745.png)
 
 #### 应用实例
 
@@ -2294,9 +2294,9 @@ dateext
 
 日志轮替之所以可以在指定的时间备份日志，是依赖系统定时任务。在 /etc/cron.daily/目录，就会发现这个目录中是有 logrotate 文件(可执行)，logrotate 通过这个文件依赖定时任务执行的
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905184053.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210905184053.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20210905175412.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20210905175412.png)
 
 ### 查看内存日志
 

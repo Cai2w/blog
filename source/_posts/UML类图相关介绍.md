@@ -7,7 +7,7 @@ categories:
 - [设计模式,相关内容介绍]
 description: 
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 ---
 
 > 统一建模语言（Unified Modeling Language，UML）是用来设计软件的可视化建模语言。它的特点是简单、统一、图形化、能表达软件设计中的动态与静态信息。
@@ -29,7 +29,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name,age和address这3个属性，以及work()方法。 
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/Employee.jpg)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/Employee.jpg)
 
 属性/方法名称前加的加号和减号表示了这个属性/方法的可见性，UML类图中表示可见性的符号有三种：
 
@@ -51,7 +51,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 **举个&#x1F330;：**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/demo.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/demo.png)
 
 上图Demo类定义了三个方法：
 
@@ -69,13 +69,13 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 **1，单向关联**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_address.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/customer_address.png)
 
 在UML类图中单向关联用一个带箭头的实线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。
 
 **2，双向关联**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/customer_product.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/customer_product.png)
 
 从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。
 
@@ -83,7 +83,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 **3，自关联**
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/node.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/node.png)
 
 自关联在UML类图中用一个带有箭头且指向自身的线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。
 
@@ -95,7 +95,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在 UML 类图中，聚合关系可以用带空心菱形的实线来表示，菱形指向整体。下图所示是大学和教师的关系图：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173422328.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/image-20191229173422328.png)
 
 #### 组合关系
 
@@ -105,7 +105,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在 UML 类图中，组合关系用带实心菱形的实线来表示，菱形指向整体。下图所示是头和嘴的关系图：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173455149.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/image-20191229173455149.png)
 
 
 
@@ -115,7 +115,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在 UML 类图中，依赖关系使用带箭头的虚线来表示，箭头从使用类指向被依赖的类。下图所示是司机和汽车的关系图，司机驾驶汽车：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173518926.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/image-20191229173518926.png)
 
 #### 继承关系
 
@@ -123,7 +123,7 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在 UML 类图中，泛化关系用带空心三角箭头的实线来表示，箭头从子类指向父类。在代码实现时，使用面向对象的继承机制来实现泛化关系。例如，Student 类和 Teacher 类都是 Person 类的子类，其类图如下图所示：
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173539838.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/image-20191229173539838.png)
 
 
 
@@ -133,6 +133,6 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Add_tasks_re_s5yj.png
 
 在 UML 类图中，实现关系使用带空心三角箭头的虚线来表示，箭头从实现类指向接口。例如，汽车和船实现了交通工具，其类图如图所示。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/image-20191229173554296.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/image-20191229173554296.png)
 
  

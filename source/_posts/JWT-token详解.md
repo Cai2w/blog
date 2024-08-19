@@ -7,7 +7,7 @@ categories:
 - Java
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_3d_modeling_h60h.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_3d_modeling_h60h.png
 ---
 
 > 说到token，我们就要聊一聊基于token的认证和传统的session的区别。
@@ -152,7 +152,7 @@ fetch('api/user/1', {
 
 服务端会验证token，如果验证通过就会返回相应的资源。整个流程就是这样的:
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/1821058-2e28fe6c997a60c9.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/1821058-2e28fe6c997a60c9.png)
 
 ## Java的JJWT实现JWT
 

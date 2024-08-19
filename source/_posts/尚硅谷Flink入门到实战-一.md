@@ -7,7 +7,7 @@ categories:
 - Flink
 description:
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_good_team_m7uu.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_good_team_m7uu.png
 ---
 
 > [尚硅谷2021最新Java版Flink](https://www.bilibili.com/video/BV1qy4y1q728)
@@ -323,7 +323,7 @@ public class StreamWordCount {
 
 3. 在本地开启的socket中输入数据，观察IDEA的console输出。
 
-   ![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211122162314.png)
+   ![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211122162314.png)
 
     本人测试后发现，同一个字符串，前面输出的编号是一样的，因为key => hashcode,同一个key的hash值固定，分配给相对应的线程处理。
 
@@ -344,9 +344,9 @@ DataStream<String> inputDataStream = env.socketTextStream(host, port);
 
 将配置项设置在`args`参数中
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211122163902.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211122163902.png)
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211122163930.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211122163930.png)
 
 输入
 

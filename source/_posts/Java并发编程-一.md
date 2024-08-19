@@ -10,7 +10,7 @@ categories:
 - JUC
 description: Synchronized 原理、LockSupport 原理、ReentrantLock 原理
 sticky:
-cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Mobile_app_re_catg.png
+cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Mobile_app_re_catg.png
 ---
 
 ## 基本概念
@@ -39,13 +39,13 @@ cover: https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/undraw_Mobile_app_re_catg.png
 
 在单核 cpu 下，线程实际还是串行执行的。操作系统中有一个组件叫做任务调度器，将 cpu 的时间片（windows 下时间片最小约为 15 毫秒）分给不同的程序使用，只是由于 cpu 在线程间（时间片很短）的切换非常快，人类感 觉是同时运行的 。一般会将这种线程轮流使用 CPU 的做法称为并发（concurrent）
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211221230445.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211221230445.png)
 
 ####  并行
 
 多核 cpu下，每个核（core） 都可以调度运行线程，这时候线程可以是并行的，不同的线程同时使用不同的cpu在执行。
 
-![](https://cdn.jsdelivr.net/gh/Cai2w/cdn/img/20211221230514.png)
+![](https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/20211221230514.png)
 
 #### 二者对比
 
