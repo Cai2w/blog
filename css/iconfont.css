@@ -1,0 +1,41 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2730391 */
+  src: url('//at.alicdn.com/t/font_2730391_68393hl4a1.woff2?t=1635862424013') format('woff2'),
+       url('//at.alicdn.com/t/font_2730391_68393hl4a1.woff?t=1635862424013') format('woff'),
+       url('//at.alicdn.com/t/font_2730391_68393hl4a1.ttf?t=1635862424013') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ��Ƭ��Сͼ�� */
+.card_icon {
+
+  /* �޸Ĵ�С */
+  font-size: 24px;
+}
+
+.icon-github:before {
+  content: "\e72a";
+  color: #333333;
+}
+
+.icon-gitee:before {
+  content: "\e602";
+  color: #C71D23;
+}
+
+.icon-juejin-logo:before {
+  content: "\e600";
+  color: #006cff;
+}
+
+.icon-qq:before {
+  content: "\e71a";
+}
+
