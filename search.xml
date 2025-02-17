@@ -12296,4 +12296,44 @@
         <tag>设计模式</tag>
       </tags>
   </entry>
+  <entry>
+    <title>两条命令解决移动硬盘无法弹出的问题</title>
+    <url>/2025/02/17/%E4%B8%A4%E6%9D%A1%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E7%A7%BB%E5%8A%A8%E7%A1%AC%E7%9B%98%E6%97%A0%E6%B3%95%E5%BC%B9%E5%87%BA%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>自从 Windows 10 更新到 20H2 版本后，几乎每次弹出移动硬盘都要碰到 “正在使用中” 无法弹出的问题，一般基于闪存的优盘直接狠心拔了完事，但是基于传统机械结构的移动硬盘还是利用操作系统弹出的功能，先使硬盘停止工作再断电比较合适。</p>
+<h2 id="解决方法-A"><a href="#解决方法-A" class="headerlink" title="解决方法 A"></a>解决方法 A</h2><ol>
+<li>打开任务管理器</li>
+<li>性能 -&gt; 打开资源管理器</li>
+<li>磁盘 -&gt; 磁盘活动 -&gt; 点击 “文件” 排序</li>
+<li>找到使用移动硬盘的程序</li>
+<li>合理的关掉这个程序 (直接结束进程 / 保存相关文档后关闭 Word 等程序)</li>
+</ol>
+<p>　　这个方法绝大部分时候都管用，但是最近在资源管理器中均找不到占用移动硬盘的程序。</p>
+<h2 id="解决方法-B"><a href="#解决方法-B" class="headerlink" title="解决方法 B"></a>解决方法 B</h2><ol>
+<li>开始菜单右键 -&gt; 事件查看器</li>
+<li>自定义视图 -&gt; 管理事件</li>
+<li>再弹出一次移动硬盘</li>
+<li>刷新事件 -&gt; 点击第一条</li>
+<li>下方常规 -&gt; 找到阻止弹出移动硬盘的程序</li>
+<li>合理的关掉这个程序</li>
+</ol>
+<p>　　这个方法 100% 可以找到占用磁盘的程序，但是这里显示：进程 ID 为 4 的应用程序 System 已停止删除或弹出设备。这就无法通过常规方法关掉占用磁盘的程序了。</p>
+<h2 id="解决方法-C"><a href="#解决方法-C" class="headerlink" title="解决方法 C"></a>解决方法 C</h2><ol>
+<li>使用以<strong>管理员</strong>身份运行 cmd</li>
+<li><code>diskpart</code></li>
+<li><code>list disk</code> 找到移动硬盘的编号 <code>X</code>，一般是最后一个</li>
+<li><code>select disk X</code></li>
+<li><code>offline disk</code></li>
+<li><code>online disk</code></li>
+<li>再次弹出移动硬盘</li>
+</ol>
+<p>转自：<a href="https://blog.kuretru.com/posts/57aea0ec/">两条命令解决移动硬盘无法弹出的问题 | 呉真</a></p>
+]]></content>
+      <categories>
+        <category>技巧</category>
+        <category>windows</category>
+      </categories>
+      <tags>
+        <tag>硬盘弹出</tag>
+      </tags>
+  </entry>
 </search>
