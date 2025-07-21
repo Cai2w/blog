@@ -4,7 +4,7 @@ date: 2021-11-03 17:08:05
 tags:
 - hexo
 categories:
-- 小知识
+- 教程
 description:
 sticky:
 cover: https://cdn.jsdmirror.com/gh/Cai2w/cdn/img/undraw_Code_thinking_re_gka2.png
